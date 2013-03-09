@@ -1,0 +1,16 @@
+2013/02/01 - v.1.1.4
+Added: HTML5 valid data-rel
+
+2012/09/30 - v.1.1.3
+Added: New player icons
+Bugfix: Stopped slideshow if swiped
+
+2012/07/11 - v.1.1.2
+Bugfix: Error message if url is invalid
+Bugfix: Prevent duplicated id's
+Added: Option 'disableShrink'
+Added: Lightcase cache
+Feature: Possibility to force width and height for default content
+
+2012/05/13 - v.1.0.1
+Initial release
