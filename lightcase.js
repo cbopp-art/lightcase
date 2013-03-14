@@ -5,10 +5,17 @@
  * @author		Cornel Boppart <cornel@bopp-art.com>
  * @copyright	Author
  *
- * @version		1.1.4 (01/02/2013)
+ * @version		1.1.5 (14/03/2013)
  */
 
 jQuery.noConflict();
+
+/**
+ * $.browser object is removed in jQuery 1.9.1 
+ */
+jQuery.browser = {
+	msie : /msie/.test(navigator.userAgent.toLowerCase());
+};
 
 (function($) {
 	window.lightcase = {

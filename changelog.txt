@@ -1,3 +1,6 @@
+2013/03/14 - v.1.1.5
+Bugfix: Issue #1 - Support jQuery 1.9.1
+
 2013/02/01 - v.1.1.4
 Added: HTML5 valid data-rel
 
