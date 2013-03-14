@@ -14,7 +14,7 @@ jQuery.noConflict();
  * $.browser object is removed in jQuery 1.9.1 
  */
 jQuery.browser = {
-	msie : /msie/.test(navigator.userAgent.toLowerCase());
+	msie : /msie/.test(navigator.userAgent.toLowerCase())
 };
 
 (function($) {
