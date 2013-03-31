@@ -1,4 +1,4 @@
-Copyright © 2011-2012, Cornel Boppart
+Copyright © 2011-2013, Cornel Boppart
 All rights reserved.
 
 The Lightcase Plugin is Open source <http://en.wikipedia.org/wiki/Opensource> and free to use, licensed under the GPL license <https://www.gnu.org/licenses/gpl.txt>.
