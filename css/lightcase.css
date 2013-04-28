@@ -178,7 +178,7 @@
 }
 #lightcase-case .nav a.pause:hover span,
 #lightcase-case .nav a.play:hover span {
-	transition-delay: 0;
+	transition-delay: 0s;
 }
 	
 	/* close */
