@@ -34,8 +34,8 @@ jQuery.browser = {
 		/**
 		 * Initializes the plugin
 		 *
-		 * @param	array	options
-		 * @return	void
+		 * @param	{array}	options
+		 * @return	{void}
 		 */
 		,init : function(options) {
 			$(this).unbind('click').click(function(event) {
@@ -47,8 +47,8 @@ jQuery.browser = {
 		/**
 		 * Starts the plugin
 		 *
-		 * @param	array	options
-		 * @return	void
+		 * @param	{array}	options
+		 * @return	{void}
 		 */
 		,start : function(options) {
 			lightcase.objectData = lightcase.getObjectData(this);
@@ -134,8 +134,8 @@ jQuery.browser = {
 		/**
 		 * Gets the object data
 		 *
-		 * @param	object	$object
-		 * @return	array	objectData
+		 * @param	{object}	$object
+		 * @return	{array}		objectData
 		 */
 		,getObjectData : function($object) {
 		 	var objectData = {
@@ -160,9 +160,9 @@ jQuery.browser = {
 		/**
 		 * Verifies if the link is part of a sequence
 		 *
-		 * @param	string	rel
-		 * @param	string	expression
-		 * @return	boolean
+		 * @param	{string}	rel
+		 * @param	{string}	expression
+		 * @return	{boolean}
 		 */
 		,isPartOfSequence : function(rel, expression) {
 			var getSimilarLinks = $('[data-rel="' + rel + '"]')
@@ -178,7 +178,7 @@ jQuery.browser = {
 		/**
 		 * Verifies if the slideshow should be enabled
 		 *
-		 * @return	boolean
+		 * @return	{boolean}
 		 */
 		,isSlideshowEnabled : function() {
 			if (lightcase.objectData.isPartOfSequence && (lightcase.settings.slideshow === true || lightcase.objectData.isPartOfSequenceWithSlideshow === true)) {
@@ -191,7 +191,7 @@ jQuery.browser = {
 		/**
 		 * Loads the new content to show
 		 *
-		 * @return	void
+		 * @return	{void}
 		 */
 		,loadContent : function() {
 			if (lightcase.cache.originalObject) {
@@ -228,7 +228,7 @@ jQuery.browser = {
 
 						// Add custom attributes from lightcase.settings
 					$.each(lightcase.settings.flash, function(name, value) {
-						$param.append('<param name="' + name + '" value="' + value + '"></param>');
+						$param = $param.add($('<param name="' + name + '" value="' + value + '"></param>'));
 						$embed.attr(name, value);
 					});
 
@@ -340,7 +340,7 @@ jQuery.browser = {
 		/**
 		 * Throws an error if something went wrong
 		 *
-		 * @return	void
+		 * @return	{void}
 		 */
 		,error : function() {
 			lightcase.objectData.type = 'error';
@@ -355,12 +355,12 @@ jQuery.browser = {
 		/**
 		 * Calculates the dimensions to fit content
 		 *
-		 * @param	object	$object
-		 * @return	void
+		 * @param	{object}	$object
+		 * @return	{void}
 		 */
 		,calculateDimensions : function($object) {
 			lightcase.cleanupDimensions();
-
+			
 				// Force shrinkFactor to 1 for mobile devices
 			var deviceAgent = navigator.userAgent.toLowerCase()
 				,agentId = deviceAgent.match(/(iphone|ipod|ipad|android|blackberry|symbian)/);
@@ -392,6 +392,7 @@ jQuery.browser = {
 				
 				switch (lightcase.objectData.type) {
 					case 'image' :
+					case 'flash' :
 					case 'video' :
 						if (dimensions.differenceWidthAsPercent > 100) {
 							dimensions.objectWidth = dimensions.maxWidth;
@@ -431,9 +432,9 @@ jQuery.browser = {
 		/**
 		 * Adjusts the dimensions
 		 *
-		 * @param	object	$object
-		 * @param	array	dimensions
-		 * @return	void
+		 * @param	{object}	$object
+		 * @param	{array}		dimensions
+		 * @return	{void}
 		 */
 		,adjustDimensions : function($object, dimensions) {
 				// Remove attribute width/height
@@ -449,13 +450,14 @@ jQuery.browser = {
 					'width' : $object.outerWidth()
 					,'height' : $object.outerHeight()
 				});
-			} else {
+			}
+			else {
 				$contentInner.css({
 					'width' : $object.outerWidth()
 					,'height' : $object.outerHeight()
 				});
 			}
-
+			
 			$case.css({
 				'width' : $contentInner.outerWidth()
 			});
@@ -465,13 +467,33 @@ jQuery.browser = {
 				'margin-top' : parseInt(-($case.outerHeight() / 2))
 				,'margin-left' : parseInt(-($case.outerWidth() / 2))
 			});
+			
+				// Adjust object
+			switch (lightcase.objectData.type) {
+				case 'flash' :
+					$.each(lightcase.settings.flash, function(name, value) {
+						lightcase.object.parent().find('param[name="' + name + '"]').attr('value', value);
+						lightcase.object.attr(name, value);
+					});
+					break;
+				case 'video' :
+					$.each(lightcase.settings.video, function(name, value) {
+						lightcase.object.attr(name, value);
+					});
+					break;
+				case 'iframe':
+					$.each(lightcase.settings.iframe, function(name, value) {
+						lightcase.object.attr(name, value);
+					});
+					break;
+			}
 		}
 
 		/**
 		 * Handles the loading
 		 *
-		 * @param	string	process
-		 * @return	void
+		 * @param	{string}	process
+		 * @return	{void}
 		 */
 		,loading : function(process) {
 			if (process === 'start') {
@@ -486,7 +508,7 @@ jQuery.browser = {
 		/**
 		 * Gets the client screen dimensions
 		 *
-		 * @return	array	dimensions
+		 * @return	{array}	dimensions
 		 */
 		,getDimensions : function() {
 			var dimensions = {
@@ -500,8 +522,8 @@ jQuery.browser = {
 		/**
 		 * Verifies the url
 		 *
-		 * @param	string	dataUrl
-		 * @return	string	dataUrl	Clean url for processing content
+		 * @param	{string}	dataUrl
+		 * @return	{string}	dataUrl	Clean url for processing content
 		 */
 		,verifyDataUrl : function(dataUrl) {
 			if (!dataUrl || dataUrl === undefined || dataUrl === '') {
@@ -519,8 +541,8 @@ jQuery.browser = {
 		/**
 		 * Verifies the data type of the content to load
 		 *
-		 * @param	string	url
-		 * @return	string	Array key if expression matched, else false
+		 * @param	{string}	url
+		 * @return	{string}	Array key if expression matched, else false
 		 */
 		,verifyDataType : function(url) {
 			var url = lightcase.verifyDataUrl(url);
@@ -560,7 +582,7 @@ jQuery.browser = {
 		/**
 		 * Extends html markup with the essential tags
 		 *
-		 * @return	void
+		 * @return	{void}
 		 */
 		,addElements : function() {
 			if ($('#' + lightcase.settings.id).length) {
@@ -573,13 +595,14 @@ jQuery.browser = {
 		/**
 		 * Shows the loaded content
 		 *
-		 * @param	object	$object
-		 * @return	void
+		 * @param	{object}	$object
+		 * @return	{void}
 		 */
 		,showContent : function($object) {
 				// Adds class with the object type
 			$case.attr('class', 'type-' + lightcase.objectData.type);
-
+			
+			lightcase.object = $object;
 			lightcase.calculateDimensions($object);
 
 				// Call hook function on finish
@@ -635,7 +658,7 @@ jQuery.browser = {
 		/**
 		 * Processes the content to show
 		 *
-		 * @return	void
+		 * @return	{void}
 		 */
 		,processContent : function() {
 			lightcase.busy = true;
@@ -673,9 +696,16 @@ jQuery.browser = {
 		/**
 		 * Handles events for gallery buttons
 		 *
-		 * @return	void
+		 * @return	{void}
 		 */
 		,handleEvents : function() {
+			$(window).resize(function(event) {
+				if (lightcase.open) {
+					lightcase.dimensions = lightcase.getDimensions();
+					lightcase.calculateDimensions(lightcase.object);
+				}
+			});
+			
 			$close.click(function(event) {
 				event.preventDefault();
 				lightcase.lightcaseClose();
@@ -692,11 +722,10 @@ jQuery.browser = {
 			$nav.children('a').unbind('click').hide();
 				// Unbind swipe events
 			$case.unbind('swipeleft').unbind('swiperight');
-
+			
 			if (lightcase.settings.useKeys === true) {
 				lightcase.handleKeyEvents();
 			}
-
 			if (!lightcase.objectData.isPartOfSequence) {
 				return;
 			} else {
@@ -709,6 +738,7 @@ jQuery.browser = {
 						lightcase.stopTimeout();
 					}
 				});
+				
 				$next.click(function(event) {
 					event.preventDefault();
 					lightcase.nav.$nextItem.click();
@@ -716,23 +746,27 @@ jQuery.browser = {
 						lightcase.stopTimeout();
 					}
 				});
-
+				
 					// Swiping support for mobile devices
-				$case.on('swipeleft', function(event) {
-					event.preventDefault();
-					lightcase.nav.$nextItem.click();
-					if (lightcase.isSlideshowEnabled()) {
-						lightcase.stopTimeout();
-					}
-				});
-				$case.on('swiperight', function(event) {
-					event.preventDefault();
-					lightcase.nav.$prevItem.click();
-					if (lightcase.isSlideshowEnabled()) {
-						lightcase.stopTimeout();
-					}
-				});
-
+				if ($.isPlainObject($.event.special.swipeleft)) {
+					$case.on('swipeleft', function(event) {
+						event.preventDefault();
+						lightcase.nav.$nextItem.click();
+						if (lightcase.isSlideshowEnabled()) {
+							lightcase.stopTimeout();
+						}
+					});
+				}
+				if ($.isPlainObject($.event.special.swiperight)) {
+					$case.on('swiperight', function(event) {
+						event.preventDefault();
+						lightcase.nav.$prevItem.click();
+						if (lightcase.isSlideshowEnabled()) {
+							lightcase.stopTimeout();
+						}
+					});
+				}
+				
 				if (lightcase.isSlideshowEnabled()) {
 					$play.click(function(event) {
 						event.preventDefault();
@@ -745,11 +779,11 @@ jQuery.browser = {
 				}
 			}
 		}
-
+		
 		/**
 		 * Enables the events for keys
 		 *
-		 * @return	void
+		 * @return	{void}
 		 */
 		,handleKeyEvents : function() {
 			$(document).keyup(function(event) {
@@ -782,7 +816,7 @@ jQuery.browser = {
 		/**
 		 * Starts the slideshow timeout
 		 *
-		 * @return	void
+		 * @return	{void}
 		 */
 		,startTimeout : function() {
 			$play.hide();
@@ -801,7 +835,7 @@ jQuery.browser = {
 		/**
 		 * Stops the slideshow timeout
 		 *
-		 * @return	void
+		 * @return	{void}
 		 */
 		,stopTimeout : function() {
 			$play.show();
@@ -814,7 +848,7 @@ jQuery.browser = {
 		/**
 		 * Sets the navigator buttons (prev/next)
 		 *
-		 * @return	array	items
+		 * @return	{array}	items
 		 */
 		,setNavigation : function() {
 			var $links = $('[data-rel="' + lightcase.objectData.rel + '"]')
@@ -849,8 +883,8 @@ jQuery.browser = {
 		/**
 		 * Clones the object for inline elements
 		 *
-		 * @param	object	$object
-		 * @return	object	$clone
+		 * @param	{object}	$object
+		 * @return	{object}	$clone
 		 */
 		,cloneObject : function($object) {
 			var $clone = $object.clone()
@@ -871,8 +905,8 @@ jQuery.browser = {
 		/**
 		 * Caches the object data
 		 *
-		 * @param	object	$object
-		 * @return	void
+		 * @param	{object}	$object
+		 * @return	{void}
 		 */
 		,cacheObjectData : function($object) {
 			$.data($object, 'cache', {
@@ -898,7 +932,7 @@ jQuery.browser = {
 		/**
 		 * Enters into the lightcase view
 		 *
-		 * @return	void
+		 * @return	{void}
 		 */
 		,lightcaseOpen : function() {
 			lightcase.open = true;
@@ -923,7 +957,7 @@ jQuery.browser = {
 		/**
 		 * Escapes from the lightcase view
 		 *
-		 * @return	void
+		 * @return	{void}
 		 */
 		,lightcaseClose : function() {
 			lightcase.open = false;
@@ -947,11 +981,14 @@ jQuery.browser = {
 		/**
 		 * Cleans up the dimensions
 		 *
-		 * @return	void
+		 * @return	{void}
 		 */
 		,cleanupDimensions : function() {
 			$case.css({
 				'width' : ''
+				,'height' : ''
+				,'margin-top' : ''
+				,'margin-left' : ''
 				,'-moz-transform' : ''
 				,'-moz-transition' : ''
 				,'-webkit-transform' : ''
@@ -965,16 +1002,19 @@ jQuery.browser = {
 				,'transition' : ''
 				,'transform' : ''
 			});
+			
 			$contentInner.css({
 				'width' : ''
 				,'height' : ''
 			});
+			
+			lightcase.object.removeAttr('style');
 		}
 
 		/**
 		 * Cleanup after aborting lightcase
 		 *
-		 * @return	void
+		 * @return	{void}
 		 */
 		,cleanup : function() {
 			lightcase.cleanupDimensions();
