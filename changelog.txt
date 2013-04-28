@@ -1,3 +1,9 @@
+2013/04/28 - v.1.2.0
+Feature: Live resize
+Feature: Navigation improvements
+Bugfix: Scrollbar was behind the next link and therefore not clickable
+Bugfix: Prevent from error if no swipe events are defined
+
 2013/03/14 - v.1.1.5
 Bugfix: Issue #1 - Support jQuery 1.9.1
 
