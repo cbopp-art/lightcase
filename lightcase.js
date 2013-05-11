@@ -976,6 +976,7 @@ jQuery.browser = {
 					lightcase.handleEvents();
 					lightcase.processContent();
 			}
+			
 			$('html').addClass(lightcase.settings.classPrefix + 'open');
 		}
 
@@ -987,6 +988,7 @@ jQuery.browser = {
 		,lightcaseClose : function() {
 			lightcase.open = false;
 			$loading.hide();
+			
 			$('html').removeClass(lightcase.settings.classPrefix + 'open');
 			
 			switch (lightcase.settings.transition) {
