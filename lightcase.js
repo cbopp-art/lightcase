@@ -5,7 +5,7 @@
  * @author		Cornel Boppart <cornel@bopp-art.com>
  * @copyright	Author
  *
- * @version		1.2.0 (28/04/2013)
+ * @version		1.3.0 (11/05/2013)
  */
 
 jQuery.noConflict();
@@ -22,7 +22,7 @@ jQuery.browser = {
 		cache : {}
 		
 		,labels : {
-			'errorMessage' : 'Could not found the requested source...'
+			'errorMessage' : 'Source could not be found...'
 			,'sequenceInfo.of' : ' of '
 			,'close' : 'Close'
 			,'navigator.prev' : 'Prev'
@@ -56,6 +56,7 @@ jQuery.browser = {
 			lightcase.settings = $.extend({
 				id : 'lightcase-case'
 				,tempIdPrefix : 'lightcase-temp-'
+				,classPrefix : 'lightcase-'
 				,transition : 'elastic'
 				,speedIn : 250
 				,speedOut : 250
@@ -63,9 +64,12 @@ jQuery.browser = {
 				,maxHeight : 500
 				,forceWidth : false
 				,forceHeight : false
+				,liveResize : true
+				,fullScreenModeForMobile : true
+				,mobileMatchExpression : /(iphone|ipod|ipad|android|blackberry|symbian)/
 				,disableShrink : false
 				,shrinkFactor : .75
-				,overlayOpacity : .85
+				,overlayOpacity : .9
 				,slideshow : false
 				,timeout : 5000
 				,useKeys : true
@@ -78,9 +82,13 @@ jQuery.browser = {
 					width : 'auto'
 					,height : 'auto'
 				}
-				,iframe : {
+				,ajax : {
 					width : 'auto'
 					,height : 'auto'
+				}
+				,iframe : {
+					width : 800
+					,height : 500
 					,frameborder : 0
 				}
 				,flash : {
@@ -98,39 +106,69 @@ jQuery.browser = {
 					,autoplay : true
 					,loop : false
 				}
-				,errorMessage : '<p class="lightcase-error">' + lightcase.labels['errorMessage'] + '</p>'
+				,errorMessage : function() {
+					return '<p class="' + lightcase.settings.classPrefix + 'error">' + lightcase.labels['errorMessage'] + '</p>';
+				}
 				,markup : function() {
 					$('body').append(
-						$overlay = $('<div id="lightcase-overlay"></div>')
-						,$loading = $('<div id="lightcase-loading"></div>')
+						$overlay = $('<div id="' + lightcase.settings.classPrefix + 'overlay"></div>')
+						,$loading = $('<div id="' + lightcase.settings.classPrefix + 'loading"></div>')
 						,$case = $('<div id=' + lightcase.settings.id + '></div>')
 					);
 					$case.append(
-						$content = $('<div class="content"></div>')
-						,$close = $('<a href="#" class="close">' + lightcase.labels['close'] + '</a>')
-						,$sequenceInfo = $('<div class="sequenceInfo"></div>')
-						,$title = $('<h4 class="title"></h4>')
-						,$caption = $('<p class="caption"></p>')
+						$content = $('<div class="' + lightcase.settings.classPrefix + 'content"></div>')
+						,$info = $('<div class="' + lightcase.settings.classPrefix + 'info"></div>')
+						,$close = $('<a href="#" class="' + lightcase.settings.classPrefix + 'close">' + lightcase.labels['close'] + '</a>')
+					);
+					$info.append(
+						$sequenceInfo = $('<div class="' + lightcase.settings.classPrefix + 'sequenceInfo"></div>')
+						,$title = $('<h4 class="' + lightcase.settings.classPrefix + 'title"></h4>')
+						,$caption = $('<p class="' + lightcase.settings.classPrefix + 'caption"></p>')
 					);
 					$content.append(
-						$contentInner = $('<div class="contentInner"></div>')
-						,$nav = $('<div class="nav"></div>')
+						$contentInner = $('<div class="' + lightcase.settings.classPrefix + 'contentInner"></div>')
+						,$nav = $('<div class="' + lightcase.settings.classPrefix + 'nav"></div>')
 					);
 					$nav.append(
-						$prev = $('<a href="#" class="prev"><span>' + lightcase.labels['navigator.prev'] + '</span></a>').hide()
-						,$next = $('<a href="#" class="next"><span>' + lightcase.labels['navigator.next'] + '</span></a>').hide()
-						,$play = $('<a href="#" class="play"><span>' + lightcase.labels['navigator.play'] + '</span></a>').hide()
-						,$pause = $('<a href="#" class="pause"><span>' + lightcase.labels['navigator.pause'] + '</span></a>').hide()
+						$prev = $('<a href="#" class="' + lightcase.settings.classPrefix + 'prev"><span>' + lightcase.labels['navigator.prev'] + '</span></a>').hide()
+						,$next = $('<a href="#" class="' + lightcase.settings.classPrefix + 'next"><span>' + lightcase.labels['navigator.next'] + '</span></a>').hide()
+						,$play = $('<a href="#" class="' + lightcase.settings.classPrefix + 'play"><span>' + lightcase.labels['navigator.play'] + '</span></a>').hide()
+						,$pause = $('<a href="#" class="' + lightcase.settings.classPrefix + 'pause"><span>' + lightcase.labels['navigator.pause'] + '</span></a>').hide()
 					);
 				}
 				,onStart : function() {}
 				,onFinish : function() {}
 			}, options);
-
+			
+			if (lightcase.isMobileDevice()) {
+				lightcase.cache.viewport = $('meta[name="viewport"]').attr('content');
+				$('html').addClass(lightcase.settings.classPrefix + 'isMobileDevice');
+				
+				if (lightcase.settings.fullScreenModeForMobile) {
+					lightcase.switchToFullScreenMode();
+				}
+			}
+			
 			lightcase.addElements();
 			lightcase.lightcaseOpen();
 		}
-
+		
+		/**
+		 * Switches to the fullscreen mode
+		 *
+		 * @return	{viod}
+		 */
+		,switchToFullScreenMode : function($object) {
+			lightcase.settings.shrinkFactor = 1;
+			lightcase.settings.overlayOpacity = 1;
+			
+			if (lightcase.settings.transition !== 'none') {
+				lightcase.settings.transition = 'fade';
+			}
+			
+			$('html').addClass(lightcase.settings.classPrefix + 'fullScreenMode');
+		}
+		
 		/**
 		 * Gets the object data
 		 *
@@ -209,16 +247,21 @@ jQuery.browser = {
 					});
 					break;
 				case 'inline' :
-					var $object = $('<div class="inlineWrap"></div>');
+					var $object = $('<div class="' + lightcase.settings.classPrefix + 'inlineWrap"></div>');
 					$object.html(lightcase.cloneObject($(lightcase.objectData.url)));
 
 						// Add custom attributes from lightcase.settings
 					$.each(lightcase.settings.inline, function(name, value) {
-						$object.css(name, value);
+						$object.attr('data-' + name, value);
 					});
 					break;
 				case 'ajax' :
-					var $object = $('<div class="inlineWrap"></div>');
+					var $object = $('<div class="' + lightcase.settings.classPrefix + 'inlineWrap"></div>');
+						
+						// Add custom attributes from lightcase.settings
+					$.each(lightcase.settings.ajax, function(name, value) {
+						$object.attr('data-' + name, value);
+					});
 					break;
 				case 'flash' :
 					var classid = $.browser.msie ? 'clsid: D27CDB6E-AE6D-11cf-96B8-444553540000' : 'clsid:d27cdb6e-ae6d-11cf-96b8-444553540000'
@@ -305,7 +348,7 @@ jQuery.browser = {
 							url : lightcase.objectData.url
 							,success : function(data, textStatus, jqXHR) {
 								$object.html(data);
-								lightcase.showContent($contentInner);
+								lightcase.showContent($object);
 							}
 							,error : function(jqXHR, textStatus, errorThrown) {
 								lightcase.error();
@@ -338,20 +381,20 @@ jQuery.browser = {
 		}
 
 		/**
-		 * Throws an error if something went wrong
+		 * Throws an error message if something went wrong
 		 *
 		 * @return	{void}
 		 */
 		,error : function() {
 			lightcase.objectData.type = 'error';
-			var $object = $('<div class="inlineWrap"></div>');
+			var $object = $('<div class="' + lightcase.settings.classPrefix + 'inlineWrap"></div>');
 
 			$object.html(lightcase.settings.errorMessage);
 			$contentInner.html($object);
 
 			lightcase.showContent($contentInner);
 		}
-
+		
 		/**
 		 * Calculates the dimensions to fit content
 		 *
@@ -361,18 +404,10 @@ jQuery.browser = {
 		,calculateDimensions : function($object) {
 			lightcase.cleanupDimensions();
 			
-				// Force shrinkFactor to 1 for mobile devices
-			var deviceAgent = navigator.userAgent.toLowerCase()
-				,agentId = deviceAgent.match(/(iphone|ipod|ipad|android|blackberry|symbian)/);
-
-			if (agentId) {
-				lightcase.settings.shrinkFactor = 1;
-			}
-
 				// Set default dimensions
 			var dimensions = {
-				objectWidth : $object.attr('width') ? $object.attr('width') : $object.outerWidth()
-				,objectHeight : $object.attr('height') ? $object.attr('height') : $object.outerHeight()
+				objectWidth : $object.attr('width') ? $object.attr('width') : $object.attr('data-width') 
+				,objectHeight : $object.attr('height') ? $object.attr('height') : $object.attr('data-height')
 				,maxWidth : parseInt(lightcase.dimensions.windowWidth * lightcase.settings.shrinkFactor)
 				,maxHeight : parseInt(lightcase.dimensions.windowHeight * lightcase.settings.shrinkFactor)
 			};
@@ -385,7 +420,7 @@ jQuery.browser = {
 				if (dimensions.maxHeight > lightcase.settings.maxHeight) {
 					dimensions.maxHeight = lightcase.settings.maxHeight;
 				}
-			
+				
 					// Calculate the difference between screen width/height and image width/height
 				dimensions.differenceWidthAsPercent = parseInt(100 / dimensions.maxWidth * dimensions.objectWidth);
 				dimensions.differenceHeightAsPercent = parseInt(100 / dimensions.maxHeight * dimensions.objectHeight);
@@ -394,33 +429,31 @@ jQuery.browser = {
 					case 'image' :
 					case 'flash' :
 					case 'video' :
-						if (dimensions.differenceWidthAsPercent > 100) {
+						if (dimensions.differenceWidthAsPercent > 100 && dimensions.differenceWidthAsPercent > dimensions.differenceHeightAsPercent) {
 							dimensions.objectWidth = dimensions.maxWidth;
 							dimensions.objectHeight = parseInt(dimensions.objectHeight / dimensions.differenceWidthAsPercent * 100);
 						}
+						if (dimensions.differenceHeightAsPercent > 100 && dimensions.differenceHeightAsPercent > dimensions.differenceWidthAsPercent) {
+							dimensions.objectWidth = parseInt(dimensions.objectWidth / dimensions.differenceHeightAsPercent * 100);
+							dimensions.objectHeight = dimensions.maxHeight;
+						}
 						if (dimensions.differenceHeightAsPercent > 100 && dimensions.differenceWidthAsPercent < dimensions.differenceHeightAsPercent) {
 							dimensions.objectWidth = parseInt(dimensions.maxWidth / dimensions.differenceHeightAsPercent * dimensions.differenceWidthAsPercent);
-							dimensions.objectHeight = parseInt(dimensions.objectHeight / dimensions.differenceHeightAsPercent * 100);
+							dimensions.objectHeight = dimensions.maxHeight;
 						}
 	
-							// For images set objectHeight always to auto
-						if (lightcase.objectData.type === 'image') {
-							dimensions.objectHeight = 'auto';
-						}
 						break;
 					case 'error' :
-						if (isNaN(dimensions.objectWidth) || dimensions.objectWidth > dimensions.maxWidth) {
+						if (!isNaN(dimensions.objectWidth) && dimensions.objectWidth > dimensions.maxWidth) {
 							dimensions.objectWidth = dimensions.maxWidth;
 						}
-	
-							// Set objectHeight always to auto
-						dimensions.objectHeight = 'auto';
+						
 						break;
 					default :
 						if ((isNaN(dimensions.objectWidth) || dimensions.objectWidth > dimensions.maxWidth) && !lightcase.settings.forceWidth) {
 							dimensions.objectWidth = dimensions.maxWidth;
 						}
-						if ((isNaN(dimensions.objectHeight) || dimensions.objectHeight > dimensions.maxHeight) && !lightcase.settings.forceHeight) {
+						if (((isNaN(dimensions.objectHeight) && dimensions.objectHeight !== 'auto') || dimensions.objectHeight > dimensions.maxHeight) && !lightcase.settings.forceHeight) {
 							dimensions.objectHeight = dimensions.maxHeight;
 						}
 				}
@@ -437,26 +470,18 @@ jQuery.browser = {
 		 * @return	{void}
 		 */
 		,adjustDimensions : function($object, dimensions) {
-				// Remove attribute width/height
-			$object.removeAttr('width').removeAttr('height');
-
+				// Adjust width and height
 			$object.css({
 				'width' : dimensions.objectWidth
 				,'height' : dimensions.objectHeight
+				,'max-width' : dimensions.maxWidth
+				,'max-height' : dimensions.maxHeight
 			});
-
-			if (lightcase.objectData.type === 'video') {
-				$contentInner.children().css({
-					'width' : $object.outerWidth()
-					,'height' : $object.outerHeight()
-				});
-			}
-			else {
-				$contentInner.css({
-					'width' : $object.outerWidth()
-					,'height' : $object.outerHeight()
-				});
-			}
+			
+			$contentInner.css({
+				'width' : $object.outerWidth()
+				,'height' : $object.outerHeight()
+			});
 			
 			$case.css({
 				'width' : $contentInner.outerWidth()
@@ -467,26 +492,6 @@ jQuery.browser = {
 				'margin-top' : parseInt(-($case.outerHeight() / 2))
 				,'margin-left' : parseInt(-($case.outerWidth() / 2))
 			});
-			
-				// Adjust object
-			switch (lightcase.objectData.type) {
-				case 'flash' :
-					$.each(lightcase.settings.flash, function(name, value) {
-						lightcase.object.parent().find('param[name="' + name + '"]').attr('value', value);
-						lightcase.object.attr(name, value);
-					});
-					break;
-				case 'video' :
-					$.each(lightcase.settings.video, function(name, value) {
-						lightcase.object.attr(name, value);
-					});
-					break;
-				case 'iframe':
-					$.each(lightcase.settings.iframe, function(name, value) {
-						lightcase.object.attr(name, value);
-					});
-					break;
-			}
 		}
 
 		/**
@@ -497,10 +502,10 @@ jQuery.browser = {
 		 */
 		,loading : function(process) {
 			if (process === 'start') {
-				$case.addClass('loading');
+				$case.addClass(lightcase.settings.classPrefix + 'loading');
 				$loading.show();
 			} else if (process === 'end') {
-				$case.removeClass('loading');
+				$case.removeClass(lightcase.settings.classPrefix + 'loading');
 				$loading.hide();
 			}
 		}
@@ -512,10 +517,10 @@ jQuery.browser = {
 		 */
 		,getDimensions : function() {
 			var dimensions = {
-				windowWidth : $(window).width()
-				,windowHeight : $(window).height()
+				windowWidth : $(window).innerWidth()
+				,windowHeight : $(window).innerHeight()
 			};
-
+			
 			return dimensions;
 		}
 
@@ -602,7 +607,7 @@ jQuery.browser = {
 				// Adds class with the object type
 			$case.attr('class', 'type-' + lightcase.objectData.type);
 			
-			lightcase.object = $object;
+			lightcase.cache.object = $object;
 			lightcase.calculateDimensions($object);
 
 				// Call hook function on finish
@@ -610,7 +615,7 @@ jQuery.browser = {
 
 			switch (lightcase.settings.transition) {
 				case 'elastic' :
-					if ($case.css('opacity') < 1 && !$.browser.msie) {
+					if ($case.css('opacity') < 1) {
 						$case.css({
 							'opacity' : 0
 							,'-moz-transform' : 'scale(0.1)'
@@ -649,7 +654,7 @@ jQuery.browser = {
 				// If slideshow is enabled, start timeout.
 			if (lightcase.isSlideshowEnabled()) {
 					// Only start the timeout if slideshow is not pausing
-				if (!$nav.hasClass('paused')) {
+				if (!$nav.hasClass(lightcase.settings.classPrefix + 'paused')) {
 					lightcase.startTimeout();
 				}
 			}
@@ -675,7 +680,8 @@ jQuery.browser = {
 						});
 					}
 					break;
-				case 'fadeInline' : case 'elastic' :
+				case 'fadeInline' :
+				case 'elastic' :
 					if ($case.is(':hidden')) {
 						$case.stop().fadeTo(0, 0);
 						$contentInner.stop().fadeTo(0, 0, function() {
@@ -699,12 +705,17 @@ jQuery.browser = {
 		 * @return	{void}
 		 */
 		,handleEvents : function() {
-			$(window).resize(function(event) {
-				if (lightcase.open) {
-					lightcase.dimensions = lightcase.getDimensions();
-					lightcase.calculateDimensions(lightcase.object);
-				}
-			});
+			if (lightcase.settings.liveResize) {
+				$(window).resize(function(event) {
+					if (lightcase.isSlideshowEnabled()) {
+						lightcase.stopTimeout();
+					}
+					if (lightcase.open) {
+						lightcase.dimensions = lightcase.getDimensions();
+						lightcase.calculateDimensions(lightcase.cache.object);
+					}
+				});
+			}
 			
 			$close.click(function(event) {
 				event.preventDefault();
@@ -822,7 +833,7 @@ jQuery.browser = {
 			$play.hide();
 			$pause.show();
 
-			$nav.removeClass('paused');
+			$nav.removeClass(lightcase.settings.classPrefix + 'paused');
 			$next.unbind('timeoutClick').dequeue();
 
 			$next.bind('timeoutClick', function() {
@@ -841,7 +852,7 @@ jQuery.browser = {
 			$play.show();
 			$pause.hide();
 
-			$nav.addClass('paused');
+			$nav.addClass(lightcase.settings.classPrefix + 'paused');
 			$next.unbind('timeoutClick');
 		}
 
@@ -903,6 +914,18 @@ jQuery.browser = {
 		}
 		
 		/**
+		 * Verifies if it is a mobile device
+		 *
+		 * @return	{void}
+		 */
+		,isMobileDevice : function() {
+			var deviceAgent = navigator.userAgent.toLowerCase()
+				,agentId = deviceAgent.match(/(iphone|ipod|ipad|android|blackberry|symbian)/);
+				
+			return agentId;
+		}
+		
+		/**
 		 * Caches the object data
 		 *
 		 * @param	{object}	$object
@@ -936,8 +959,9 @@ jQuery.browser = {
 		 */
 		,lightcaseOpen : function() {
 			lightcase.open = true;
+			
 			$overlay.css('opacity', lightcase.settings.overlayOpacity);
-
+			
 			switch (lightcase.settings.transition) {
 				case 'fade' :
 				case 'fadeInline' :
@@ -952,6 +976,7 @@ jQuery.browser = {
 					lightcase.handleEvents();
 					lightcase.processContent();
 			}
+			$('html').addClass(lightcase.settings.classPrefix + 'open');
 		}
 
 		/**
@@ -962,7 +987,8 @@ jQuery.browser = {
 		,lightcaseClose : function() {
 			lightcase.open = false;
 			$loading.hide();
-
+			$('html').removeClass(lightcase.settings.classPrefix + 'open');
+			
 			switch (lightcase.settings.transition) {
 				case 'fade' :
 				case 'fadeInline' :
@@ -995,10 +1021,6 @@ jQuery.browser = {
 				,'-webkit-transition' : ''
 				,'-o-transform' : ''
 				,'-o-transition' : ''
-				,'-o-transition-property' : ''
-				,'-o-transition-delay' : ''
-				,'-o-transition-duration' : ''
-				,'-o-transition-timing-function' : ''
 				,'transition' : ''
 				,'transform' : ''
 			});
@@ -1008,7 +1030,7 @@ jQuery.browser = {
 				,'height' : ''
 			});
 			
-			lightcase.object.removeAttr('style');
+			$contentInner.children().removeAttr('style');
 		}
 
 		/**
@@ -1020,12 +1042,13 @@ jQuery.browser = {
 			lightcase.cleanupDimensions();
 			if (lightcase.isSlideshowEnabled()) {
 				lightcase.stopTimeout();
-				$nav.removeClass('paused');
+				$nav.removeClass(lightcase.settings.classPrefix + 'paused');
 			}
 
 			$loading.hide();
 			$overlay.hide();
 
+			$('html').removeClass(lightcase.settings.classPrefix + 'fullScreenMode');
 			$case.hide().removeAttr('style').removeAttr('class');
 			$contentInner.empty();
 			
