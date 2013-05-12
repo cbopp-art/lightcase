@@ -140,13 +140,13 @@ jQuery.browser = {
 				,onFinish : function() {}
 			}, options);
 			
-			//if (lightcase.isMobileDevice()) {
+			if (lightcase.isMobileDevice()) {
 				$('html').addClass(lightcase.settings.classPrefix + 'isMobileDevice');
 				
 				if (lightcase.settings.fullScreenModeForMobile) {
 					lightcase.switchToFullScreenMode();
 				}
-			//}
+			}
 			
 			lightcase.addElements();
 			lightcase.lightcaseOpen();
