@@ -5,7 +5,7 @@
  * @author		Cornel Boppart <cornel@bopp-art.com>
  * @copyright	Author
  *
- * @version		1.3.0 (11/05/2013)
+ * @version		1.3.1 (12/05/2013)
  */
 
 jQuery.noConflict();
@@ -140,33 +140,16 @@ jQuery.browser = {
 				,onFinish : function() {}
 			}, options);
 			
-			if (lightcase.isMobileDevice()) {
-				lightcase.cache.viewport = $('meta[name="viewport"]').attr('content');
+			//if (lightcase.isMobileDevice()) {
 				$('html').addClass(lightcase.settings.classPrefix + 'isMobileDevice');
 				
 				if (lightcase.settings.fullScreenModeForMobile) {
 					lightcase.switchToFullScreenMode();
 				}
-			}
+			//}
 			
 			lightcase.addElements();
 			lightcase.lightcaseOpen();
-		}
-		
-		/**
-		 * Switches to the fullscreen mode
-		 *
-		 * @return	{viod}
-		 */
-		,switchToFullScreenMode : function($object) {
-			lightcase.settings.shrinkFactor = 1;
-			lightcase.settings.overlayOpacity = 1;
-			
-			if (lightcase.settings.transition !== 'none') {
-				lightcase.settings.transition = 'fade';
-			}
-			
-			$('html').addClass(lightcase.settings.classPrefix + 'fullScreenMode');
 		}
 		
 		/**
@@ -1005,6 +988,22 @@ jQuery.browser = {
 					lightcase.cleanup();
 			}
 		}
+		
+		/**
+		 * Switches to the fullscreen mode
+		 *
+		 * @return	{void}
+		 */
+		,switchToFullScreenMode : function() {
+			lightcase.settings.shrinkFactor = 1;
+			lightcase.settings.overlayOpacity = 1;
+			
+			if (lightcase.settings.transition !== 'none') {
+				lightcase.settings.transition = 'fade';
+			}
+			
+			$('html').addClass(lightcase.settings.classPrefix + 'fullScreenMode');
+		}
 
 		/**
 		 * Cleans up the dimensions
@@ -1050,7 +1049,7 @@ jQuery.browser = {
 			$loading.hide();
 			$overlay.hide();
 
-			$('html').removeClass(lightcase.settings.classPrefix + 'fullScreenMode');
+			lightcase.abortsFromFullScreenMode();
 			$case.hide().removeAttr('style').removeAttr('class');
 			$contentInner.empty();
 			
