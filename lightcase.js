@@ -140,14 +140,6 @@ jQuery.browser = {
 				,onFinish : function() {}
 			}, options);
 			
-			if (lightcase.isMobileDevice()) {
-				$('html').addClass(lightcase.settings.classPrefix + 'isMobileDevice');
-				
-				if (lightcase.settings.fullScreenModeForMobile) {
-					lightcase.switchToFullScreenMode();
-				}
-			}
-			
 			lightcase.addElements();
 			lightcase.lightcaseOpen();
 		}
@@ -943,6 +935,14 @@ jQuery.browser = {
 		,lightcaseOpen : function() {
 			lightcase.open = true;
 			
+			if (lightcase.isMobileDevice()) {
+				$('html').addClass(lightcase.settings.classPrefix + 'isMobileDevice');
+				
+				if (lightcase.settings.fullScreenModeForMobile) {
+					lightcase.switchToFullScreenMode();
+				}
+			}
+			
 			$overlay.css('opacity', lightcase.settings.overlayOpacity);
 			
 			switch (lightcase.settings.transition) {
@@ -1049,9 +1049,9 @@ jQuery.browser = {
 			$loading.hide();
 			$overlay.hide();
 
-			lightcase.abortsFromFullScreenMode();
 			$case.hide().removeAttr('style').removeAttr('class');
 			$contentInner.empty();
+			$info.children().empty();
 			
 			if (lightcase.cache.originalObject) {
 				lightcase.restoreObject();
