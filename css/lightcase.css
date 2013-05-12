@@ -234,8 +234,6 @@
 	}
 		/* fullScreenModeForMobile */
 	.lightcase-fullScreenMode #lightcase-case {
-		display: block;
-		
 		color: #fff;
 		text-shadow: none;
 		
