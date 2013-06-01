@@ -1,4 +1,4 @@
-2013/05/12 - v.1.3.2
+2013/05/26 - v.1.3.2
 Removed: The modified jQuery.browser object
 Removed: Flash object tag and classid for a simpler browser handling
 Bugfix: Fixed the ignored mobileMatchExpression property
