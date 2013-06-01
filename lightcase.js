@@ -10,16 +10,11 @@
 
 jQuery.noConflict();
 
-/**
- * $.browser object is removed in jQuery 1.9.1 
- */
-jQuery.browser = {
-	msie : /msie/.test(navigator.userAgent.toLowerCase())
-};
-
 (function($) {
 	window.lightcase = {
 		cache : {}
+		
+		,support : {}
 		
 		,labels : {
 			'errorMessage' : 'Source could not be found...'
@@ -239,19 +234,12 @@ jQuery.browser = {
 					});
 					break;
 				case 'flash' :
-					var classid = $.browser.msie ? 'clsid: D27CDB6E-AE6D-11cf-96B8-444553540000' : 'clsid:d27cdb6e-ae6d-11cf-96b8-444553540000'
-						,$object = $('<object classid="' + classid + '"></object>')
-						,$param = $('<param name="movie" value="' + lightcase.objectData.url + '"></param>')
-						,$embed = $('<embed src="' + lightcase.objectData.url + '" type="application/x-shockwave-flash"></embed>');
+					var $object = $('<embed src="' + lightcase.objectData.url + '" type="application/x-shockwave-flash"></embed>');
 
 						// Add custom attributes from lightcase.settings
 					$.each(lightcase.settings.flash, function(name, value) {
-						$param = $param.add($('<param name="' + name + '" value="' + value + '"></param>'));
-						$embed.attr(name, value);
+						$object.attr(name, value);
 					});
-
-						// Append param and embed tags to the object
-					$object.append($param, $embed);
 					break;
 				case 'video' :
 					var $object = $('<video></video>');
@@ -891,13 +879,13 @@ jQuery.browser = {
 		/**
 		 * Verifies if it is a mobile device
 		 *
-		 * @return	{void}
+		 * @return	{boolean}
 		 */
 		,isMobileDevice : function() {
 			var deviceAgent = navigator.userAgent.toLowerCase()
-				,agentId = deviceAgent.match(/(iphone|ipod|ipad|android|blackberry|symbian)/);
+				,agentId = deviceAgent.match(lightcase.settings.mobileMatchExpression);
 				
-			return agentId;
+			return agentId ? true : false;
 		}
 		
 		/**
