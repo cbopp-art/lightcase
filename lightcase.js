@@ -5,7 +5,7 @@
  * @author		Cornel Boppart <cornel@bopp-art.com>
  * @copyright	Author
  *
- * @version		1.3.2 (26/05/2013)
+ * @version		1.4.0 (02/06/2013)
  */
 
 jQuery.noConflict();
@@ -15,7 +15,7 @@ jQuery.noConflict();
 		cache : {}
 		
 		,support : {}
-		
+
 		,labels : {
 			'errorMessage' : 'Source could not be found...'
 			,'sequenceInfo.of' : ' of '
@@ -29,7 +29,7 @@ jQuery.noConflict();
 		/**
 		 * Initializes the plugin
 		 *
-		 * @param	{array}	options
+		 * @param	{object}	options
 		 * @return	{void}
 		 */
 		,init : function(options) {
@@ -42,17 +42,18 @@ jQuery.noConflict();
 		/**
 		 * Starts the plugin
 		 *
-		 * @param	{array}	options
+		 * @param	{object}	options
 		 * @return	{void}
 		 */
 		,start : function(options) {
-			lightcase.objectData = lightcase.getObjectData(this);
-			lightcase.dimensions = lightcase.getDimensions();
 			lightcase.settings = $.extend({
 				id : 'lightcase-case'
 				,tempIdPrefix : 'lightcase-temp-'
 				,classPrefix : 'lightcase-'
 				,transition : 'elastic'
+				,transitionIn : null
+				,transitionOut : null
+				,csstransitions : true
 				,speedIn : 250
 				,speedOut : 250
 				,maxWidth : 800
@@ -67,6 +68,7 @@ jQuery.noConflict();
 				,overlayOpacity : .9
 				,slideshow : false
 				,timeout : 5000
+				,swipe : true
 				,useKeys : true
 				,navigateEndless : true
 				,closeOnOverlayClick : true
@@ -100,6 +102,14 @@ jQuery.noConflict();
 					,autobuffer : true
 					,autoplay : true
 					,loop : false
+				}
+				,typeMapping : {
+					'image' : 'jpg,jpeg,gif,png,bmp'
+					,'flash' : 'swf'
+					,'video' : 'mp4,mov,ogv,ogg,webm'
+					,'iframe' : 'html,php'
+					,'ajax' : 'txt'
+					,'inline' : '#'
 				}
 				,errorMessage : function() {
 					return '<p class="' + lightcase.settings.classPrefix + 'error">' + lightcase.labels['errorMessage'] + '</p>';
@@ -135,6 +145,8 @@ jQuery.noConflict();
 				,onFinish : function() {}
 			}, options);
 			
+			lightcase.objectData = lightcase.getObjectData(this);
+			lightcase.dimensions = lightcase.getDimensions();
 			lightcase.addElements();
 			lightcase.lightcaseOpen();
 		}
@@ -143,7 +155,7 @@ jQuery.noConflict();
 		 * Gets the object data
 		 *
 		 * @param	{object}	$object
-		 * @return	{array}		objectData
+		 * @return	{object}	objectData
 		 */
 		,getObjectData : function($object) {
 		 	var objectData = {
@@ -205,7 +217,16 @@ jQuery.noConflict();
 			if (lightcase.cache.originalObject) {
 				lightcase.restoreObject();
 			}
+			
+			lightcase.createObject();
+		}
 		
+		/**
+		 * Creates a new object
+		 *
+		 * @return	{void}
+		 */
+		,createObject : function() {
 				// Create object
 			switch (lightcase.objectData.type) {
 				case 'image' :
@@ -261,7 +282,18 @@ jQuery.noConflict();
 						$object.attr(name, value);
 					});
 			}
-
+			
+			lightcase.addObject($object);
+			lightcase.loadObject($object);
+		}
+		
+		/**
+		 * Adds the new object to the markup
+		 *
+		 * @param	{object}	$object
+		 * @return	{void}
+		 */
+		,addObject : function($object) {
 				// Add object to content holder
 			$contentInner.html($object);
 
@@ -295,7 +327,15 @@ jQuery.noConflict();
 				$caption.empty();
 				$caption.hide();
 			}
-			
+		}
+		
+		/**
+		 * Loads the new object
+		 *
+		 * @param	{object}	$object
+		 * @return	{void}
+		 */
+		,loadObject : function($object) {
 				// Load object
 			switch (lightcase.objectData.type) {
 				case 'inline' :
@@ -320,7 +360,7 @@ jQuery.noConflict();
 					);
 					break;
 				case 'flash' :
-					lightcase.showContent($object.children('embed'));
+					lightcase.showContent($object);
 					break;
 				case 'video' :
 					if (typeof($object.get(0).canPlayType) === 'function' || $case.find('video').length === 0) {
@@ -429,7 +469,7 @@ jQuery.noConflict();
 		 * Adjusts the dimensions
 		 *
 		 * @param	{object}	$object
-		 * @param	{array}		dimensions
+		 * @param	{object}	dimensions
 		 * @return	{void}
 		 */
 		,adjustDimensions : function($object, dimensions) {
@@ -476,7 +516,7 @@ jQuery.noConflict();
 		/**
 		 * Gets the client screen dimensions
 		 *
-		 * @return	{array}	dimensions
+		 * @return	{object}	dimensions
 		 */
 		,getDimensions : function() {
 			var dimensions = {
@@ -509,29 +549,21 @@ jQuery.noConflict();
 		/**
 		 * Verifies the data type of the content to load
 		 *
-		 * @param	{string}	url
-		 * @return	{string}	Array key if expression matched, else false
+		 * @param	{string}			url
+		 * @return	{string|boolean}	Array key if expression matched, else false
 		 */
 		,verifyDataType : function(url) {
-			var url = lightcase.verifyDataUrl(url);
-
-			var type = {
-				'image' : 'jpg,jpeg,gif,png,bmp'
-				,'flash' : 'swf'
-				,'video' : 'mp4,mov,ogv,ogg,webm'
-				,'iframe' : 'html,php'
-				,'ajax' : 'txt'
-				,'inline' : '#'
-			};
-
+			var url = lightcase.verifyDataUrl(url)
+				,typeMapping = lightcase.settings.typeMapping;
+				
 			if (url) {
-				for (var key in type) {
-					var suffixArr = type[key].split(',');
+				for (var key in typeMapping) {
+					var suffixArr = typeMapping[key].split(',');
 
 					for (i = 0; i < suffixArr.length; i++) {
 						var suffix = suffixArr[i]
 							, regexp = new RegExp('\.(' + suffix + ')$', 'i')
-							// Verify only only the last 4 characters of string
+								// Verify only only the last 4 characters of string
 							,str = url.split('?')[0].substr(-4);
 
 						if (regexp.test(str) === true) {
@@ -575,54 +607,37 @@ jQuery.noConflict();
 
 				// Call hook function on finish
 			lightcase.settings.onFinish();
-
-			switch (lightcase.settings.transition) {
+			
+			switch (lightcase.settings.transitionIn) {
+				case 'scrollTop' :
+				case 'scrollRight' :
+				case 'scrollBottom' :
+				case 'scrollLeft' :
+				case 'scrollHorizontal' :
+				case 'scrollVertical' :
+					lightcase.transition.scroll($case, 'in', lightcase.settings.speedIn);
+					lightcase.transition.fade($contentInner, 'in', lightcase.settings.speedIn);
+					break;
 				case 'elastic' :
 					if ($case.css('opacity') < 1) {
-						$case.css({
-							'opacity' : 0
-							,'-moz-transform' : 'scale(0.1)'
-							,'-webkit-transform' : 'scale(0.1)'
-							,'-o-transform' : 'scale(0.1)'
-							,'transform' : 'scale(0.1)'
-						});
-						$contentInner.stop().fadeTo(lightcase.settings.speedIn, 1);
-						$case.css({
-							'opacity' : 1
-							,'-moz-transform' : 'scale(1)'
-							,'-moz-transition' : lightcase.settings.speedIn + 'ms ease-out'
-							,'-webkit-transform' : 'scale(1)'
-							,'-webkit-transition' : lightcase.settings.speedIn + 'ms ease-out'
-							,'-o-transform' : 'scale(1)'
-							,'-o-transition' : lightcase.settings.speedIn + 'ms ease-out'
-							,'transform' : 'scale(1)'
-							,'transition' : lightcase.settings.speedIn + 'ms ease-out'
-						});
-						break;
+						lightcase.transition.zoom($case, 'in', lightcase.settings.speedIn);
+						lightcase.transition.fade($contentInner, 'in', lightcase.settings.speedIn);
 					}
 				case 'fade' :
 				case 'fadeInline' :
 				case 'elastic' :
-					$case.stop().fadeTo(lightcase.settings.speedIn, 1);
-					$contentInner.stop().fadeTo(lightcase.settings.speedIn, 1);
+					lightcase.transition.fade($case, 'in', lightcase.settings.speedIn);
+					lightcase.transition.fade($contentInner, 'in', lightcase.settings.speedIn);
 					break;
 				default :
-					$case.stop().fadeTo(0, 1);
+					lightcase.transition.fade($case, 'in', 0);
 			}
 
 				// End loading
 			lightcase.loading('end');
 			lightcase.busy = false;
-
-				// If slideshow is enabled, start timeout.
-			if (lightcase.isSlideshowEnabled()) {
-					// Only start the timeout if slideshow is not pausing
-				if (!$nav.hasClass(lightcase.settings.classPrefix + 'paused')) {
-					lightcase.startTimeout();
-				}
-			}
 		}
-
+		
 		/**
 		 * Processes the content to show
 		 *
@@ -630,15 +645,33 @@ jQuery.noConflict();
 		 */
 		,processContent : function() {
 			lightcase.busy = true;
-
-			switch (lightcase.settings.transition) {
+			
+			switch (lightcase.settings.transitionOut) {
+				case 'scrollTop' :
+				case 'scrollRight' :
+				case 'scrollBottom' :
+				case 'scrollLeft' :
+				case 'scrollVertical' :
+				case 'scrollHorizontal' :
+					if ($case.is(':hidden')) {
+						lightcase.transition.fade($case, 'out', 0, 0, function() {
+							lightcase.loadContent();
+						});
+						lightcase.transition.fade($contentInner, 'out', 0);
+					} else {
+						lightcase.transition.scroll($case, 'out', lightcase.settings.speedOut, function() {
+							lightcase.loadContent();
+						});
+						lightcase.transition.fade($contentInner, 'out', 0);
+					}
+					break;
 				case 'fade' :
 					if ($case.is(':hidden')) {
-						$case.stop().fadeTo(0, 0, function() {
+						lightcase.transition.fade($case, 'out', 0, 0, function() {
 							lightcase.loadContent();
 						});
 					} else {
-						$case.stop().fadeTo(lightcase.settings.speedOut, 0, function() {
+						lightcase.transition.fade($case, 'out', lightcase.settings.speedOut, 0, function() {
 							lightcase.loadContent();
 						});
 					}
@@ -646,19 +679,19 @@ jQuery.noConflict();
 				case 'fadeInline' :
 				case 'elastic' :
 					if ($case.is(':hidden')) {
-						$case.stop().fadeTo(0, 0);
-						$contentInner.stop().fadeTo(0, 0, function() {
+						lightcase.transition.fade($case, 'out', 0, 0, function() {
 							lightcase.loadContent();
 						});
 					} else {
-						$contentInner.stop().fadeTo(lightcase.settings.speedOut, 0, function() {
+						lightcase.transition.fade($contentInner, 'out', lightcase.settings.speedOut, 0, function() {
 							lightcase.loadContent();
 						});
 					}
 					break;
 				default :
-					$case.stop().fadeTo(0, 0);
-					lightcase.loadContent();
+					lightcase.transition.fade($case, 'out', 0, 0, function() {
+						lightcase.loadContent();
+					});
 			}
 		}
 
@@ -668,6 +701,21 @@ jQuery.noConflict();
 		 * @return	{void}
 		 */
 		,handleEvents : function() {
+			lightcase.unbindEvents();
+			
+			$nav.children().hide();
+			
+				// If slideshow is enabled, show play/pause and start timeout.
+			if (lightcase.isSlideshowEnabled()) {
+				$play.show();
+				$pause.show();
+				
+					// Only start the timeout if slideshow is not pausing
+				if (!$nav.hasClass(lightcase.settings.classPrefix + 'paused')) {
+					lightcase.startTimeout();
+				}
+			}
+			
 			if (lightcase.settings.liveResize) {
 				$(window).resize(function(event) {
 					if (lightcase.isSlideshowEnabled()) {
@@ -688,17 +736,13 @@ jQuery.noConflict();
 			if (lightcase.settings.closeOnOverlayClick === true) {
 				$overlay.css('cursor', 'pointer').click(function(event) {
 					event.preventDefault();
+					
 					lightcase.lightcaseClose();
 				});
 			}
-
-				// Unbind and hide navigator buttons as default
-			$nav.children('a').unbind('click').hide();
-				// Unbind swipe events
-			$case.unbind('swipeleft').unbind('swiperight');
 			
 			if (lightcase.settings.useKeys === true) {
-				lightcase.handleKeyEvents();
+				lightcase.addKeyEvents();
 			}
 			if (!lightcase.objectData.isPartOfSequence) {
 				return;
@@ -707,7 +751,11 @@ jQuery.noConflict();
 
 				$prev.click(function(event) {
 					event.preventDefault();
+					
+					$prev.unbind('click');
+					lightcase.cache.action = 'prev';
 					lightcase.nav.$prevItem.click();
+					
 					if (lightcase.isSlideshowEnabled()) {
 						lightcase.stopTimeout();
 					}
@@ -715,31 +763,15 @@ jQuery.noConflict();
 				
 				$next.click(function(event) {
 					event.preventDefault();
+					
+					$next.unbind('click');
+					lightcase.cache.action = 'next';
 					lightcase.nav.$nextItem.click();
+					
 					if (lightcase.isSlideshowEnabled()) {
 						lightcase.stopTimeout();
 					}
 				});
-				
-					// Swiping support for mobile devices
-				if ($.isPlainObject($.event.special.swipeleft)) {
-					$case.on('swipeleft', function(event) {
-						event.preventDefault();
-						lightcase.nav.$nextItem.click();
-						if (lightcase.isSlideshowEnabled()) {
-							lightcase.stopTimeout();
-						}
-					});
-				}
-				if ($.isPlainObject($.event.special.swiperight)) {
-					$case.on('swiperight', function(event) {
-						event.preventDefault();
-						lightcase.nav.$prevItem.click();
-						if (lightcase.isSlideshowEnabled()) {
-							lightcase.stopTimeout();
-						}
-					});
-				}
 				
 				if (lightcase.isSlideshowEnabled()) {
 					$play.click(function(event) {
@@ -751,15 +783,37 @@ jQuery.noConflict();
 						lightcase.stopTimeout();
 					});
 				}
+				
+					// Enable swiping if activated
+				if (lightcase.settings.swipe === true) {
+					if ($.isPlainObject($.event.special.swipeleft)) {
+						$case.on('swipeleft', function(event) {
+							event.preventDefault();
+							$next.click();
+							if (lightcase.isSlideshowEnabled()) {
+								lightcase.stopTimeout();
+							}
+						});
+					}
+					if ($.isPlainObject($.event.special.swiperight)) {
+						$case.on('swiperight', function(event) {
+							event.preventDefault();
+							$prev.click();
+							if (lightcase.isSlideshowEnabled()) {
+								lightcase.stopTimeout();
+							}
+						});
+					}
+				}
 			}
 		}
 		
 		/**
-		 * Enables the events for keys
+		 * Adds the key events
 		 *
 		 * @return	{void}
 		 */
-		,handleKeyEvents : function() {
+		,addKeyEvents : function() {
 			$(document).keyup(function(event) {
 					// Do nothing if lightcase is in process
 				if (lightcase.busy) {
@@ -795,15 +849,14 @@ jQuery.noConflict();
 		,startTimeout : function() {
 			$play.hide();
 			$pause.show();
-
+			
+			lightcase.cache.action = 'next';
+			
 			$nav.removeClass(lightcase.settings.classPrefix + 'paused');
-			$next.unbind('timeoutClick').dequeue();
 
-			$next.bind('timeoutClick', function() {
+			lightcase.timeout = setTimeout(function() {
 				lightcase.nav.$nextItem.click();
-			}).delay(lightcase.settings.timeout).queue(function() {
-				$next.trigger('timeoutClick');
-			});
+			}, lightcase.settings.timeout);
 		}
 
 		/**
@@ -814,15 +867,16 @@ jQuery.noConflict();
 		,stopTimeout : function() {
 			$play.show();
 			$pause.hide();
-
+			
 			$nav.addClass(lightcase.settings.classPrefix + 'paused');
-			$next.unbind('timeoutClick');
+			
+			clearTimeout(lightcase.timeout);
 		}
 
 		/**
 		 * Sets the navigator buttons (prev/next)
 		 *
-		 * @return	{array}	items
+		 * @return	{object}	items
 		 */
 		,setNavigation : function() {
 			var $links = $('[data-rel="' + lightcase.objectData.rel + '"]')
@@ -884,8 +938,226 @@ jQuery.noConflict();
 		,isMobileDevice : function() {
 			var deviceAgent = navigator.userAgent.toLowerCase()
 				,agentId = deviceAgent.match(lightcase.settings.mobileMatchExpression);
-				
+			
 			return agentId ? true : false;
+		}
+		
+		/**
+		 * Verifies if css transitions are supported
+		 *
+		 * @return	{string|boolean}	The transition prefix if supported, else false.
+		 */
+		,isTransitionSupported : function() {
+			var body = $('body').get(0)
+				,isTransitionSupported = false
+				,transitionMapping = {
+					'transition' : ''
+					,'WebkitTransition' : '-webkit-'
+					,'MozTransition' : '-moz-'
+					,'OTransition' : '-o-'
+					,'MsTransition' : '-ms-'
+				};
+				
+			for (var key in transitionMapping) {
+				if (key in body.style) {
+					lightcase.support.transition = transitionMapping[key];
+					isTransitionSupported = true;
+				}
+			}
+			
+			return isTransitionSupported;
+		}
+		
+		/**
+		 * Transition types
+		 *
+		 */
+		,transition : {
+			/**
+			 * Fades in/out the object
+			 *
+			 * @param	{object}	$object
+			 * @param	{string}	type
+			 * @param	{number}	speed
+			 * @param	{number}	opacity
+			 * @param	{function}	callback
+			 * @return	{void}		Animates an object
+			 */
+			fade : function($object, type, speed, opacity, callback) {
+				var isInTransition = type === 'in' ? true : false
+					,startTransition = {}
+					,startOpacity = $object.css('opacity')
+					,endTransition = {}
+					,endOpacity = opacity ? opacity : isInTransition ? 1 : 0
+				
+				if (!lightcase.open && isInTransition) return;
+					
+				startTransition['opacity'] = startOpacity;
+				endTransition['opacity'] = endOpacity;
+					
+				$object.css(startTransition).show();
+					
+					// Css transition
+				if (lightcase.support.transitions) {
+					endTransition[lightcase.support.transition + 'transition'] = speed + 'ms ease-out';
+					
+					setTimeout(function() {
+						$object.css(endTransition);
+					}, 0);
+					
+					setTimeout(function() {
+						$object.css(lightcase.support.transition + 'transition', '');
+						
+						if (callback && (lightcase.open || !isInTransition)) {
+							callback();
+						}
+					}, speed);
+				} else {
+						// Fallback to js transition
+					$object.stop();
+					$object.animate(endTransition, speed, callback);
+				}
+			}
+			
+			/**
+			 * Scrolls in/out the object
+			 *
+			 * @param	{object}	$object
+			 * @param	{string}	type
+			 * @param	{number}	speed
+			 * @param	{function}	callback
+			 * @return	{void}		Animates an object
+			 */
+			,scroll : function($object, type, speed, callback) {
+				var isInTransition = type === 'in' ? true : false
+					,transition = isInTransition ? lightcase.settings.transitionIn : lightcase.settings.transitionOut
+					,direction = 'left'
+					,startTransition = {}
+					,startOpacity = isInTransition ? 0 : 1
+					,startOffset = isInTransition ? '-50%' : '50%'
+					,endTransition = {}
+					,endOpacity = isInTransition ? 1 : 0
+					,endOffset = isInTransition ? '50%' : '-50%';
+				
+				if (!lightcase.open && isInTransition) return;
+				
+				switch (transition) {
+					case 'scrollTop' :
+						direction = 'top';
+						break;
+					case 'scrollRight' :
+						startOffset = isInTransition ? '150%' : '50%'
+						endOffset = isInTransition ? '50%' : '150%'
+						break;
+					case 'scrollBottom' :
+						direction = 'top';
+						startOffset = isInTransition ? '150%' : '50%'
+						endOffset = isInTransition ? '50%' : '150%'
+						break;
+					case 'scrollHorizontal' : 
+						startOffset = isInTransition ? '150%' : '50%'
+						endOffset = isInTransition ? '50%' : '-50%'
+						break;
+					case 'scrollVertical' :
+						direction = 'top';
+						startOffset = isInTransition ? '-50%' : '50%'
+						endOffset = isInTransition ? '50%' : '150%'
+						break;
+				}
+				
+				if (lightcase.cache.action === 'prev') {
+					switch (transition) {
+						case 'scrollHorizontal' : 
+							startOffset = isInTransition ? '-50%' : '50%';
+							endOffset = isInTransition ? '50%' : '150%';
+							break;
+						case 'scrollVertical' : 
+							startOffset = isInTransition ? '150%' : '50%';
+							endOffset = isInTransition ? '50%' : '-50%';
+							break;
+					}
+				}
+				
+				startTransition['opacity'] = startOpacity;
+				startTransition[direction] = startOffset;
+				
+				endTransition['opacity'] = endOpacity;
+				endTransition[direction] = endOffset;
+					
+				$object.css(startTransition).show();
+				
+					// Css transition
+				if (lightcase.support.transitions) {
+					endTransition[lightcase.support.transition + 'transition'] = speed + 'ms ease-out';
+					
+					setTimeout(function() {
+						$object.css(endTransition);
+					}, 0);
+					
+					setTimeout(function() {
+						$object.css(lightcase.support.transition + 'transition', '');
+
+						if (callback && (lightcase.open || !isInTransition)) {
+							callback();
+						}
+					}, speed);
+				} else {
+						// Fallback to js transition
+					$object.stop();
+					$object.animate(endTransition, speed, callback);
+				}
+			}
+			
+			/**
+			 * Zooms in/out the object
+			 *
+			 * @param	{object}	$object
+			 * @param	{string}	type
+			 * @param	{number}	speed
+			 * @param	{function}	callback
+			 * @return	{void}		Animates an object
+			 */
+			,zoom : function($object, type, speed, callback) {
+				var isInTransition = type === 'in' ? true : false
+					,startTransition = {}
+					,startOpacity = $object.css('opacity')
+					,startScale = isInTransition ? 'scale(0)' : 'scale(1)'
+					,endTransition = {}
+					,endOpacity = isInTransition ? 1 : 0
+					,endScale = isInTransition ? 'scale(1)' : 'scale(0)';
+					
+				if (!lightcase.open && isInTransition) return;
+					
+				startTransition['opacity'] = startOpacity;
+				startTransition[lightcase.support.transition + 'transform'] = startScale;
+				
+				endTransition['opacity'] = endOpacity;
+					
+				$object.css(startTransition).show();
+				
+					// Css transition
+				if (lightcase.support.transitions) {
+					endTransition[lightcase.support.transition + 'transform'] = endScale;
+					endTransition[lightcase.support.transition + 'transition'] = speed + 'ms ease-out';
+					
+					setTimeout(function() {
+						$object.css(endTransition);
+					}, 0);
+					
+					setTimeout(function() {
+						$object.css(lightcase.support.transition + 'transform', '');
+						$object.css(lightcase.support.transition + 'transition', '');
+						
+						if (callback && (lightcase.open || !isInTransition)) {
+							callback();
+						}
+					}, speed);
+				} else {
+						// Fallback to js transition
+					$object.stop();
+					$object.animate(endTransition, speed, callback);
+				}
+			}
 		}
 		
 		/**
@@ -904,7 +1176,7 @@ jQuery.noConflict();
 		}
 		
 		/**
-		 * Restore object from cache
+		 * Restores the object from cache
 		 *
 		 * @return	void
 		 */
@@ -923,7 +1195,10 @@ jQuery.noConflict();
 		,lightcaseOpen : function() {
 			lightcase.open = true;
 			
-			if (lightcase.isMobileDevice()) {
+			lightcase.support.transitions = lightcase.settings.csstransitions ? lightcase.isTransitionSupported() : false;
+			lightcase.support.mobileDevice = lightcase.isMobileDevice();
+			
+			if (lightcase.support.mobileDevice) {
 				$('html').addClass(lightcase.settings.classPrefix + 'isMobileDevice');
 				
 				if (lightcase.settings.fullScreenModeForMobile) {
@@ -931,21 +1206,38 @@ jQuery.noConflict();
 				}
 			}
 			
-			$overlay.css('opacity', lightcase.settings.overlayOpacity);
+			if (!lightcase.settings.transitionIn) {
+				lightcase.settings.transitionIn = lightcase.settings.transition;
+			}
+			if (!lightcase.settings.transitionOut) {
+				lightcase.settings.transitionOut = lightcase.settings.transition;
+			}
 			
-			switch (lightcase.settings.transition) {
+			switch (lightcase.settings.transitionIn) {
 				case 'fade' :
 				case 'fadeInline' :
 				case 'elastic' :
-					$overlay.stop().fadeIn(lightcase.settings.speedIn, function() {
+				case 'scrollTop' :
+				case 'scrollRight' :
+				case 'scrollBottom' :
+				case 'scrollLeft' :
+				case 'scrollVertical' :
+				case 'scrollHorizontal' :
+					if ($case.is(':hidden')) {
+						$overlay.css('opacity', 0);
+						$case.css('opacity', 0);
+						$contentInner.css('opacity', 0);
+					}
+					lightcase.transition.fade($overlay, 'in', lightcase.settings.speedIn, lightcase.settings.overlayOpacity, function() {
 						lightcase.handleEvents();
 						lightcase.processContent();
 					});
 					break;
 				default :
-					$overlay.show();
-					lightcase.handleEvents();
-					lightcase.processContent();
+					lightcase.transition.fade($overlay, 'in', 0, lightcase.settings.overlayOpacity, function() {
+						lightcase.handleEvents();
+						lightcase.processContent();
+					});
 			}
 			
 			$('html').addClass(lightcase.settings.classPrefix + 'open');
@@ -960,14 +1252,32 @@ jQuery.noConflict();
 			lightcase.open = false;
 			$loading.hide();
 			
+			lightcase.unbindEvents();
+			
+			if (lightcase.isSlideshowEnabled()) {
+				lightcase.stopTimeout();
+			}
+			
 			$('html').removeClass(lightcase.settings.classPrefix + 'open');
 			
-			switch (lightcase.settings.transition) {
+			switch (lightcase.settings.transitionOut) {
 				case 'fade' :
 				case 'fadeInline' :
+				case 'scrollTop' :
+				case 'scrollRight' :
+				case 'scrollBottom' :
+				case 'scrollLeft' :
+				case 'scrollVertical' :
+				case 'scrollHorizontal' :
+					lightcase.transition.fade($case, 'out', lightcase.settings.speedOut, 0, function() {
+						lightcase.transition.fade($overlay, 'out', lightcase.settings.speedOut, 0, function() {
+							lightcase.cleanup();
+						});
+					});
+					break;
 				case 'elastic' :
-					$case.stop().fadeOut(lightcase.settings.speedOut, function() {
-						$overlay.stop().fadeOut(lightcase.settings.speedOut, function() {
+					lightcase.transition.zoom($case, 'out', lightcase.settings.speedOut, function() {
+						lightcase.transition.fade($overlay, 'out', lightcase.settings.speedOut, 0, function() {
 							lightcase.cleanup();
 						});
 					});
@@ -986,11 +1296,36 @@ jQuery.noConflict();
 			lightcase.settings.shrinkFactor = 1;
 			lightcase.settings.overlayOpacity = 1;
 			
-			if (lightcase.settings.transition !== 'none') {
-				lightcase.settings.transition = 'fade';
+			if (lightcase.settings.transitionIn !== 'none') {
+				lightcase.settings.transitionIn = 'fade';
+			}
+			if (lightcase.settings.transitionOut !== 'none') {
+				lightcase.settings.transitionOut = 'fade';
 			}
 			
 			$('html').addClass(lightcase.settings.classPrefix + 'fullScreenMode');
+		}
+		
+		/**
+		 * Unbinds all given events
+		 *
+		 * @return	{void}
+		 */
+		,unbindEvents : function() {
+				// Unbind overlay event
+			$overlay.unbind('click');
+
+				// Unbind key events
+			$(document).unbind('keyup');
+			
+				// Unbind swipe events
+			$case.unbind('swipeleft').unbind('swiperight');
+			
+				// Unbind navigator events
+			$nav.children('a').unbind('click');
+			
+				// Unbind close event
+			$close.unbind('click');
 		}
 
 		/**
@@ -999,26 +1334,18 @@ jQuery.noConflict();
 		 * @return	{void}
 		 */
 		,cleanupDimensions : function() {
+			var opacity = $contentInner.css('opacity');
+			
 			$case.css({
 				'width' : ''
 				,'height' : ''
+				,'top' : ''
+				,'left' : ''
 				,'margin-top' : ''
 				,'margin-left' : ''
-				,'-moz-transform' : ''
-				,'-moz-transition' : ''
-				,'-webkit-transform' : ''
-				,'-webkit-transition' : ''
-				,'-o-transform' : ''
-				,'-o-transition' : ''
-				,'transition' : ''
-				,'transform' : ''
 			});
 			
-			$contentInner.css({
-				'width' : ''
-				,'height' : ''
-			});
-			
+			$contentInner.removeAttr('style').css('opacity', opacity);
 			$contentInner.children().removeAttr('style');
 		}
 
@@ -1037,8 +1364,8 @@ jQuery.noConflict();
 			$loading.hide();
 			$overlay.hide();
 
-			$case.hide().removeAttr('style').removeAttr('class');
-			$contentInner.empty();
+			$case.hide().removeAttr('class');
+			$contentInner.empty().hide();
 			$info.children().empty();
 			
 			if (lightcase.cache.originalObject) {
