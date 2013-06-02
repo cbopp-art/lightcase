@@ -53,7 +53,7 @@ jQuery.noConflict();
 				,transition : 'elastic'
 				,transitionIn : null
 				,transitionOut : null
-				,csstransitions : true
+				,cssTransitions : true
 				,speedIn : 250
 				,speedOut : 250
 				,maxWidth : 800
@@ -1195,7 +1195,7 @@ jQuery.noConflict();
 		,lightcaseOpen : function() {
 			lightcase.open = true;
 			
-			lightcase.support.transitions = lightcase.settings.csstransitions ? lightcase.isTransitionSupported() : false;
+			lightcase.support.transitions = lightcase.settings.cssTransitions ? lightcase.isTransitionSupported() : false;
 			lightcase.support.mobileDevice = lightcase.isMobileDevice();
 			
 			if (lightcase.support.mobileDevice) {

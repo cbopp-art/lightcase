@@ -2,7 +2,7 @@
 Feature: New effects like 'scrollTop', 'scrollHorizontal' and more
 Feature: Option 'swipe'
 Feature: Additional options 'transitionIn' and 'transitionOut'
-Feature: Option 'csstransitions' for enabing/disabling
+Feature: Option 'cssTransitions' for enabing/disabling transitions with css
 Feature: Option 'typeMapping'
 Added: Design adjustments
 Added: All effects as CSS3 transitions with javascript fallbacks
