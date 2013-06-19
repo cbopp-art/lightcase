@@ -1,3 +1,6 @@
+2013/06/19 - v.1.4.1
+Removed: noConflict call
+
 2013/06/02 - v.1.4.0
 Feature: New effects like 'scrollTop', 'scrollHorizontal' and more
 Feature: Option 'swipe'

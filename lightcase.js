@@ -5,10 +5,8 @@
  * @author		Cornel Boppart <cornel@bopp-art.com>
  * @copyright	Author
  *
- * @version		1.4.0 (02/06/2013)
+ * @version		1.4.1 (19/06/2013)
  */
-
-jQuery.noConflict();
 
 (function($) {
 	window.lightcase = {
@@ -1387,4 +1385,4 @@ jQuery.noConflict();
 			$.error('Method ' + method + ' does not exist on jQuery.lightcase');
 		}
 	};
-})(jQuery);
+}(jQuery));
