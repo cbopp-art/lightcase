@@ -5,7 +5,7 @@
  * @author		Cornel Boppart <cornel@bopp-art.com>
  * @copyright	Author
  *
- * @version		1.4.1 (19/06/2013)
+ * @version		1.4.2 (30/06/2013)
  */
 
 (function($) {
@@ -101,6 +101,7 @@
 					,autoplay : true
 					,loop : false
 				}
+				,type : null
 				,typeMapping : {
 					'image' : 'jpg,jpeg,gif,png,bmp'
 					,'flash' : 'swf'
@@ -162,7 +163,7 @@
 				,caption : $object.children('img').attr('alt')
 				,url : lightcase.verifyDataUrl($object.attr('href'))
 				,rel : $object.attr('data-rel')
-				,type : lightcase.verifyDataType($object.attr('href'))
+				,type : lightcase.settings.type ? lightcase.settings.type : lightcase.verifyDataType($object.attr('href'))
 				,isPartOfSequence : lightcase.isPartOfSequence($object.attr('data-rel'), ':')
 				,isPartOfSequenceWithSlideshow : lightcase.isPartOfSequence($object.attr('data-rel'), ':slideshow')
 				,currentIndex : $('[data-rel="' + $object.attr('data-rel') + '"]').index($object)
