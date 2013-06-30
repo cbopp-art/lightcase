@@ -1,5 +1,5 @@
-2013/06/19 - v.1.4.2
-Added: Option 'type' to force data type
+2013/06/30 - v.1.4.2
+Added: Option 'type' for forcing data type
 
 2013/06/19 - v.1.4.1
 Removed: noConflict call
