@@ -1120,10 +1120,10 @@
 				var isInTransition = type === 'in' ? true : false
 					,startTransition = {}
 					,startOpacity = $object.css('opacity')
-					,startScale = isInTransition ? 'scale(0)' : 'scale(1)'
+					,startScale = isInTransition ? 'scale(0.001)' : 'scale(1)'
 					,endTransition = {}
 					,endOpacity = isInTransition ? 1 : 0
-					,endScale = isInTransition ? 'scale(1)' : 'scale(0)';
+					,endScale = isInTransition ? 'scale(1)' : 'scale(0.001)';
 					
 				if (!lightcase.open && isInTransition) return;
 					
