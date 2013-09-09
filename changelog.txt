@@ -1,3 +1,7 @@
+2013/09/09 - v1.4.4
+Fixed: Cross effects when using multiple class names with option 'classPrefix'
+Removed: Replaced option 'id' and 'tempIdPrefix' with 'idPrefix'
+
 2013/09/01 - v1.4.3
 Bugfix: Fixed the 'elastic' inTransition in Google Chrome 29.0.1547.62 m
 

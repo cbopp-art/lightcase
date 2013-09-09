@@ -5,7 +5,7 @@
  * @author		Cornel Boppart <cornel@bopp-art.com>
  * @copyright	Author
  *
- * @version		1.4.3 (01/09/2013)
+ * @version		1.4.4 (09/09/2013)
  */
 
 (function($) {
@@ -45,8 +45,7 @@
 		 */
 		,start : function(options) {
 			lightcase.settings = $.extend({
-				id : 'lightcase-case'
-				,tempIdPrefix : 'lightcase-temp-'
+				idPrefix : 'lightcase-'
 				,classPrefix : 'lightcase-'
 				,transition : 'elastic'
 				,transitionIn : null
@@ -115,9 +114,9 @@
 				}
 				,markup : function() {
 					$('body').append(
-						$overlay = $('<div id="' + lightcase.settings.classPrefix + 'overlay"></div>')
-						,$loading = $('<div id="' + lightcase.settings.classPrefix + 'loading"></div>')
-						,$case = $('<div id=' + lightcase.settings.id + '></div>')
+						$overlay = $('<div id="' + lightcase.settings.idPrefix + 'overlay"></div>')
+						,$loading = $('<div id="' + lightcase.settings.idPrefix + 'loading"></div>')
+						,$case = $('<div id="' + lightcase.settings.idPrefix + 'case"></div>')
 					);
 					$case.append(
 						$content = $('<div class="' + lightcase.settings.classPrefix + 'content"></div>')
@@ -920,7 +919,7 @@
 				// If element is hidden, cache the object and remove
 			if ($object.is(':hidden')) {
 				lightcase.cacheObjectData($object);
-				$object.attr('id', lightcase.settings.tempIdPrefix + objectId).empty();
+				$object.attr('id', lightcase.settings.idPrefix + 'temp-' + objectId).empty();
 			} else {
 					// Prevent duplicated id's
 				$clone.removeAttr('id');
@@ -1180,7 +1179,7 @@
 		 * @return	void
 		 */
 		,restoreObject : function() {
-			var $object = $('[id^="' + lightcase.settings.tempIdPrefix + '"]');
+			var $object = $('[id^="' + lightcase.settings.idPrefix + 'temp-"]');
 		
 			$object.attr('id', $.data(lightcase.cache.originalObject, 'cache').id);
 			$object.html($.data(lightcase.cache.originalObject, 'cache').content);
