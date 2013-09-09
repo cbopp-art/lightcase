@@ -583,7 +583,7 @@
 		 * @return	{void}
 		 */
 		,addElements : function() {
-			if ($('#' + lightcase.settings.id).length) {
+			if ($('[id^=' + lightcase.settings.idPrefix).length) {
 				return;
 			}
 
