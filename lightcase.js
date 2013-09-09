@@ -334,7 +334,7 @@
 		 * @return	{void}
 		 */
 		,loadObject : function($object) {
-				// Load object
+				// Load the object
 			switch (lightcase.objectData.type) {
 				case 'inline' :
 					if ($(lightcase.objectData.url)) {
