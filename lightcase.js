@@ -5,7 +5,7 @@
  * @author		Cornel Boppart <cornel@bopp-art.com>
  * @copyright	Author
  *
- * @version		1.4.2 (30/06/2013)
+ * @version		1.4.3 (01/09/2013)
  */
 
 (function($) {
