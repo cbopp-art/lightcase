@@ -160,9 +160,9 @@
 				$link : $object
 				,title : $object.attr('title')
 				,caption : $object.children('img').attr('alt')
-				,url : lightcase.verifyDataUrl($object.attr('href'))
+				,url : lightcase.verifyDataUrl($object.attr('data-href') || $object.attr('href'))
 				,rel : $object.attr('data-rel')
-				,type : lightcase.settings.type ? lightcase.settings.type : lightcase.verifyDataType($object.attr('href'))
+				,type : lightcase.settings.type ? lightcase.settings.type : lightcase.verifyDataType($object.attr('data-href') || $object.attr('href'))
 				,isPartOfSequence : lightcase.isPartOfSequence($object.attr('data-rel'), ':')
 				,isPartOfSequenceWithSlideshow : lightcase.isPartOfSequence($object.attr('data-rel'), ':slideshow')
 				,currentIndex : $('[data-rel="' + $object.attr('data-rel') + '"]').index($object)
