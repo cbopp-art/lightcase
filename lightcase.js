@@ -643,7 +643,6 @@
 						lightcase.transition.zoom($case, 'in', lightcase.settings.speedIn);
 						lightcase.transition.fade($contentInner, 'in', lightcase.settings.speedIn);
 					}
-					break;
 				case 'fade' :
 				case 'fadeInline' :
 					lightcase.transition.fade($case, 'in', lightcase.settings.speedIn);
