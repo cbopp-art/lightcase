@@ -82,9 +82,6 @@
 					,type : 'get'
 					,dataType : 'html'
 					,data : {}
-					,onSuccess : function(data) {
-						return data;
-					}
 				}
 				,iframe : {
 					width : 800
