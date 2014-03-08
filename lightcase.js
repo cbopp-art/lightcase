@@ -5,7 +5,7 @@
  * @author		Cornel Boppart <cornel@bopp-art.com>
  * @copyright	Author
  *
- * @version		1.4.4 (10/09/2013)
+ * @version		1.5.0 (08/03/2014)
  */
 
 (function($) {
@@ -79,6 +79,12 @@
 				,ajax : {
 					width : 'auto'
 					,height : 'auto'
+					,type : 'get'
+					,dataType : 'html'
+					,data : {}
+					,onSuccess : function(data) {
+						return data;
+					}
 				}
 				,iframe : {
 					width : 800
@@ -116,7 +122,7 @@
 					$('body').append(
 						$overlay = $('<div id="' + lightcase.settings.idPrefix + 'overlay"></div>')
 						,$loading = $('<div id="' + lightcase.settings.idPrefix + 'loading"></div>')
-						,$case = $('<div id="' + lightcase.settings.idPrefix + 'case"></div>')
+						,$case = $('<div id="' + lightcase.settings.idPrefix + 'case" aria-hidden="true" role="dialog"></div>')
 					);
 					$case.append(
 						$content = $('<div class="' + lightcase.settings.classPrefix + 'content"></div>')
@@ -139,12 +145,17 @@
 						,$pause = $('<a href="#" class="' + lightcase.settings.classPrefix + 'pause"><span>' + lightcase.labels['navigator.pause'] + '</span></a>').hide()
 					);
 				}
+				,onInit : function() {}
 				,onStart : function() {}
 				,onFinish : function() {}
 			}, options);
 			
 			lightcase.objectData = lightcase.getObjectData(this);
 			lightcase.dimensions = lightcase.getDimensions();
+
+				// Call hook function on initialization
+			lightcase.settings.onInit();
+
 			lightcase.addElements();
 			lightcase.lightcaseOpen();
 		}
@@ -160,9 +171,12 @@
 				$link : $object
 				,title : $object.attr('title')
 				,caption : $object.children('img').attr('alt')
-				,url : lightcase.verifyDataUrl($object.attr('href'))
+				,url : lightcase.verifyDataUrl($object.attr('data-href') || $object.attr('href'))
+				,requestType : lightcase.settings.ajax.type
+				,requestData : lightcase.settings.ajax.data
+				,responseDataType : lightcase.settings.ajax.dataType
 				,rel : $object.attr('data-rel')
-				,type : lightcase.settings.type ? lightcase.settings.type : lightcase.verifyDataType($object.attr('href'))
+				,type : lightcase.settings.type || lightcase.verifyDataType($object.attr('data-href') || $object.attr('href'))
 				,isPartOfSequence : lightcase.isPartOfSequence($object.attr('data-rel'), ':')
 				,isPartOfSequenceWithSlideshow : lightcase.isPartOfSequence($object.attr('data-rel'), ':slideshow')
 				,currentIndex : $('[data-rel="' + $object.attr('data-rel') + '"]').index($object)
@@ -170,7 +184,7 @@
 			};
 
 				// Add sequence info to objectData
-			objectData.sequenceInfo = (objectData.currentIndex + 1) + lightcase.labels['sequenceInfo.of'] + objectData.sequenceLength
+			objectData.sequenceInfo = (objectData.currentIndex + 1) + lightcase.labels['sequenceInfo.of'] + objectData.sequenceLength;
 
 			return objectData;
 		}
@@ -249,7 +263,9 @@
 						
 						// Add custom attributes from lightcase.settings
 					$.each(lightcase.settings.ajax, function(name, value) {
-						$object.attr('data-' + name, value);
+						if (name !== 'data') {
+							$object.attr('data-' + name, value);
+						}
 					});
 					break;
 				case 'flash' :
@@ -347,7 +363,14 @@
 					$.ajax(
 						$.extend({}, lightcase.settings.ajax, {
 							url : lightcase.objectData.url
+							,type : lightcase.objectData.requestType
+							,dataType : lightcase.objectData.requestDataType
+							,data : lightcase.objectData.requestData
 							,success : function(data, textStatus, jqXHR) {
+									// Unserialize if data is transeferred as json
+								if (lightcase.objectData.responseDataType === 'json') {
+									data = $.parseJSON(data);
+								}
 								$object.html(data);
 								lightcase.showContent($object);
 							}
@@ -475,13 +498,14 @@
 			$object.css({
 				'width' : dimensions.objectWidth
 				,'height' : dimensions.objectHeight
-				,'max-width' : dimensions.maxWidth
-				,'max-height' : dimensions.maxHeight
+				,'max-width' : $object.attr('data-max-width') ? $object.attr('data-max-width') : dimensions.maxWidth
+				,'max-height' : $object.attr('data-max-height') ? $object.attr('data-max-height') : dimensions.maxHeight
 			});
 			
 			$contentInner.css({
 				'width' : $object.outerWidth()
 				,'height' : $object.outerHeight()
+				,'max-width' : '100%'
 			});
 			
 			$case.css({
@@ -517,12 +541,10 @@
 		 * @return	{object}	dimensions
 		 */
 		,getDimensions : function() {
-			var dimensions = {
+			return {
 				windowWidth : $(window).innerWidth()
 				,windowHeight : $(window).innerHeight()
 			};
-			
-			return dimensions;
 		}
 
 		/**
@@ -553,15 +575,15 @@
 		,verifyDataType : function(url) {
 			var url = lightcase.verifyDataUrl(url)
 				,typeMapping = lightcase.settings.typeMapping;
-				
+
 			if (url) {
 				for (var key in typeMapping) {
 					var suffixArr = typeMapping[key].split(',');
 
-					for (i = 0; i < suffixArr.length; i++) {
+					for (var i = 0; i < suffixArr.length; i++) {
 						var suffix = suffixArr[i]
-							, regexp = new RegExp('\.(' + suffix + ')$', 'i')
-								// Verify only only the last 4 characters of string
+							,regexp = new RegExp('\.(' + suffix + ')$', 'i')
+								// Verify only the last 4 characters of the string
 							,str = url.split('?')[0].substr(-4);
 
 						if (regexp.test(str) === true) {
@@ -572,7 +594,7 @@
 					}
 				}
 			}
-			
+
 				// If no expression matched, return 'iframe'.
 			return 'iframe';
 		}
@@ -621,9 +643,9 @@
 						lightcase.transition.zoom($case, 'in', lightcase.settings.speedIn);
 						lightcase.transition.fade($contentInner, 'in', lightcase.settings.speedIn);
 					}
+					break;
 				case 'fade' :
 				case 'fadeInline' :
-				case 'elastic' :
 					lightcase.transition.fade($case, 'in', lightcase.settings.speedIn);
 					lightcase.transition.fade($contentInner, 'in', lightcase.settings.speedIn);
 					break;
@@ -715,7 +737,7 @@
 			}
 			
 			if (lightcase.settings.liveResize) {
-				$(window).resize(function(event) {
+				$(window).resize(function() {
 					if (lightcase.isSlideshowEnabled()) {
 						lightcase.stopTimeout();
 					}
@@ -982,7 +1004,7 @@
 			 * @return	{void}		Animates an object
 			 */
 			fade : function($object, type, speed, opacity, callback) {
-				var isInTransition = type === 'in' ? true : false
+				var isInTransition = type === 'in'
 					,startTransition = {}
 					,startOpacity = $object.css('opacity')
 					,endTransition = {}
@@ -1027,7 +1049,7 @@
 			 * @return	{void}		Animates an object
 			 */
 			,scroll : function($object, type, speed, callback) {
-				var isInTransition = type === 'in' ? true : false
+				var isInTransition = type === 'in'
 					,transition = isInTransition ? lightcase.settings.transitionIn : lightcase.settings.transitionOut
 					,direction = 'left'
 					,startTransition = {}
@@ -1044,22 +1066,22 @@
 						direction = 'top';
 						break;
 					case 'scrollRight' :
-						startOffset = isInTransition ? '150%' : '50%'
-						endOffset = isInTransition ? '50%' : '150%'
+						startOffset = isInTransition ? '150%' : '50%';
+						endOffset = isInTransition ? '50%' : '150%';
 						break;
 					case 'scrollBottom' :
 						direction = 'top';
-						startOffset = isInTransition ? '150%' : '50%'
-						endOffset = isInTransition ? '50%' : '150%'
+						startOffset = isInTransition ? '150%' : '50%';
+						endOffset = isInTransition ? '50%' : '150%';
 						break;
 					case 'scrollHorizontal' : 
-						startOffset = isInTransition ? '150%' : '50%'
-						endOffset = isInTransition ? '50%' : '-50%'
+						startOffset = isInTransition ? '150%' : '50%';
+						endOffset = isInTransition ? '50%' : '-50%';
 						break;
 					case 'scrollVertical' :
 						direction = 'top';
-						startOffset = isInTransition ? '-50%' : '50%'
-						endOffset = isInTransition ? '50%' : '150%'
+						startOffset = isInTransition ? '-50%' : '50%';
+						endOffset = isInTransition ? '50%' : '150%';
 						break;
 				}
 				
@@ -1116,7 +1138,7 @@
 			 * @return	{void}		Animates an object
 			 */
 			,zoom : function($object, type, speed, callback) {
-				var isInTransition = type === 'in' ? true : false
+				var isInTransition = type === 'in'
 					,startTransition = {}
 					,startOpacity = $object.css('opacity')
 					,startScale = isInTransition ? 'scale(0.001)' : 'scale(1)'
@@ -1239,6 +1261,7 @@
 			}
 			
 			$('html').addClass(lightcase.settings.classPrefix + 'open');
+			$case.attr('aria-hidden', 'false');
 		}
 
 		/**
@@ -1257,6 +1280,7 @@
 			}
 			
 			$('html').removeClass(lightcase.settings.classPrefix + 'open');
+			$case.attr('aria-hidden', 'true');
 			
 			switch (lightcase.settings.transitionOut) {
 				case 'fade' :
