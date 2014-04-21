@@ -1,3 +1,7 @@
+2014/04/21 - v1.5.1
+Feature: Changed default speed value
+Feature: Improved and transition 'elastic' look and feel
+
 2014/03/08 - v1.5.0
 Feature: New hook function on initialization
 Feature: Advanced usage of type ajax

@@ -5,7 +5,7 @@
  * @author		Cornel Boppart <cornel@bopp-art.com>
  * @copyright	Author
  *
- * @version		1.5.0 (08/03/2014)
+ * @version		1.5.1 (21/04/2014)
  */
 
 (function($) {
@@ -51,7 +51,7 @@
 				,transitionIn : null
 				,transitionOut : null
 				,cssTransitions : true
-				,speedIn : 250
+				,speedIn : 350
 				,speedOut : 250
 				,maxWidth : 800
 				,maxHeight : 500
@@ -1137,10 +1137,10 @@
 				var isInTransition = type === 'in'
 					,startTransition = {}
 					,startOpacity = $object.css('opacity')
-					,startScale = isInTransition ? 'scale(0.001)' : 'scale(1)'
+					,startScale = isInTransition ? 'scale(0.75)' : 'scale(1)'
 					,endTransition = {}
 					,endOpacity = isInTransition ? 1 : 0
-					,endScale = isInTransition ? 'scale(1)' : 'scale(0.001)';
+					,endScale = isInTransition ? 'scale(1)' : 'scale(0.75)';
 					
 				if (!lightcase.open && isInTransition) return;
 					
