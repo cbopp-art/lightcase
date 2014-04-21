@@ -8,7 +8,7 @@
  * @version		1.5.1 (21/04/2014)
  */
 
-(function($) {
+;(function($) {
 	window.lightcase = {
 		cache : {}
 		
