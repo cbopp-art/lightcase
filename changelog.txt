@@ -1,3 +1,6 @@
+2014/04/28 - v1.5.2
+Fixed: CSS3 transition timing issue in Firefox
+
 2014/04/21 - v1.5.1
 Feature: Changed default speed value
 Feature: Improved and transition 'elastic' look and feel

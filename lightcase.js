@@ -5,10 +5,10 @@
  * @author		Cornel Boppart <cornel@bopp-art.com>
  * @copyright	Author
  *
- * @version		1.5.1 (21/04/2014)
+ * @version		1.5.2 (28/04/2014)
  */
 
-;(function($) {
+(function($) {
 	window.lightcase = {
 		cache : {}
 		
@@ -1015,11 +1015,11 @@
 					
 					// Css transition
 				if (lightcase.support.transitions) {
-					endTransition[lightcase.support.transition + 'transition'] = speed + 'ms ease-out';
+					endTransition[lightcase.support.transition + 'transition'] = 'opacity ' + speed + 'ms ease-out';
 					
 					setTimeout(function() {
 						$object.css(endTransition);
-					}, 0);
+					}, 15);
 					
 					setTimeout(function() {
 						$object.css(lightcase.support.transition + 'transition', '');
@@ -1104,7 +1104,7 @@
 				
 					// Css transition
 				if (lightcase.support.transitions) {
-					endTransition[lightcase.support.transition + 'transition'] = speed + 'ms ease-out';
+					endTransition[lightcase.support.transition + 'transition'] = direction + ' ' + speed + 'ms ease-out';
 					
 					setTimeout(function() {
 						$object.css(endTransition);
