@@ -1015,7 +1015,7 @@
 					
 					// Css transition
 				if (lightcase.support.transitions) {
-					endTransition[lightcase.support.transition + 'transition'] = 'opacity ' + speed + 'ms ease-out';
+					endTransition[lightcase.support.transition + 'transition'] = speed + 'ms ease-out';
 					
 					setTimeout(function() {
 						$object.css(endTransition);
@@ -1104,7 +1104,7 @@
 				
 					// Css transition
 				if (lightcase.support.transitions) {
-					endTransition[lightcase.support.transition + 'transition'] = direction + ' ' + speed + 'ms ease-out';
+					endTransition[lightcase.support.transition + 'transition'] = speed + 'ms ease-out';
 					
 					setTimeout(function() {
 						$object.css(endTransition);
