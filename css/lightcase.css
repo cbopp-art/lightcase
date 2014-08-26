@@ -277,7 +277,7 @@
 	.lightcase-fullScreenMode #lightcase-case a.lightcase-pause span,
 	.lightcase-fullScreenMode #lightcase-case a.lightcase-play span,
 	.lightcase-fullScreenMode #lightcase-case a.lightcase-close {
-		border: 1px solid rbga(0,0,0, .25);
+		border: 1px solid rgba(0,0,0, .25);
 		
 		background-color: rgba(150,150,150, .75);
 		background-repeat: no-repeat;
