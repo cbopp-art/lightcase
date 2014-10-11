@@ -5,10 +5,10 @@
  * @author		Cornel Boppart <cornel@bopp-art.com>
  * @copyright	Author
  *
- * @version		1.5.2 (28/04/2014)
+ * @version		1.5.3 (11/10/2014)
  */
 
-(function($) {
+;(function($) {
 	window.lightcase = {
 		cache : {}
 		
