@@ -7,11 +7,10 @@
     "window",
     "popup"
   ],
-  "version": "1.5.3",
+  "version": "1.5.4",
   "dependencies": {
     "jquery": ">=1.5.0"
   },
-  "readmeFilename": "README.md",
   "author": "Cornel Boppart (https://github.com/cbopp-art)",
   "license": "GPL-2.0+",
   "main": "lightcase.js",
