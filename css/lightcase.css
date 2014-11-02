@@ -80,8 +80,8 @@
 	#lightcase-case .lightcase-caption {
 		margin: 10px;
 		padding: 0;
-		overflow: auto;
-		font-size: 11px;
+		font-weight: normal;
+		font-size: 15px;
 		line-height: 15px;
 		text-overflow: ellipsis;
 	}

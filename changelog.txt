@@ -1,4 +1,12 @@
+2014/11/02 - v1.5.4
+Feature: Slight style improvments (font size)
+Feature: Returned the object within init
+Cleanup: Outdent inline comments
+Cleanup: Space before braces for anonymous function
+Cleanup: Changed comma position
+
 2014/10/11 - v1.5.3
+Added: package.json file
 Fixed: Incorrect css property
 
 2014/04/28 - v1.5.2
