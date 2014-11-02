@@ -14,7 +14,7 @@
   "readmeFilename": "README.md",
   "author": "Cornel Boppart (https://github.com/cbopp-art)",
   "license": "GPL-2.0+",
-  "main": "./lightcase.js",
+  "main": "lightcase.js",
   "homepage": "http://cornel.bopp-art.com/lightcase/",
   "repository": {
     "type": "git",
