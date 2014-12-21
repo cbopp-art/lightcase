@@ -11,7 +11,7 @@
 ;(function ($) {
 	window.lightcase = {
 		cache : {},
-		
+
 		support : {},
 
 		hooks : {
