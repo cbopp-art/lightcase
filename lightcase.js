@@ -11,8 +11,14 @@
 ;(function ($) {
 	window.lightcase = {
 		cache : {},
-
+		
 		support : {},
+
+		hooks : {
+			onInit : {},
+			onStart : {},
+			onFinish : {}
+		},
 
 		labels : {
 			'errorMessage' : 'Source could not be found...',
@@ -31,6 +37,11 @@
 		 * @return	{object}
 		 */
 		init : function (options) {
+			// Call hook functions on initialization
+			$.each(lightcase.hooks.onInit, function(index, hookFunction) {
+				hookFunction();
+			});
+		
 			return this.each(function () {
 				$(this).unbind('click').click(function (event) {
 					event.preventDefault();
@@ -151,9 +162,6 @@
 
 			lightcase.objectData = lightcase.getObjectData(this);
 			lightcase.dimensions = lightcase.getDimensions();
-
-			// Call hook function on initialization
-			lightcase.settings.onInit();
 
 			lightcase.addElements();
 			lightcase.lightcaseOpen();
@@ -315,8 +323,12 @@
 			// Start loading
 			lightcase.loading('start');
 
-			// Call hook function on start
-			lightcase.settings.onStart();
+			// Call hook functions on start
+			$.each(lightcase.hooks.onStart, function(index, hookFunction) {
+				hookFunction();
+			});
+			
+			// Call hook function on initialization
 
 			// Add sequenceInfo to the content holder or hide if its empty
 			if (lightcase.settings.showSequenceInfo === true && lightcase.objectData.isPartOfSequence) {
@@ -626,8 +638,11 @@
 			lightcase.cache.object = $object;
 			lightcase.calculateDimensions($object);
 
-			// Call hook function on finish
-			lightcase.settings.onFinish();
+			// Call hook functions on finish
+			$.each(lightcase.hooks.onFinish, function(index, hookFunction) {
+				hookFunction();
+			});
+			
 
 			switch (lightcase.settings.transitionIn) {
 				case 'scrollTop' :
