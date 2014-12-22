@@ -1,3 +1,7 @@
+2014/12/22 - v1.5.5
+Feature: Improved hook implementation
+Update: jQuery touch events from v1.3.1 to v1.4.5
+
 2014/11/02 - v1.5.4
 Feature: Slight style improvments (font size)
 Feature: Returned the object within init
