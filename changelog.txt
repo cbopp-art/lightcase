@@ -1,4 +1,4 @@
-2014/12/22 - v1.5.5
+2014/12/22 - v1.6.0
 Feature: Improved hook implementation
 Update: jQuery touch events from v1.3.1 to v1.4.5
 
