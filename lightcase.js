@@ -14,12 +14,6 @@
 
 		support : {},
 
-		hooks : {
-			onInit : {},
-			onStart : {},
-			onFinish : {}
-		},
-
 		labels : {
 			'errorMessage' : 'Source could not be found...',
 			'sequenceInfo.of' : ' of ',
@@ -37,11 +31,6 @@
 		 * @return	{object}
 		 */
 		init : function (options) {
-			// Call hook functions on initialization
-			$.each(lightcase.hooks.onInit, function(index, hookFunction) {
-				hookFunction();
-			});
-		
 			return this.each(function () {
 				$(this).unbind('click').click(function (event) {
 					event.preventDefault();
@@ -155,10 +144,13 @@
 						$pause = $('<a href="#" class="' + lightcase.settings.classPrefix + 'pause"><span>' + lightcase.labels['navigator.pause'] + '</span></a>').hide()
 					);
 				},
-				onInit : function () {},
-				onStart : function () {},
-				onFinish : function () {}
+				onInit : {},
+				onStart : {},
+				onFinish : {}
 			}, options);
+
+			// Call onInit hook functions
+			lightcase.callHooks(lightcase.settings.onInit);
 
 			lightcase.objectData = lightcase.getObjectData(this);
 			lightcase.dimensions = lightcase.getDimensions();
@@ -323,10 +315,8 @@
 			// Start loading
 			lightcase.loading('start');
 
-			// Call hook functions on start
-			$.each(lightcase.hooks.onStart, function(index, hookFunction) {
-				hookFunction();
-			});
+			// Call onStart hook functions
+			lightcase.callHooks(lightcase.settings.onStart);
 			
 			// Call hook function on initialization
 
@@ -638,11 +628,8 @@
 			lightcase.cache.object = $object;
 			lightcase.calculateDimensions($object);
 
-			// Call hook functions on finish
-			$.each(lightcase.hooks.onFinish, function(index, hookFunction) {
-				hookFunction();
-			});
-			
+			// Call onFinish hook functions
+			lightcase.callHooks(lightcase.settings.onFinish);
 
 			switch (lightcase.settings.transitionIn) {
 				case 'scrollTop' :
@@ -1191,6 +1178,22 @@
 					$object.stop();
 					$object.animate(endTransition, speed, callback);
 				}
+			}
+		},
+		
+		/**
+		 * Calls all the registered functions of a specific hook
+		 *
+		 * @param	{object}	hooks
+		 * @return	{void}
+		 */
+		callHooks : function (hooks) {
+			if (typeof(hooks) === 'object') {
+				$.each(hooks, function(index, hook) {
+					if (typeof(hook) === 'function') {
+						hook();
+					}
+				});
 			}
 		},
 
