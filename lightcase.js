@@ -69,6 +69,8 @@
 				timeout : 5000,
 				swipe : true,
 				useKeys : true,
+				caption : undefined,
+				title : undefined,
 				navigateEndless : true,
 				closeOnOverlayClick : true,
 				showTitle : true,
@@ -168,8 +170,8 @@
 		getObjectData : function ($object) {
 		 	var objectData = {
 				$link : $object,
-				title : $object.attr('title'),
-				caption : $object.children('img').attr('alt'),
+				title : lightcase.settings.title || $object.attr('title'),
+				caption : lightcase.settings.caption || $object.children('img').attr('alt'),
 				url : lightcase.verifyDataUrl($object.attr('data-href') || $object.attr('href')),
 				requestType : lightcase.settings.ajax.type,
 				requestData : lightcase.settings.ajax.data,
