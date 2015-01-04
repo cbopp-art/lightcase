@@ -1,3 +1,7 @@
+2015/01/04 - v1.6.1
+Bugfix: Removed unique hash appended to image prohibited to cache it
+Feature: Add title and caption to options
+
 2014/12/22 - v1.6.0
 Feature: Improved hook implementation
 Update: jQuery touch events from v1.3.1 to v1.4.5
