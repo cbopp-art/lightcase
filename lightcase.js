@@ -248,7 +248,7 @@
 					$object = $(new Image());
 					$object.attr({
 						// The time expression is required to prevent the binding of an image load
-						'src' : lightcase.objectData.url + '?random=' + (new Date()).getTime(),
+						'src' : lightcase.objectData.url,
 						'alt' : lightcase.objectData.title
 					});
 					break;
