@@ -5,7 +5,7 @@
  * @author		Cornel Boppart <cornel@bopp-art.com>
  * @copyright	Author
  *
- * @version		1.6.1 (04/01/2015)
+ * @version		2.0.0 (09/02/2015)
  */
 
 ;(function ($) {
@@ -53,7 +53,7 @@
 				transitionIn : null,
 				transitionOut : null,
 				cssTransitions : true,
-				speedIn : 350,
+				speedIn : 250,
 				speedOut : 250,
 				maxWidth : 800,
 				maxHeight : 500,
@@ -122,28 +122,30 @@
 				markup : function () {
 					$('body').append(
 						$overlay = $('<div id="' + lightcase.settings.idPrefix + 'overlay"></div>'),
-						$loading = $('<div id="' + lightcase.settings.idPrefix + 'loading"></div>'),
+						$loading = $('<div id="' + lightcase.settings.idPrefix + 'loading" class="' + lightcase.settings.classPrefix + 'icon-spin"></div>'),
 						$case = $('<div id="' + lightcase.settings.idPrefix + 'case" aria-hidden="true" role="dialog"></div>')
+					);
+					$case.after(
+						$nav = $('<div id="' + lightcase.settings.idPrefix + 'nav"></div>')
+					);
+					$nav.append(
+						$close = $('<a href="#" class="' + lightcase.settings.classPrefix + 'icon-close"><span>' + lightcase.labels['close'] + '</span></a>'),
+						$prev = $('<a href="#" class="' + lightcase.settings.classPrefix + 'icon-prev"><span>' + lightcase.labels['navigator.prev'] + '</span></a>').hide(),
+						$next = $('<a href="#" class="' + lightcase.settings.classPrefix + 'icon-next"><span>' + lightcase.labels['navigator.next'] + '</span></a>').hide(),
+						$play = $('<a href="#" class="' + lightcase.settings.classPrefix + 'icon-play"><span>' + lightcase.labels['navigator.play'] + '</span></a>').hide(),
+						$pause = $('<a href="#" class="' + lightcase.settings.classPrefix + 'icon-pause"><span>' + lightcase.labels['navigator.pause'] + '</span></a>').hide()
 					);
 					$case.append(
 						$content = $('<div class="' + lightcase.settings.classPrefix + 'content"></div>'),
-						$info = $('<div class="' + lightcase.settings.classPrefix + 'info"></div>'),
-						$close = $('<a href="#" class="' + lightcase.settings.classPrefix + 'close">' + lightcase.labels['close'] + '</a>')
+						$info = $('<div class="' + lightcase.settings.classPrefix + 'info"></div>')
+					);
+					$content.append(
+						$contentInner = $('<div class="' + lightcase.settings.classPrefix + 'contentInner"></div>')
 					);
 					$info.append(
 						$sequenceInfo = $('<div class="' + lightcase.settings.classPrefix + 'sequenceInfo"></div>'),
 						$title = $('<h4 class="' + lightcase.settings.classPrefix + 'title"></h4>'),
 						$caption = $('<p class="' + lightcase.settings.classPrefix + 'caption"></p>')
-					);
-					$content.append(
-						$contentInner = $('<div class="' + lightcase.settings.classPrefix + 'contentInner"></div>'),
-						$nav = $('<div class="' + lightcase.settings.classPrefix + 'nav"></div>')
-					);
-					$nav.append(
-						$prev = $('<a href="#" class="' + lightcase.settings.classPrefix + 'prev"><span>' + lightcase.labels['navigator.prev'] + '</span></a>').hide(),
-						$next = $('<a href="#" class="' + lightcase.settings.classPrefix + 'next"><span>' + lightcase.labels['navigator.next'] + '</span></a>').hide(),
-						$play = $('<a href="#" class="' + lightcase.settings.classPrefix + 'play"><span>' + lightcase.labels['navigator.play'] + '</span></a>').hide(),
-						$pause = $('<a href="#" class="' + lightcase.settings.classPrefix + 'pause"><span>' + lightcase.labels['navigator.pause'] + '</span></a>').hide()
 					);
 				},
 				onInit : {},
@@ -155,10 +157,11 @@
 			lightcase.callHooks(lightcase.settings.onInit);
 
 			lightcase.objectData = lightcase.getObjectData(this);
-			lightcase.dimensions = lightcase.getDimensions();
 
 			lightcase.addElements();
 			lightcase.lightcaseOpen();
+
+			lightcase.dimensions = lightcase.getDimensions();
 		},
 
 		/**
@@ -624,8 +627,8 @@
 		 * @return	{void}
 		 */
 		showContent : function ($object) {
-			// Adds class with the object type
-			$case.attr('class', 'type-' + lightcase.objectData.type);
+			// Add data attribute with the object type
+			$case.attr('data-type', lightcase.objectData.type);
 
 			lightcase.cache.object = $object;
 			lightcase.calculateDimensions($object);
@@ -686,7 +689,6 @@
 						lightcase.transition.scroll($case, 'out', lightcase.settings.speedOut, function () {
 							lightcase.loadContent();
 						});
-						lightcase.transition.fade($contentInner, 'out', 0);
 					}
 					break;
 				case 'fade' :
@@ -727,29 +729,20 @@
 		handleEvents : function () {
 			lightcase.unbindEvents();
 
-			$nav.children().hide();
+			$nav.children().not($close).hide();
 
 			// If slideshow is enabled, show play/pause and start timeout.
 			if (lightcase.isSlideshowEnabled()) {
-				$play.show();
-				$pause.show();
-
 				// Only start the timeout if slideshow is not pausing
 				if (!$nav.hasClass(lightcase.settings.classPrefix + 'paused')) {
 					lightcase.startTimeout();
+				} else {
+					lightcase.stopTimeout();
 				}
 			}
 
 			if (lightcase.settings.liveResize) {
-				$(window).resize(function () {
-					if (lightcase.isSlideshowEnabled()) {
-						lightcase.stopTimeout();
-					}
-					if (lightcase.open) {
-						lightcase.dimensions = lightcase.getDimensions();
-						lightcase.calculateDimensions(lightcase.cache.object);
-					}
-				});
+				$(window).resize(lightcase.resize);
 			}
 
 			$close.click(function (event) {
@@ -770,6 +763,7 @@
 			}
 
 			if (lightcase.objectData.isPartOfSequence) {
+				$nav.attr('data-ispartofsequence', true);
 				lightcase.nav = lightcase.setNavigation();
 
 				$prev.click(function (event) {
@@ -874,7 +868,6 @@
 			$pause.show();
 			
 			lightcase.cache.action = 'next';
-			
 			$nav.removeClass(lightcase.settings.classPrefix + 'paused');
 
 			lightcase.timeout = setTimeout(function () {
@@ -1011,7 +1004,7 @@
 					startTransition = {},
 					startOpacity = $object.css('opacity'),
 					endTransition = {},
-					endOpacity = opacity ? opacity : isInTransition ? 1 : 0
+					endOpacity = opacity ? opacity : isInTransition ? 1 : 0;
 				
 				if (!lightcase.open && isInTransition) return;
 					
@@ -1022,19 +1015,19 @@
 
 				// Css transition
 				if (lightcase.support.transitions) {
-					endTransition[lightcase.support.transition + 'transition'] = speed + 'ms ease-out';
+					endTransition[lightcase.support.transition + 'transition'] = speed + 'ms ease';
 
 					setTimeout(function () {
 						$object.css(endTransition);
+
+						setTimeout(function () {
+							$object.css(lightcase.support.transition + 'transition', '');
+
+							if (callback && (lightcase.open || !isInTransition)) {
+								callback();
+							}
+						}, speed);
 					}, 15);
-
-					setTimeout(function () {
-						$object.css(lightcase.support.transition + 'transition', '');
-
-						if (callback && (lightcase.open || !isInTransition)) {
-							callback();
-						}
-					}, speed);
 				} else {
 					// Fallback to js transition
 					$object.stop();
@@ -1111,7 +1104,7 @@
 
 				// Css transition
 				if (lightcase.support.transitions) {
-					endTransition[lightcase.support.transition + 'transition'] = speed + 'ms ease-out';
+					endTransition[lightcase.support.transition + 'transition'] = speed + 'ms ease';
 
 					setTimeout(function () {
 						$object.css(endTransition);
@@ -1161,7 +1154,7 @@
 				// Css transition
 				if (lightcase.support.transitions) {
 					endTransition[lightcase.support.transition + 'transform'] = endScale;
-					endTransition[lightcase.support.transition + 'transition'] = speed + 'ms ease-out';
+					endTransition[lightcase.support.transition + 'transition'] = speed + 'ms ease';
 					
 					setTimeout(function () {
 						$object.css(endTransition);
@@ -1227,6 +1220,35 @@
 		},
 
 		/**
+		 * Executes functions for a window resize.
+		 * It stops an eventual timeout and recalculates dimenstions.
+		 *
+		 * @return	{void}
+		 */
+		resize : function () {
+			if (!lightcase.open) return;
+
+			if (lightcase.isSlideshowEnabled()) {
+				lightcase.stopTimeout();
+			}
+
+			lightcase.dimensions = lightcase.getDimensions();
+			lightcase.calculateDimensions(lightcase.cache.object);
+		},
+
+		/**
+		 * Switches to the fullscreen mode
+		 *
+		 * @return	{void}
+		 */
+		switchToFullScreenMode : function () {
+			lightcase.settings.shrinkFactor = 1;
+			lightcase.settings.overlayOpacity = 1;
+
+			$('html').addClass(lightcase.settings.classPrefix + 'fullScreenMode');
+		},
+
+		/**
 		 * Enters into the lightcase view
 		 *
 		 * @return	{void}
@@ -1239,12 +1261,10 @@
 
 			if (lightcase.support.mobileDevice) {
 				$('html').addClass(lightcase.settings.classPrefix + 'isMobileDevice');
-				
-				if (lightcase.settings.fullScreenModeForMobile) {
-					lightcase.switchToFullScreenMode();
-				}
 			}
-
+			if (lightcase.settings.fullScreenModeForMobile) {
+				lightcase.switchToFullScreenMode();
+			}
 			if (!lightcase.settings.transitionIn) {
 				lightcase.settings.transitionIn = lightcase.settings.transition;
 			}
@@ -1263,17 +1283,20 @@
 				case 'scrollVertical' :
 				case 'scrollHorizontal' :
 					if ($case.is(':hidden')) {
+						$close.css('opacity', 0);
 						$overlay.css('opacity', 0);
 						$case.css('opacity', 0);
 						$contentInner.css('opacity', 0);
 					}
 					lightcase.transition.fade($overlay, 'in', lightcase.settings.speedIn, lightcase.settings.overlayOpacity, function () {
+						lightcase.transition.fade($close, 'in', lightcase.settings.speedIn);
 						lightcase.handleEvents();
 						lightcase.processContent();
 					});
 					break;
 				default :
 					lightcase.transition.fade($overlay, 'in', 0, lightcase.settings.overlayOpacity, function () {
+						lightcase.transition.fade($close, 'in', 0);
 						lightcase.handleEvents();
 						lightcase.processContent();
 					});
@@ -1290,16 +1313,17 @@
 		 */
 		lightcaseClose : function () {
 			lightcase.open = false;
+
 			$loading.hide();
 
 			lightcase.unbindEvents();
 
-			if (lightcase.isSlideshowEnabled()) {
-				lightcase.stopTimeout();
-			}
+			$(window).off('resize', lightcase.resize);
 
 			$('html').removeClass(lightcase.settings.classPrefix + 'open');
 			$case.attr('aria-hidden', 'true');
+
+			$nav.children().hide();
 
 			switch (lightcase.settings.transitionOut) {
 				case 'fade' :
@@ -1308,8 +1332,8 @@
 				case 'scrollRight' :
 				case 'scrollBottom' :
 				case 'scrollLeft' :
-				case 'scrollVertical' :
 				case 'scrollHorizontal' :
+				case 'scrollVertical' :
 					lightcase.transition.fade($case, 'out', lightcase.settings.speedOut, 0, function () {
 						lightcase.transition.fade($overlay, 'out', lightcase.settings.speedOut, 0, function () {
 							lightcase.cleanup();
@@ -1326,25 +1350,6 @@
 				default :
 					lightcase.cleanup();
 			}
-		},
-
-		/**
-		 * Switches to the fullscreen mode
-		 *
-		 * @return	{void}
-		 */
-		switchToFullScreenMode : function () {
-			lightcase.settings.shrinkFactor = 1;
-			lightcase.settings.overlayOpacity = 1;
-
-			if (lightcase.settings.transitionIn !== 'none') {
-				lightcase.settings.transitionIn = 'fade';
-			}
-			if (lightcase.settings.transitionOut !== 'none') {
-				lightcase.settings.transitionOut = 'fade';
-			}
-
-			$('html').addClass(lightcase.settings.classPrefix + 'fullScreenMode');
 		},
 
 		/**
@@ -1397,6 +1402,7 @@
 		 */
 		cleanup : function () {
 			lightcase.cleanupDimensions();
+
 			if (lightcase.isSlideshowEnabled()) {
 				lightcase.stopTimeout();
 				$nav.removeClass(lightcase.settings.classPrefix + 'paused');
@@ -1404,8 +1410,12 @@
 
 			$loading.hide();
 			$overlay.hide();
+			$case.hide();
+			$nav.children().hide();
+			
+			$case.removeAttr('data-type');
+			$nav.removeAttr('data-ispartofsequence');
 
-			$case.hide().removeAttr('class');
 			$contentInner.empty().hide();
 			$info.children().empty();
 
