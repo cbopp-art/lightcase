@@ -1,12 +1,8 @@
 2015/02/09 - v2.0.0
 Feature: Implemeted breakpoint related styles
-Feature: Major style improvments
+Feature: Major style improvements
 Feature: Switched from sprites to icon font
 Bugfix: Fixed performance issues
-Feature: Add title and caption to options
-
-2015/01/04 - v1.6.1
-Bugfix: Removed unique hash appended to image prohibited to cache it
 Feature: Add title and caption to options
 
 2014/12/22 - v1.6.0
