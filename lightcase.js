@@ -1261,9 +1261,10 @@
 
 			if (lightcase.support.mobileDevice) {
 				$('html').addClass(lightcase.settings.classPrefix + 'isMobileDevice');
-			}
-			if (lightcase.settings.fullScreenModeForMobile) {
-				lightcase.switchToFullScreenMode();
+
+				if (lightcase.settings.fullScreenModeForMobile) {
+					lightcase.switchToFullScreenMode();
+				}
 			}
 			if (!lightcase.settings.transitionIn) {
 				lightcase.settings.transitionIn = lightcase.settings.transition;
