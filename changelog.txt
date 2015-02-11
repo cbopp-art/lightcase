@@ -1,3 +1,8 @@
+2015/02/11 - v2.0.1
+Added: Minified source of lightcase.js
+Bugfix: Fixed loading animation wobble in mozilla firefox
+Bugfix: Optimized loading spin icon
+
 2015/02/09 - v2.0.0
 Feature: Implemeted breakpoint related styles
 Feature: Major style improvements
