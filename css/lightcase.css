@@ -44,6 +44,9 @@
 		font-size: 32px;
 		line-height: 1;
 
+		/* Fixes the icon wobble issue in firefox */
+		-moz-transform-origin: 50% 53%;
+
 		-webkit-animation: lightcase-loading-spin 0.5s infinite linear;
 		-moz-animation: lightcase-loading-spin 0.5s infinite linear;
 		-o-animation: lightcase-loading-spin 0.5s infinite linear;
