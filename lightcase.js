@@ -1108,15 +1108,15 @@
 
 					setTimeout(function () {
 						$object.css(endTransition);
-					}, 0);
 
-					setTimeout(function () {
-						$object.css(lightcase.support.transition + 'transition', '');
+						setTimeout(function () {
+							$object.css(lightcase.support.transition + 'transition', '');
 
-						if (callback && (lightcase.open || !isInTransition)) {
-							callback();
-						}
-					}, speed);
+							if (callback && (lightcase.open || !isInTransition)) {
+								callback();
+							}
+						}, speed);
+					}, 15);
 				} else {
 					// Fallback to js transition
 					$object.stop();
@@ -1158,16 +1158,16 @@
 					
 					setTimeout(function () {
 						$object.css(endTransition);
-					}, 0);
 					
-					setTimeout(function () {
-						$object.css(lightcase.support.transition + 'transform', '');
-						$object.css(lightcase.support.transition + 'transition', '');
-						
-						if (callback && (lightcase.open || !isInTransition)) {
-							callback();
-						}
-					}, speed);
+						setTimeout(function () {
+							$object.css(lightcase.support.transition + 'transform', '');
+							$object.css(lightcase.support.transition + 'transition', '');
+							
+							if (callback && (lightcase.open || !isInTransition)) {
+								callback();
+							}
+						}, speed);
+					}, 15);
 				} else {
 					// Fallback to js transition
 					$object.stop();
