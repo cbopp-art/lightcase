@@ -131,14 +131,14 @@
 		display: inline-block;
 		text-indent: -9999px;
 	}
-	
+
 	/* For mobile (touch) devices */
 	.lightcase-isMobileDevice #lightcase-case .lightcase-inlineWrap,
 	.lightcase-isMobileDevice #lightcase-case[data-type=iframe] .lightcase-contentInner {
 		overflow: auto;
 		-webkit-overflow-scrolling: touch;
 	}
-	
+
 	.lightcase-isMobileDevice.lightcase-open,
 	.lightcase-isMobileDevice.lightcase-open body {
 		max-width: 100%;
