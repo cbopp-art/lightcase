@@ -42,9 +42,9 @@
 		opacity: 1;
 
 		font-size: 32px;
-
+		
 		/* Fixes the icon wobble issue in webkits and firefox */
-		-webkit-transform-origin: 48% 51%;
+		-webkit-transform-origin: 49% 51%;
 		-moz-transform-origin: 50% 53%;
 
 		-webkit-animation: lightcase-loading-spin 0.5s infinite linear;
@@ -150,6 +150,7 @@
 		color: #aaa;
 		text-shadow: none;
 	}
+
 }
 
 /* Animation for loading spin icon */
