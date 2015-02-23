@@ -46,7 +46,7 @@
 		 * @return	{void}
 		 */
 		start : function (options) {
-			lightcase.settings = $.extend({
+			lightcase.settings = $.extend(true, {
 				idPrefix : 'lightcase-',
 				classPrefix : 'lightcase-',
 				transition : 'elastic',
@@ -113,7 +113,7 @@
 					'flash' : 'swf',
 					'video' : 'mp4,mov,ogv,ogg,webm',
 					'iframe' : 'html,php',
-					'ajax' : 'txt',
+					'ajax' : 'json,txt',
 					'inline' : '#'
 				},
 				errorMessage : function () {
@@ -178,7 +178,7 @@
 				url : lightcase.verifyDataUrl($object.attr('data-href') || $object.attr('href')),
 				requestType : lightcase.settings.ajax.type,
 				requestData : lightcase.settings.ajax.data,
-				responseDataType : lightcase.settings.ajax.dataType,
+				requestDataType : lightcase.settings.ajax.dataType,
 				rel : $object.attr('data-rel'),
 				type : lightcase.settings.type || lightcase.verifyDataType($object.attr('data-href') || $object.attr('href')),
 				isPartOfSequence : lightcase.isPartOfSequence($object.attr('data-rel'), ':'),
@@ -375,11 +375,12 @@
 							dataType : lightcase.objectData.requestDataType,
 							data : lightcase.objectData.requestData,
 							success : function (data, textStatus, jqXHR) {
-								// Unserialize if data is transeferred as json
-								if (lightcase.objectData.responseDataType === 'json') {
-									data = $.parseJSON(data);
+								// Unserialize if data is transferred as json
+								if (lightcase.objectData.requestDataType === 'json') {
+									lightcase.objectData.data = data;
+								} else {
+									$object.html(data);
 								}
-								$object.html(data);
 								lightcase.showContent($object);
 							},
 							error : function (jqXHR, textStatus, errorThrown) {
@@ -591,8 +592,8 @@
 					for (var i = 0; i < suffixArr.length; i++) {
 						var suffix = suffixArr[i]
 							,regexp = new RegExp('\.(' + suffix + ')$', 'i')
-							// Verify only the last 4 characters of the string
-							,str = url.split('?')[0].substr(-4);
+							// Verify only the last 5 characters of the string
+							,str = url.split('?')[0].substr(-5);
 
 						if (regexp.test(str) === true) {
 							return key;
@@ -1175,7 +1176,7 @@
 				}
 			}
 		},
-		
+
 		/**
 		 * Calls all the registered functions of a specific hook
 		 *
@@ -1413,7 +1414,7 @@
 			$overlay.hide();
 			$case.hide();
 			$nav.children().hide();
-			
+
 			$case.removeAttr('data-type');
 			$nav.removeAttr('data-ispartofsequence');
 
