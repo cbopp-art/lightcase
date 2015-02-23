@@ -20,14 +20,13 @@
 	/* Overlay */
 	#lightcase-overlay {
 		display: none;
+		width: 100%;
+		height: 100%;
 
 		position: fixed;
 		z-index: 1000;
 		top: 0;
 		left: 0;
-
-		width: 100%;
-		height: 100%;
 	}
 
 	/* Loading */
@@ -44,8 +43,7 @@
 
 		font-size: 32px;
 		
-		/* Fixes the icon wobble issue in webkits and firefox */
-		-webkit-transform-origin: 49% 51%;
+		/* Fixes the icon wobble issue in firefox */
 		-moz-transform-origin: 50% 53%;
 
 		-webkit-animation: lightcase-loading-spin 0.5s infinite linear;
@@ -98,7 +96,7 @@
 
 	/* Icons */
 	[class*='lightcase-icon-'] {
-		width: 1em;
+		width: 1.123em;
 		height: auto;
 
 		/*
