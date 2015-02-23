@@ -2,10 +2,10 @@
  * Lightcase - jQuery Plugin
  * The smart and flexible Lightbox Plugin.
  *
- * @author			Cornel Boppart <cornel@bopp-art.com>
- * @copyright		Author
+ * @author		Cornel Boppart <cornel@bopp-art.com>
+ * @copyright	Author
  *
- * @version			2.0.1 (11/02/2015)
+ * @version		2.0.1 (11/02/2015)
  */
 
 /* Import icon font */
@@ -42,7 +42,6 @@
 		opacity: 1;
 
 		font-size: 32px;
-		line-height: 1;
 
 		/* Fixes the icon wobble issue in webkits and firefox */
 		-webkit-transform-origin: 48% 51%;
@@ -106,6 +105,7 @@
 		 * value for "font-size" here!
 		 */
 		font-size: 38px;
+		line-height: 1;
 
 		text-align: center;
 		text-shadow: none;
