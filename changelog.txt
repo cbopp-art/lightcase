@@ -1,3 +1,8 @@
+2015/02/23 - v2.0.2
+Bugfix: Fixed icon wobble for webkit
+Bugfix: Defined line-height on each icon to prevent from style inheritance
+Feature: Improved use of format json with type ajax
+
 2015/02/11 - v2.0.1
 Added: Minified source of lightcase.js
 Bugfix: Fixed loading animation wobble in mozilla firefox
