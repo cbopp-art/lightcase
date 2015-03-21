@@ -1,4 +1,5 @@
 2015/03/21 - v2.0.3
+Bugfix: Decreased vulnerability in side effects for text colors
 Feature: Added new option 'href' overriding attribute
 Feature: Updated lightcase font with a new loading icon
 
