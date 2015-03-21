@@ -29,15 +29,7 @@
 		text-align: left;
 
 		color: #aaa;
-		text-shadow: 0 0 10px #000;
-	}
-
-	/* Error message */
-	#lightcase-case p.lightcase-error {
-		margin: 0;
-		padding: 0;
-
-		font-size: 17px;
+		text-shadow: 0 0 10px rgba(0,0,0,0.5);
 	}
 
 	/* Content */
@@ -46,7 +38,6 @@
 		z-index: 1;
 		overflow: hidden;
 
-		color: #333;
 		text-shadow: none;
 
 		background-color: #fff;
@@ -75,6 +66,20 @@
 		-moz-box-sizing: border-box;
 		-o-box-sizing: border-box;
 		box-sizing: border-box;
+	}
+
+	/*
+	 * Content - Extend with further selectors and colors in case you
+	 * have elements like <ul>, <li>, <span> or similar displayed in lightcase.
+	 */
+	#lightcase-case .lightcase-content h1,
+	#lightcase-case .lightcase-content h2,
+	#lightcase-case .lightcase-content h3,
+	#lightcase-case .lightcase-content h4,
+	#lightcase-case .lightcase-content h5,
+	#lightcase-case .lightcase-content h6,
+	#lightcase-case .lightcase-content p {
+		color: #333;
 	}
 
 	/* Navigation */
@@ -121,6 +126,15 @@
 	}
 	#lightcase-nav a.lightcase-icon-next {
 		right: 15px;
+	}
+
+	/* Error message */
+	#lightcase-case p.lightcase-error {
+		margin: 0;
+		padding: 0;
+
+		font-size: 17px;
+		color: #aaa;
 	}
 
 }

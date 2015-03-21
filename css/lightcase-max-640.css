@@ -42,8 +42,7 @@
 		line-height: 18px;
 		text-align: left;
 
-		color: #aaa;
-		text-shadow: 0 0 10px #000;
+		text-shadow: 0 0 10px rgba(0,0,0,0.5);
 	}
 
 	#lightcase-case:not([data-type=image]):not([data-type=video]):not([data-type=flash]):not([data-type=error]),
@@ -62,6 +61,20 @@
 
 		border: none;
 		background: none;
+	}
+
+	/*
+	 * Content - Extend with further selectors and colors in case you
+	 * have elements like <ul>, <li>, <span> or similar displayed in lightcase.
+	 */
+	#lightcase-case .lightcase-content h1,
+	#lightcase-case .lightcase-content h2,
+	#lightcase-case .lightcase-content h3,
+	#lightcase-case .lightcase-content h4,
+	#lightcase-case .lightcase-content h5,
+	#lightcase-case .lightcase-content h6,
+	#lightcase-case .lightcase-content p {
+		color: #aaa;
 	}
 
 	/* Additional info */
@@ -98,17 +111,6 @@
 		max-height: none !important;
 	}
 
-	/* Error message */
-	#lightcase-case p.lightcase-error {
-		padding: 30px 0;
-		font-size: 17px;
-		text-align: center;
-		
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
-	}
-
 	/* Navigation */
 	.lightcase-open #lightcase-nav[data-ispartofsequence]:before {
 		content: '';
@@ -117,15 +119,9 @@
 		right: 0;
 		bottom: 0;
 		left: 0;
-
 		height: 55px;
 
 		background: rgba(55,55,55,0.9);
-
-		-webkit-box-shadow: 0 0 30px rgba(0,0,0,0.15);
-		-moz-box-shadow: 0 0 30px rgba(0,0,0,0.15);
-		-o-box-shadow: 0 0 30px rgba(0,0,0,0.15);
-		box-shadow: 0 0 30px rgba(0,0,0,0.15);
 	}
 
 	#lightcase-nav a {
@@ -161,6 +157,19 @@
 	}
 	#lightcase-nav .lightcase-icon-next {
 		right: 15px;
+	}
+
+	/* Error message */
+	#lightcase-case p.lightcase-error {
+		padding: 30px 0;
+		font-size: 17px;
+		text-align: center;
+		
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+
+		color: #aaa;
 	}
 
 }
