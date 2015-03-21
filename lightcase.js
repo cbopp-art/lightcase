@@ -107,6 +107,7 @@
 					autoplay : true,
 					loop : false
 				},
+				href : null,
 				type : null,
 				typeMapping : {
 					'image' : 'jpg,jpeg,gif,png,bmp',
@@ -175,7 +176,7 @@
 				$link : $object,
 				title : lightcase.settings.title || $object.attr('title'),
 				caption : lightcase.settings.caption || $object.children('img').attr('alt'),
-				url : lightcase.verifyDataUrl($object.attr('data-href') || $object.attr('href')),
+				url : lightcase.verifyDataUrl(lightcase.settings.href || $object.attr('data-href') || $object.attr('href')),
 				requestType : lightcase.settings.ajax.type,
 				requestData : lightcase.settings.ajax.data,
 				requestDataType : lightcase.settings.ajax.dataType,
@@ -572,7 +573,7 @@
 				dataUrl = '#' + dataUrl[dataUrl.length - 1];
 			}
 
-			return dataUrl;
+			return dataUrl.toString();
 		},
 
 		/**
