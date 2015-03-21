@@ -1,3 +1,7 @@
+2015/03/21 - v2.0.3
+Feature: Added new option 'href' overriding attribute
+Feature: Updated lightcase font with a new loading icon
+
 2015/02/23 - v2.0.2
 Bugfix: Fixed icon wobble for webkit
 Bugfix: Defined line-height on each icon to prevent from style inheritance
