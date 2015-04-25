@@ -1247,7 +1247,7 @@
 		 * @return	{void}
 		 */
 		cacheScrollPosition : function () {
-			var $window = $(window),
+			var	$window = $(window),
 				$document = $(document),
 				offset = {
 					'top' : $window.scrollTop(),
