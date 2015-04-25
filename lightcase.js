@@ -107,6 +107,7 @@
 					autoplay : true,
 					loop : false
 				},
+				attr: 'data-rel',
 				href : null,
 				type : null,
 				typeMapping : {
@@ -185,12 +186,12 @@
 				requestType : lightcase.settings.ajax.type,
 				requestData : lightcase.settings.ajax.data,
 				requestDataType : lightcase.settings.ajax.dataType,
-				rel : $object.attr('data-rel'),
+				rel : $object.attr(lightcase.settings.attr),
 				type : lightcase.settings.type || lightcase.verifyDataType($object.attr('data-href') || $object.attr('href')),
-				isPartOfSequence : lightcase.isPartOfSequence($object.attr('data-rel'), ':'),
-				isPartOfSequenceWithSlideshow : lightcase.isPartOfSequence($object.attr('data-rel'), ':slideshow'),
-				currentIndex : $('[data-rel="' + $object.attr('data-rel') + '"]').index($object),
-				sequenceLength : $('[data-rel="' + $object.attr('data-rel') + '"]').length
+				isPartOfSequence : lightcase.isPartOfSequence($object.attr(lightcase.settings.attr), ':'),
+				isPartOfSequenceWithSlideshow : lightcase.isPartOfSequence($object.attr(lightcase.settings.attr), ':slideshow'),
+				currentIndex : $('[' + lightcase.settings.attr + '="' + $object.attr(lightcase.settings.attr) + '"]').index($object),
+				sequenceLength : $('[' + lightcase.settings.attr + '="' + $object.attr(lightcase.settings.attr) + '"]').length
 			};
 
 			// Add sequence info to objectData
@@ -207,7 +208,7 @@
 		 * @return	{boolean}
 		 */
 		isPartOfSequence : function (rel, expression) {
-			var getSimilarLinks = $('[data-rel="' + rel + '"]'),
+			var getSimilarLinks = $('[' + lightcase.settings.attr + '="' + rel + '"]'),
 				regexp = new RegExp(expression);
 
 			if (regexp.test(rel) && getSimilarLinks.length > 1) {
@@ -902,7 +903,7 @@
 		 * @return	{object}	items
 		 */
 		setNavigation : function () {
-			var $links = $('[data-rel="' + lightcase.objectData.rel + '"]'),
+			var $links = $('[' + lightcase.settings.attr + '="' + lightcase.objectData.rel + '"]'),
 				currentIndex = lightcase.objectData.currentIndex,
 				prevIndex = currentIndex - 1,
 				nextIndex = currentIndex + 1,
