@@ -615,7 +615,7 @@
 		 * @return	{void}
 		 */
 		addElements : function () {
-			if ($('[id^="' + lightcase.settings.idPrefix + '"]').length) {
+			if (typeof($case) !== 'undefined' && $('#' + $case.attr('id')).length) {
 				return;
 			}
 
