@@ -1307,8 +1307,10 @@
 		 * @return	{void}
 		 */
 		restoreScrollPosition : function () {
-			$(window).scrollTop(parseInt(lightcase.cache.scrollPosition.top));
-			$(window).scrollLeft(parseInt(lightcase.cache.scrollPosition.left));
+			$(window)
+				.scrollTop(parseInt(lightcase.cache.scrollPosition.top))
+				.scrollLeft(parseInt(lightcase.cache.scrollPosition.left))
+				.resize();
 		},
 
 		/**
