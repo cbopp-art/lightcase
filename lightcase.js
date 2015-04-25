@@ -159,6 +159,9 @@
 
 			lightcase.objectData = lightcase.getObjectData(this);
 
+			lightcase.cacheScrollPosition();
+			lightcase.watchScrollInteraction();
+
 			lightcase.addElements();
 			lightcase.lightcaseOpen();
 
@@ -744,7 +747,7 @@
 			}
 
 			if (lightcase.settings.liveResize) {
-				$(window).resize(lightcase.resize);
+				lightcase.watchResizeInteraction();
 			}
 
 			$close.click(function (event) {
@@ -1239,6 +1242,76 @@
 		},
 
 		/**
+		 * Caches the actual scroll coordinates.
+		 *
+		 * @return	{void}
+		 */
+		cacheScrollPosition : function () {
+			var $window = $(window),
+				$document = $(document),
+				offset = {
+					'top' : $window.scrollTop(),
+					'left' :  $window.scrollLeft()
+				};
+
+			lightcase.cache.scrollPosition = lightcase.cache.scrollPosition || {};
+
+			if ($document.width() > $window.width()) {
+				lightcase.cache.scrollPosition.left = offset.left;
+			}
+			if ($document.height() > $window.height()) {
+				lightcase.cache.scrollPosition.top = offset.top;
+			}
+		},
+
+		/**
+		 * Watches for any resize interaction and caches the new sizes.
+		 *
+		 * @return	{void}
+		 */
+		watchResizeInteraction : function () {
+			$(window).resize(lightcase.resize);
+		},
+		
+		/**
+		 * Stop watching any resize interaction related to lightcase.
+		 *
+		 * @return	{void}
+		 */
+		unwatchResizeInteraction : function () {
+			$(window).off('resize', lightcase.resize);
+		},
+
+		/**
+		 * Watches for any scroll interaction and caches the new position.
+		 *
+		 * @return	{void}
+		 */
+		watchScrollInteraction : function () {
+			$(window).scroll(lightcase.cacheScrollPosition);
+		},
+
+		/**
+		 * Stop watching any scroll interaction related to lightcase.
+		 *
+		 * @return	{void}
+		 */
+		unwatchScrollInteraction : function () {
+			$(window).off('scroll', lightcase.cacheScrollPosition);
+		},
+		
+		/**
+		 * Restores to the original scoll position before
+		 * lightcase got initialized.
+		 *
+		 * @return	{void}
+		 */
+		restoreScrollPosition : function () {
+			$(window).scrollTop(parseInt(lightcase.cache.scrollPosition.top));
+			$(window).scrollLeft(parseInt(lightcase.cache.scrollPosition.left));
+		},
+
+		/**
 		 * Switches to the fullscreen mode
 		 *
 		 * @return	{void}
@@ -1321,12 +1394,15 @@
 
 			lightcase.unbindEvents();
 
-			$(window).off('resize', lightcase.resize);
+			lightcase.unwatchResizeInteraction();
+			lightcase.unwatchScrollInteraction();
 
 			$('html').removeClass(lightcase.settings.classPrefix + 'open');
 			$case.attr('aria-hidden', 'true');
 
 			$nav.children().hide();
+
+			lightcase.restoreScrollPosition();
 
 			switch (lightcase.settings.transitionOut) {
 				case 'fade' :
