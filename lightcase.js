@@ -151,7 +151,9 @@
 				},
 				onInit : {},
 				onStart : {},
-				onFinish : {}
+				onFinish : {},
+				onClose : {},
+				onCleanup : {}
 			}, options);
 
 			// Call onInit hook functions
@@ -1405,6 +1407,9 @@
 			$nav.children().hide();
 
 			lightcase.restoreScrollPosition();
+			
+			// Call onClose hook functions
+			lightcase.callHooks(lightcase.settings.onClose);
 
 			switch (lightcase.settings.transitionOut) {
 				case 'fade' :
@@ -1504,6 +1509,9 @@
 				lightcase.restoreObject();
 			}
 
+			// Call onCleanup hook functions
+			lightcase.callHooks(lightcase.settings.onCleanup);
+			
 			// Restore cache
 			lightcase.cache = {};
 		}
