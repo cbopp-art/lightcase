@@ -1395,6 +1395,11 @@
 		lightcaseClose : function () {
 			lightcase.open = false;
 
+			if (lightcase.isSlideshowEnabled()) {
+				lightcase.stopTimeout();
+				$nav.removeClass(lightcase.settings.classPrefix + 'paused');
+			}
+
 			$loading.hide();
 
 			lightcase.unbindEvents();
@@ -1489,11 +1494,6 @@
 		 */
 		cleanup : function () {
 			lightcase.cleanupDimensions();
-
-			if (lightcase.isSlideshowEnabled()) {
-				lightcase.stopTimeout();
-				$nav.removeClass(lightcase.settings.classPrefix + 'paused');
-			}
 
 			$loading.hide();
 			$overlay.hide();
