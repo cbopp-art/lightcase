@@ -85,7 +85,7 @@
 	/* Navigation */
 	#lightcase-nav a {
 		bottom: 50%;
-		margin-top: -0.5em;
+		margin-bottom: -0.5em;
 
 		outline: none;
 		cursor: pointer;
