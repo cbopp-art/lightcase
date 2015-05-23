@@ -42,9 +42,9 @@
 }
 
 /* Codes */
-.lightcase-icon-play:before { content: '\e800'; } /* '' */
-.lightcase-icon-pause:before { content: '\e801'; } /* '' */
-.lightcase-icon-close:before { content: '\e802'; } /* '' */
-.lightcase-icon-prev:before { content: '\e803'; } /* '' */
-.lightcase-icon-next:before { content: '\e804'; } /* '' */
-.lightcase-icon-spin:before { content: '\e805'; } /* '' */
+.lightcase-icon-play:before { content: '\e800'; }
+.lightcase-icon-pause:before { content: '\e801'; }
+.lightcase-icon-close:before { content: '\e802'; }
+.lightcase-icon-prev:before { content: '\e803'; }
+.lightcase-icon-next:before { content: '\e804'; }
+.lightcase-icon-spin:before { content: '\e805'; }
