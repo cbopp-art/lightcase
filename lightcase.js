@@ -839,7 +839,7 @@
 		 * @return	{void}
 		 */
 		addKeyEvents : function () {
-			$(document).keyup(function (event) {
+			$(document).bind('keyup.lightcase', function (event) {
 				// Do nothing if lightcase is in process
 				if (lightcase.busy) {
 					return;
@@ -1454,7 +1454,7 @@
 			$overlay.unbind('click');
 
 			// Unbind key events
-			$(document).unbind('keyup');
+			$(document).unbind('keyup.lightcase');
 
 			// Unbind swipe events
 			$case.unbind('swipeleft').unbind('swiperight');
