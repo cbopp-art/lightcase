@@ -443,16 +443,18 @@
 		 */
 		calculateDimensions : function ($object) {
 			lightcase.cleanupDimensions();
-			
+
 			// Set default dimensions
 			var dimensions = {
 				objectWidth : $object.attr('width') ? $object.attr('width') : $object.attr('data-width'), 
-				objectHeight : $object.attr('height') ? $object.attr('height') : $object.attr('data-height'),
-				maxWidth : parseInt(lightcase.dimensions.windowWidth * lightcase.settings.shrinkFactor),
-				maxHeight : parseInt(lightcase.dimensions.windowHeight * lightcase.settings.shrinkFactor)
+				objectHeight : $object.attr('height') ? $object.attr('height') : $object.attr('data-height')
 			};
-			
+
 			if (!lightcase.settings.disableShrink) {
+				// Add calculated maximum width/height to dimensions
+				dimensions.maxWidth = parseInt(lightcase.dimensions.windowWidth * lightcase.settings.shrinkFactor);
+				dimensions.maxHeight = parseInt(lightcase.dimensions.windowHeight * lightcase.settings.shrinkFactor);
+
 				// If the auto calculated maxWidth/maxHeight greather than the userdefined one, use that.
 				if (dimensions.maxWidth > lightcase.settings.maxWidth) {
 					dimensions.maxWidth = lightcase.settings.maxWidth;
@@ -597,10 +599,10 @@
 					var suffixArr = typeMapping[key].split(',');
 
 					for (var i = 0; i < suffixArr.length; i++) {
-						var suffix = suffixArr[i]
+						var suffix = suffixArr[i].toLowerCase()
 							,regexp = new RegExp('\.(' + suffix + ')$', 'i')
 							// Verify only the last 5 characters of the string
-							,str = url.split('?')[0].substr(-5);
+							,str = url.toLowerCase().split('?')[0].substr(-5);
 
 						if (regexp.test(str) === true) {
 							return key;
@@ -839,7 +841,7 @@
 		 * @return	{void}
 		 */
 		addKeyEvents : function () {
-			$(document).bind('keyup.lightcase', function (event) {
+			$(document).keyup(function (event) {
 				// Do nothing if lightcase is in process
 				if (lightcase.busy) {
 					return;
@@ -1454,7 +1456,7 @@
 			$overlay.unbind('click');
 
 			// Unbind key events
-			$(document).unbind('keyup.lightcase');
+			$(document).unbind('keyup');
 
 			// Unbind swipe events
 			$case.unbind('swipeleft').unbind('swiperight');
