@@ -1,3 +1,11 @@
+2015/07/12 - v2.1.1
+Feature: Added bower configuration file
+Bugfix: Issue #22 - DisableShrink property doesn't work, case of image type affects type of overlay
+Bugfix: Disabled text decoration for icon links
+Bugfix: Optimized nav icon position
+Bugfix: Issue #19 - Cleanup removes all key bindings on the page
+Bugfix: Issue #17 - While closing in midst of loading next image
+
 2015/04/25 - v2.1.0
 Feature: Added new option 'attr' used for initializing collections
 Feature: Added new hook calls 'onClose' and 'onCleanup'
