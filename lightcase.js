@@ -197,6 +197,10 @@
 			// Add sequence info to objectData
 			objectData.sequenceInfo = (objectData.currentIndex + 1) + lightcase.labels['sequenceInfo.of'] + objectData.sequenceLength;
 
+			// Add next/prev index
+			objectData.prevIndex = objectData.currentIndex - 1;
+			objectData.nextIndex = objectData.currentIndex + 1;
+
 			return objectData;
 		},
 
@@ -854,13 +858,13 @@
 						break;
 					// Backward key
 					case 37 :
-						if (lightcase.objectData.isPartOfSequence) {
+						if (lightcase.objectData.isPartOfSequence && (lightcase.settings.navigateEndless === true || !lightcase.item.isFirst())) {
 							$prev.click();
 						}
 						break;
 					// Forward key
 					case 39 :
-						if (lightcase.objectData.isPartOfSequence) {
+						if (lightcase.objectData.isPartOfSequence && (lightcase.settings.navigateEndless === true || !lightcase.item.isLast())) {
 							$next.click();
 						}
 						break;
@@ -906,21 +910,18 @@
 		 */
 		setNavigation : function () {
 			var $links = $('[' + lightcase.settings.attr + '="' + lightcase.objectData.rel + '"]'),
-				currentIndex = lightcase.objectData.currentIndex,
-				prevIndex = currentIndex - 1,
-				nextIndex = currentIndex + 1,
 				sequenceLength = lightcase.objectData.sequenceLength - 1,
 				items = {
-					$prevItem : $links.eq(prevIndex),
-					$nextItem : $links.eq(nextIndex)
+					$prevItem : $links.eq(lightcase.objectData.prevIndex),
+					$nextItem : $links.eq(lightcase.objectData.nextIndex)
 				};
 
-			if (currentIndex > 0) {
+			if (lightcase.objectData.currentIndex > 0) {
 				$prev.show();
 			} else {
 				items.$prevItem = $links.eq(sequenceLength);
 			}
-			if (nextIndex <= sequenceLength) {
+			if (lightcase.objectData.nextIndex <= sequenceLength) {
 				$next.show();
 			} else {
 				items.$nextItem = $links.eq(0);
@@ -932,6 +933,30 @@
 			}
 
 			return items;
+		},
+
+		/**
+		 * Item information/status
+		 *
+		 */
+		item : {
+			/**
+			 * Verifies if the current item is first item.
+			 *
+			 * @return	{boolean}
+			 */
+			isFirst : function () {
+				return (lightcase.objectData.currentIndex === 0);
+			},
+
+			/**
+			 * Verifies if the current item is last item.
+			 *
+			 * @return	{boolean}
+			 */
+			isLast : function () {
+				return (lightcase.objectData.currentIndex === (lightcase.objectData.sequenceLength - 1));
+			}
 		},
 
 		/**
