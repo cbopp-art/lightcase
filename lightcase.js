@@ -783,24 +783,28 @@
 				$prev.click(function (event) {
 					event.preventDefault();
 
-					$prev.unbind('click');
-					lightcase.cache.action = 'prev';
-					lightcase.nav.$prevItem.click();
+					if (lightcase.settings.navigateEndless === true || !lightcase.item.isFirst()) {
+						$prev.unbind('click');
+						lightcase.cache.action = 'prev';
+						lightcase.nav.$prevItem.click();
 					
-					if (lightcase.isSlideshowEnabled()) {
-						lightcase.stopTimeout();
+						if (lightcase.isSlideshowEnabled()) {
+							lightcase.stopTimeout();
+						}
 					}
 				});
 
 				$next.click(function (event) {
 					event.preventDefault();
-					
-					$next.unbind('click');
-					lightcase.cache.action = 'next';
-					lightcase.nav.$nextItem.click();
-					
-					if (lightcase.isSlideshowEnabled()) {
-						lightcase.stopTimeout();
+
+					if (lightcase.settings.navigateEndless === true || !lightcase.item.isLast()) {
+						$next.unbind('click');
+						lightcase.cache.action = 'next';
+						lightcase.nav.$nextItem.click();
+
+						if (lightcase.isSlideshowEnabled()) {
+							lightcase.stopTimeout();
+						}
 					}
 				});
 
@@ -858,13 +862,13 @@
 						break;
 					// Backward key
 					case 37 :
-						if (lightcase.objectData.isPartOfSequence && (lightcase.settings.navigateEndless === true || !lightcase.item.isFirst())) {
+						if (lightcase.objectData.isPartOfSequence) {
 							$prev.click();
 						}
 						break;
 					// Forward key
 					case 39 :
-						if (lightcase.objectData.isPartOfSequence && (lightcase.settings.navigateEndless === true || !lightcase.item.isLast())) {
+						if (lightcase.objectData.isPartOfSequence) {
 							$next.click();
 						}
 						break;
