@@ -27,6 +27,7 @@
 
 	/* Overlay */
 	#lightcase-overlay {
+		opacity: 1 !important;
 		background: #333;
 	}
 
@@ -82,8 +83,17 @@
 		padding-left: 15px;
 		padding-right: 15px;
 	}
+
 	#lightcase-case:not([data-type=image]):not([data-type=video]):not([data-type=flash]):not([data-type=error]) .lightcase-info {
 		position: static;
+	}
+
+	#lightcase-case .lightcase-title {
+		position: fixed;
+		top: 10px;
+		left: 0;
+		padding: 5px 15px;
+		background: rgba(51,51,51,0.9);
 	}
 
 	#lightcase-case:not([data-type=image]):not([data-type=video]):not([data-type=flash]):not([data-type=error]) .lightcase-content {
@@ -121,7 +131,7 @@
 		left: 0;
 		height: 55px;
 
-		background: rgba(55,55,55,0.9);
+		background: rgba(60,60,60,0.9);
 	}
 
 	#lightcase-nav a {
