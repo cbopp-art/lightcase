@@ -1,3 +1,8 @@
+2015/09/29 - v2.1.2
+Bugfix: Issue #26 - Captions on mobile devices
+Bugfix: Issue #25 - navigateEndless when useKeys is true
+Cleanup: Remove BOM from package.json
+
 2015/07/12 - v2.1.1
 Feature: Added bower configuration file
 Bugfix: Issue #22 - DisableShrink property doesn't work, case of image type affects type of overlay
