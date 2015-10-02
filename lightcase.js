@@ -1226,7 +1226,7 @@
 			if (typeof(hooks) === 'object') {
 				$.each(hooks, function(index, hook) {
 					if (typeof(hook) === 'function') {
-						hook.call(lightcase.objectData.origin);
+						hook.call(lightcase.origin);
 					}
 				});
 			}
