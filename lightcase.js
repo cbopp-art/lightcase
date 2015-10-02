@@ -157,6 +157,8 @@
 				onCleanup : {}
 			}, options);
 
+			lightcase.origin = this;
+
 			// Call onInit hook functions
 			lightcase.callHooks(lightcase.settings.onInit);
 
@@ -179,7 +181,6 @@
 		 */
 		getObjectData : function ($object) {
 		 	var objectData = {
-				origin : $object,
 				title : lightcase.settings.title || $object.attr('title'),
 				caption : lightcase.settings.caption || $object.children('img').attr('alt'),
 				url : lightcase.verifyDataUrl(lightcase.settings.href || $object.attr('data-href') || $object.attr('href')),
