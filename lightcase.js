@@ -32,7 +32,7 @@
 		 */
 		init : function (options) {
 			return this.each(function () {
-				$(this).unbind('click').click(function (event) {
+				$(this).unbind('click.lightcase').bind('click.lightcase', function (event) {
 					event.preventDefault();
 					$(this).lightcase('start', options);
 				});
@@ -179,7 +179,7 @@
 		 */
 		getObjectData : function ($object) {
 		 	var objectData = {
-				$link : $object,
+				origin : $object,
 				title : lightcase.settings.title || $object.attr('title'),
 				caption : lightcase.settings.caption || $object.children('img').attr('alt'),
 				url : lightcase.verifyDataUrl(lightcase.settings.href || $object.attr('data-href') || $object.attr('href')),
@@ -1225,7 +1225,7 @@
 			if (typeof(hooks) === 'object') {
 				$.each(hooks, function(index, hook) {
 					if (typeof(hook) === 'function') {
-						hook();
+						hook.call(lightcase.objectData.origin);
 					}
 				});
 			}
