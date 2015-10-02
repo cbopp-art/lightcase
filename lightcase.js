@@ -34,7 +34,6 @@
 			return this.each(function () {
 				$(this).unbind('click.lightcase').bind('click.lightcase', function (event) {
 					event.preventDefault();
-					lightcase.origin = this;
 					$(this).lightcase('start', options);
 				});
 			});
@@ -47,6 +46,7 @@
 		 * @return	{void}
 		 */
 		start : function (options) {
+			lightcase.origin = this;
 			lightcase.settings = $.extend(true, {
 				idPrefix : 'lightcase-',
 				classPrefix : 'lightcase-',
