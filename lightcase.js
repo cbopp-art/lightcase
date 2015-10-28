@@ -50,6 +50,7 @@
 			lightcase.settings = $.extend(true, {
 				idPrefix : 'lightcase-',
 				classPrefix : 'lightcase-',
+				attrPrefix : 'lc-',
 				transition : 'elastic',
 				transitionIn : null,
 				transitionOut : null,
@@ -78,9 +79,6 @@
 				showTitle : true,
 				showCaption : true,
 				showSequenceInfo : true,
-				categories : {
-					attr : 'data-lc-categories'
-				},
 				inline : {
 					width : 'auto',
 					height : 'auto'
@@ -112,7 +110,7 @@
 					autoplay : true,
 					loop : false
 				},
-				attr: 'data-rel',
+				attr : 'data-rel',
 				href : null,
 				type : null,
 				typeMapping : {
@@ -186,12 +184,12 @@
 		 	var objectData = {
 				title : lightcase.settings.title || $object.attr('title'),
 				caption : lightcase.settings.caption || $object.children('img').attr('alt'),
-				url : lightcase.verifyDataUrl(lightcase.settings.href || $object.attr('data-href') || $object.attr('href')),
+				url : lightcase.verifyDataUrl(lightcase.determineLinkTarget()),
 				requestType : lightcase.settings.ajax.type,
 				requestData : lightcase.settings.ajax.data,
 				requestDataType : lightcase.settings.ajax.dataType,
 				rel : $object.attr(lightcase.determineAttributeSelector()),
-				type : lightcase.settings.type || lightcase.verifyDataType($object.attr('data-href') || $object.attr('href')),
+				type : lightcase.settings.type || lightcase.verifyDataType(lightcase.determineLinkTarget()),
 				isPartOfSequence : lightcase.isPartOfSequence($object.attr(lightcase.settings.attr), ':'),
 				isPartOfSequenceWithSlideshow : lightcase.isPartOfSequence($object.attr(lightcase.settings.attr), ':slideshow'),
 				currentIndex : $(lightcase.determineAttributeSelector()).index($object),
@@ -209,6 +207,27 @@
 		},
 
 		/**
+		 * Prefixes a data attribute name with defined name from 'settings.attrPrefix'
+		 * to ensure more uniqueness for all lightcase related/used attributes.
+		 *
+		 * @param	{string}	name
+		 * @return	{string}
+		 */
+		prefixAttributeName : function (name) {
+			return 'data-' + lightcase.settings.attrPrefix + name;
+		},
+
+		/**
+		 * Determines the link target considering 'settings.href' and data attributes
+		 * but also with a fallback to the default 'href' value.
+		 *
+		 * @return	{string}
+		 */
+		determineLinkTarget : function () {
+			return lightcase.settings.href || $(lightcase.origin).attr('data-href') || $(lightcase.origin).attr('href');
+		},
+
+		/**
 		 * Determines the attribute selector to use, depending on
 		 * whether categorized collections are beeing used or not.
 		 *
@@ -220,14 +239,14 @@
 
 			if (typeof lightcase.cache.selector !== 'undefined') {
 				selector = lightcase.cache.selector;
-			} else if (lightcase.settings.useCategories === true && $origin.attr(lightcase.settings.categories.attr)) {
-				var	categories = $origin.attr(lightcase.settings.categories.attr).split(' ');
+			} else if (lightcase.settings.useCategories === true && $origin.attr(lightcase.prefixAttributeName('categories'))) {
+				var	categories = $origin.attr(lightcase.prefixAttributeName('categories')).split(' ');
 
 				$.each(categories, function (index, category) {
 					if (index > 0) {
 						selector += ',';
 					}
-					selector += '[' + lightcase.settings.categories.attr + '~="' + category + '"]';
+					selector += '[' + lightcase.prefixAttributeName('categories') + '~="' + category + '"]';
 				});
 			} else {
 				selector = '[' + lightcase.settings.attr + '="' + $origin.attr(lightcase.settings.attr) + '"]';
@@ -306,7 +325,7 @@
 
 					// Add custom attributes from lightcase.settings
 					$.each(lightcase.settings.inline, function (name, value) {
-						$object.attr('data-' + name, value);
+						$object.attr(lightcase.prefixAttributeName(name), value);
 					});
 					break;
 				case 'ajax' :
@@ -315,7 +334,7 @@
 					// Add custom attributes from lightcase.settings
 					$.each(lightcase.settings.ajax, function (name, value) {
 						if (name !== 'data') {
-							$object.attr('data-' + name, value);
+							$object.attr(lightcase.prefixAttributeName(name), value);
 						}
 					});
 					break;
@@ -484,8 +503,8 @@
 
 			// Set default dimensions
 			var dimensions = {
-				objectWidth : $object.attr('width') ? $object.attr('width') : $object.attr('data-width'), 
-				objectHeight : $object.attr('height') ? $object.attr('height') : $object.attr('data-height')
+				objectWidth : $object.attr('width') ? $object.attr('width') : $object.attr(lightcase.prefixAttributeName('width')),
+				objectHeight : $object.attr('height') ? $object.attr('height') : $object.attr(lightcase.prefixAttributeName('height'))
 			};
 
 			if (!lightcase.settings.disableShrink) {
@@ -554,8 +573,8 @@
 			$object.css({
 				'width' : dimensions.objectWidth,
 				'height' : dimensions.objectHeight,
-				'max-width' : $object.attr('data-max-width') ? $object.attr('data-max-width') : dimensions.maxWidth,
-				'max-height' : $object.attr('data-max-height') ? $object.attr('data-max-height') : dimensions.maxHeight
+				'max-width' : $object.attr(lightcase.prefixAttributeName('max-width')) ? $object.attr(lightcase.prefixAttributeName('max-width')) : dimensions.maxWidth,
+				'max-height' : $object.attr(lightcase.prefixAttributeName('max-height')) ? $object.attr(lightcase.prefixAttributeName('max-width')) : dimensions.maxHeight
 			});
 			
 			$contentInner.css({
@@ -677,7 +696,7 @@
 		 */
 		showContent : function ($object) {
 			// Add data attribute with the object type
-			$case.attr('data-type', lightcase.objectData.type);
+			$case.attr(lightcase.prefixAttributeName('type'), lightcase.objectData.type);
 
 			lightcase.cache.object = $object;
 			lightcase.calculateDimensions($object);
@@ -812,7 +831,7 @@
 			}
 
 			if (lightcase.objectData.isPartOfSequence) {
-				$nav.attr('data-ispartofsequence', true);
+				$nav.attr(lightcase.prefixAttributeName('ispartofsequence'), true);
 				lightcase.nav = lightcase.setNavigation();
 
 				$prev.click(function (event) {
@@ -1566,8 +1585,8 @@
 			$case.hide();
 			$nav.children().hide();
 
-			$case.removeAttr('data-type');
-			$nav.removeAttr('data-ispartofsequence');
+			$case.removeAttr(lightcase.prefixAttributeName('type'));
+			$nav.removeAttr(lightcase.prefixAttributeName('ispartofsequence'));
 
 			$contentInner.empty().hide();
 			$info.children().empty();

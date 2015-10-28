@@ -33,7 +33,7 @@
 	}
 
 	/* Content */
-	#lightcase-case:not([data-type=error]) .lightcase-content {
+	#lightcase-case:not([data-lc-type=error]) .lightcase-content {
 		position: relative;
 		z-index: 1;
 		overflow: hidden;
@@ -49,15 +49,15 @@
 
 		-webkit-backface-visibility: hidden;
 	}
-	#lightcase-case[data-type=image] .lightcase-content,
-	#lightcase-case[data-type=video] .lightcase-content {
+	#lightcase-case[data-lc-type=image] .lightcase-content,
+	#lightcase-case[data-lc-type=video] .lightcase-content {
 		background-color: #333;
 	}
-	#lightcase-case[data-type=image] .lightcase-contentInner,
-	#lightcase-case[data-type=video] .lightcase-contentInner {
+	#lightcase-case[data-lc-type=image] .lightcase-contentInner,
+	#lightcase-case[data-lc-type=video] .lightcase-contentInner {
 		line-height: 0.75;
 	}
-	#lightcase-case:not([data-type=error]) .lightcase-inlineWrap {
+	#lightcase-case:not([data-lc-type=error]) .lightcase-inlineWrap {
 		padding: 30px;
 
 		overflow: auto;

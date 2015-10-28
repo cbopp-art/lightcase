@@ -127,7 +127,7 @@
 
 	/* For mobile (touch) devices */
 	.lightcase-isMobileDevice #lightcase-case .lightcase-inlineWrap,
-	.lightcase-isMobileDevice #lightcase-case[data-type=iframe] .lightcase-contentInner {
+	.lightcase-isMobileDevice #lightcase-case[data-lc-type=iframe] .lightcase-contentInner {
 		overflow: auto;
 		-webkit-overflow-scrolling: touch;
 	}
