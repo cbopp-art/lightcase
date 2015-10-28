@@ -70,6 +70,7 @@
 				timeout : 5000,
 				swipe : true,
 				useKeys : true,
+				useCategories : true,
 				navigateEndless : true,
 				closeOnOverlayClick : true,
 				title : null,
@@ -77,6 +78,9 @@
 				showTitle : true,
 				showCaption : true,
 				showSequenceInfo : true,
+				categories : {
+					attr : 'data-lc-categories'
+				},
 				inline : {
 					width : 'auto',
 					height : 'auto'
@@ -186,12 +190,12 @@
 				requestType : lightcase.settings.ajax.type,
 				requestData : lightcase.settings.ajax.data,
 				requestDataType : lightcase.settings.ajax.dataType,
-				rel : $object.attr(lightcase.settings.attr),
+				rel : $object.attr(lightcase.determineAttributeSelector()),
 				type : lightcase.settings.type || lightcase.verifyDataType($object.attr('data-href') || $object.attr('href')),
 				isPartOfSequence : lightcase.isPartOfSequence($object.attr(lightcase.settings.attr), ':'),
 				isPartOfSequenceWithSlideshow : lightcase.isPartOfSequence($object.attr(lightcase.settings.attr), ':slideshow'),
-				currentIndex : $('[' + lightcase.settings.attr + '="' + $object.attr(lightcase.settings.attr) + '"]').index($object),
-				sequenceLength : $('[' + lightcase.settings.attr + '="' + $object.attr(lightcase.settings.attr) + '"]').length
+				currentIndex : $(lightcase.determineAttributeSelector()).index($object),
+				sequenceLength : $(lightcase.determineAttributeSelector()).length
 			};
 
 			// Add sequence info to objectData
@@ -202,6 +206,36 @@
 			objectData.nextIndex = objectData.currentIndex + 1;
 
 			return objectData;
+		},
+
+		/**
+		 * Determines the attribute selector to use, depending on
+		 * whether categorized collections are beeing used or not.
+		 *
+		 * @return	{string}	selector
+		 */
+		determineAttributeSelector : function () {
+			var	$origin = $(lightcase.origin),
+				selector = '';
+
+			if (typeof lightcase.cache.selector !== 'undefined') {
+				selector = lightcase.cache.selector;
+			} else if (lightcase.settings.useCategories === true && $origin.attr(lightcase.settings.categories.attr)) {
+				var	categories = $origin.attr(lightcase.settings.categories.attr).split(' ');
+
+				$.each(categories, function (index, category) {
+					if (index > 0) {
+						selector += ',';
+					}
+					selector += '[' + lightcase.settings.categories.attr + '~="' + category + '"]';
+				});
+			} else {
+				selector = '[' + lightcase.settings.attr + '="' + $origin.attr(lightcase.settings.attr) + '"]';
+			}
+
+			lightcase.cache.selector = selector;
+
+			return selector;
 		},
 
 		/**
@@ -556,6 +590,7 @@
 				$loading.hide();
 			}
 		},
+
 
 		/**
 		 * Gets the client screen dimensions
@@ -913,7 +948,7 @@
 		 * @return	{object}	items
 		 */
 		setNavigation : function () {
-			var $links = $('[' + lightcase.settings.attr + '="' + lightcase.objectData.rel + '"]'),
+			var $links = $((lightcase.cache.selector || lightcase.settings.attr)),
 				sequenceLength = lightcase.objectData.sequenceLength - 1,
 				items = {
 					$prevItem : $links.eq(lightcase.objectData.prevIndex),
