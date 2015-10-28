@@ -574,7 +574,7 @@
 				'width' : dimensions.objectWidth,
 				'height' : dimensions.objectHeight,
 				'max-width' : $object.attr(lightcase.prefixAttributeName('max-width')) ? $object.attr(lightcase.prefixAttributeName('max-width')) : dimensions.maxWidth,
-				'max-height' : $object.attr(lightcase.prefixAttributeName('max-height')) ? $object.attr(lightcase.prefixAttributeName('max-width')) : dimensions.maxHeight
+				'max-height' : $object.attr(lightcase.prefixAttributeName('max-height')) ? $object.attr(lightcase.prefixAttributeName('max-height')) : dimensions.maxHeight
 			});
 			
 			$contentInner.css({
