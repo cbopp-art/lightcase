@@ -10,18 +10,18 @@
 
 ;(function ($) {
 	window.lightcase = {
-		cache : {},
+		cache: {},
 
-		support : {},
+		support: {},
 
-		labels : {
-			'errorMessage' : 'Source could not be found...',
-			'sequenceInfo.of' : ' of ',
-			'close' : 'Close',
-			'navigator.prev' : 'Prev',
-			'navigator.next' : 'Next',
-			'navigator.play' : 'Play',
-			'navigator.pause' : 'Pause'
+		labels: {
+			'errorMessage': 'Source could not be found...',
+			'sequenceInfo.of': ' of ',
+			'close': 'Close',
+			'navigator.prev': 'Prev',
+			'navigator.next': 'Next',
+			'navigator.play': 'Play',
+			'navigator.pause': 'Pause'
 		},
 
 		/**
@@ -30,7 +30,7 @@
 		 * @param	{object}	options
 		 * @return	{object}
 		 */
-		init : function (options) {
+		init: function (options) {
 			return this.each(function () {
 				$(this).unbind('click.lightcase').bind('click.lightcase', function (event) {
 					event.preventDefault();
@@ -45,86 +45,86 @@
 		 * @param	{object}	options
 		 * @return	{void}
 		 */
-		start : function (options) {
+		start: function (options) {
 			lightcase.origin = this;
 			lightcase.settings = $.extend(true, {
-				idPrefix : 'lightcase-',
-				classPrefix : 'lightcase-',
-				attrPrefix : 'lc-',
-				transition : 'elastic',
-				transitionIn : null,
-				transitionOut : null,
-				cssTransitions : true,
-				speedIn : 250,
-				speedOut : 250,
-				maxWidth : 800,
-				maxHeight : 500,
-				forceWidth : false,
-				forceHeight : false,
-				liveResize : true,
-				fullScreenModeForMobile : true,
-				mobileMatchExpression : /(iphone|ipod|ipad|android|blackberry|symbian)/,
-				disableShrink : false,
-				shrinkFactor : .75,
-				overlayOpacity : .9,
-				slideshow : false,
-				timeout : 5000,
-				swipe : true,
-				useKeys : true,
-				useCategories : true,
-				navigateEndless : true,
-				closeOnOverlayClick : true,
-				title : null,
-				caption : null,
-				showTitle : true,
-				showCaption : true,
-				showSequenceInfo : true,
-				inline : {
-					width : 'auto',
-					height : 'auto'
+				idPrefix: 'lightcase-',
+				classPrefix: 'lightcase-',
+				attrPrefix: 'lc-',
+				transition: 'elastic',
+				transitionIn: null,
+				transitionOut: null,
+				cssTransitions: true,
+				speedIn: 250,
+				speedOut: 250,
+				maxWidth: 800,
+				maxHeight: 500,
+				forceWidth: false,
+				forceHeight: false,
+				liveResize: true,
+				fullScreenModeForMobile: true,
+				mobileMatchExpression: /(iphone|ipod|ipad|android|blackberry|symbian)/,
+				disableShrink: false,
+				shrinkFactor: .75,
+				overlayOpacity: .9,
+				slideshow: false,
+				timeout: 5000,
+				swipe: true,
+				useKeys: true,
+				useCategories: true,
+				navigateEndless: true,
+				closeOnOverlayClick: true,
+				title: null,
+				caption: null,
+				showTitle: true,
+				showCaption: true,
+				showSequenceInfo: true,
+				inline: {
+					width: 'auto',
+					height: 'auto'
 				},
-				ajax : {
-					width : 'auto',
-					height : 'auto',
-					type : 'get',
-					dataType : 'html',
-					data : {}
+				ajax: {
+					width: 'auto',
+					height: 'auto',
+					type: 'get',
+					dataType: 'html',
+					data: {}
 				},
-				iframe : {
-					width : 800,
-					height : 500,
-					frameborder : 0
+				iframe: {
+					width: 800,
+					height: 500,
+					frameborder: 0
 				},
-				flash : {
-					width : 400,
-					height : 205,
-					wmode : 'transparent'
+				flash: {
+					width: 400,
+					height: 205,
+					wmode: 'transparent'
 				},
-				video : {
-					width : 400,
-					height : 225,
-					poster : '',
-					preload : 'auto',
-					controls : true,
-					autobuffer : true,
-					autoplay : true,
-					loop : false
+				video: {
+					width: 400,
+					height: 225,
+					poster: '',
+					preload: 'auto',
+					controls: true,
+					autobuffer: true,
+					autoplay: true,
+					loop: false
 				},
-				attr : 'data-rel',
-				href : null,
-				type : null,
-				typeMapping : {
-					'image' : 'jpg,jpeg,gif,png,bmp',
-					'flash' : 'swf',
-					'video' : 'mp4,mov,ogv,ogg,webm',
-					'iframe' : 'html,php',
-					'ajax' : 'json,txt',
-					'inline' : '#'
+				attr: 'data-rel',
+				href: null,
+				type: null,
+				typeMapping: {
+					'image': 'jpg,jpeg,gif,png,bmp',
+					'flash': 'swf',
+					'video': 'mp4,mov,ogv,ogg,webm',
+					'iframe': 'html,php',
+					'ajax': 'json,txt',
+					'inline': '#'
 				},
-				errorMessage : function () {
+				errorMessage: function () {
 					return '<p class="' + lightcase.settings.classPrefix + 'error">' + lightcase.labels['errorMessage'] + '</p>';
 				},
-				markup : function () {
+				markup: function () {
 					$('body').append(
 						$overlay = $('<div id="' + lightcase.settings.idPrefix + 'overlay"></div>'),
 						$loading = $('<div id="' + lightcase.settings.idPrefix + 'loading" class="' + lightcase.settings.classPrefix + 'icon-spin"></div>'),
@@ -153,11 +153,11 @@
 						$caption = $('<p class="' + lightcase.settings.classPrefix + 'caption"></p>')
 					);
 				},
-				onInit : {},
-				onStart : {},
-				onFinish : {},
-				onClose : {},
-				onCleanup : {}
+				onInit: {},
+				onStart: {},
+				onFinish: {},
+				onClose: {},
+				onCleanup: {}
 			}, options);
 
 			// Call onInit hook functions
@@ -180,20 +180,20 @@
 		 * @param	{object}	$object
 		 * @return	{object}	objectData
 		 */
-		getObjectData : function ($object) {
+		getObjectData: function ($object) {
 		 	var objectData = {
-				title : lightcase.settings.title || $object.attr('title'),
-				caption : lightcase.settings.caption || $object.children('img').attr('alt'),
-				url : lightcase.verifyDataUrl(lightcase.determineLinkTarget()),
-				requestType : lightcase.settings.ajax.type,
-				requestData : lightcase.settings.ajax.data,
-				requestDataType : lightcase.settings.ajax.dataType,
-				rel : $object.attr(lightcase.determineAttributeSelector()),
-				type : lightcase.settings.type || lightcase.verifyDataType(lightcase.determineLinkTarget()),
-				isPartOfSequence : lightcase.isPartOfSequence($object.attr(lightcase.settings.attr), ':'),
-				isPartOfSequenceWithSlideshow : lightcase.isPartOfSequence($object.attr(lightcase.settings.attr), ':slideshow'),
-				currentIndex : $(lightcase.determineAttributeSelector()).index($object),
-				sequenceLength : $(lightcase.determineAttributeSelector()).length
+				title: lightcase.settings.title || $object.attr('title'),
+				caption: lightcase.settings.caption || $object.children('img').attr('alt'),
+				url: lightcase.verifyDataUrl(lightcase.determineLinkTarget()),
+				requestType: lightcase.settings.ajax.type,
+				requestData: lightcase.settings.ajax.data,
+				requestDataType: lightcase.settings.ajax.dataType,
+				rel: $object.attr(lightcase.determineAttributeSelector()),
+				type: lightcase.settings.type || lightcase.verifyDataType(lightcase.determineLinkTarget()),
+				isPartOfSequence: lightcase.isPartOfSequence($object.attr(lightcase.settings.attr), ':'),
+				isPartOfSequenceWithSlideshow: lightcase.isPartOfSequence($object.attr(lightcase.settings.attr), ':slideshow'),
+				currentIndex: $(lightcase.determineAttributeSelector()).index($object),
+				sequenceLength: $(lightcase.determineAttributeSelector()).length
 			};
 
 			// Add sequence info to objectData
@@ -213,7 +213,7 @@
 		 * @param	{string}	name
 		 * @return	{string}
 		 */
-		prefixAttributeName : function (name) {
+		prefixAttributeName: function (name) {
 			return 'data-' + lightcase.settings.attrPrefix + name;
 		},
 
@@ -223,7 +223,7 @@
 		 *
 		 * @return	{string}
 		 */
-		determineLinkTarget : function () {
+		determineLinkTarget: function () {
 			return lightcase.settings.href || $(lightcase.origin).attr('data-href') || $(lightcase.origin).attr('href');
 		},
 
@@ -233,7 +233,7 @@
 		 *
 		 * @return	{string}	selector
 		 */
-		determineAttributeSelector : function () {
+		determineAttributeSelector: function () {
 			var	$origin = $(lightcase.origin),
 				selector = '';
 
@@ -264,7 +264,7 @@
 		 * @param	{string}	expression
 		 * @return	{boolean}
 		 */
-		isPartOfSequence : function (rel, expression) {
+		isPartOfSequence: function (rel, expression) {
 			var getSimilarLinks = $('[' + lightcase.settings.attr + '="' + rel + '"]'),
 				regexp = new RegExp(expression);
 
@@ -280,7 +280,7 @@
 		 *
 		 * @return	{boolean}
 		 */
-		isSlideshowEnabled : function () {
+		isSlideshowEnabled: function () {
 			if (lightcase.objectData.isPartOfSequence && (lightcase.settings.slideshow === true || lightcase.objectData.isPartOfSequenceWithSlideshow === true)) {
 				return true;
 			} else {
@@ -293,7 +293,7 @@
 		 *
 		 * @return	{void}
 		 */
-		loadContent : function () {
+		loadContent: function () {
 			if (lightcase.cache.originalObject) {
 				lightcase.restoreObject();
 			}
@@ -306,20 +306,20 @@
 		 *
 		 * @return	{void}
 		 */
-		createObject : function () {
+		createObject: function () {
 			var $object;
 
 			// Create object
 			switch (lightcase.objectData.type) {
-				case 'image' :
+				case 'image':
 					$object = $(new Image());
 					$object.attr({
 						// The time expression is required to prevent the binding of an image load
-						'src' : lightcase.objectData.url,
-						'alt' : lightcase.objectData.title
+						'src': lightcase.objectData.url,
+						'alt': lightcase.objectData.title
 					});
 					break;
-				case 'inline' :
+				case 'inline':
 					$object = $('<div class="' + lightcase.settings.classPrefix + 'inlineWrap"></div>');
 					$object.html(lightcase.cloneObject($(lightcase.objectData.url)));
 
@@ -328,7 +328,7 @@
 						$object.attr(lightcase.prefixAttributeName(name), value);
 					});
 					break;
-				case 'ajax' :
+				case 'ajax':
 					$object = $('<div class="' + lightcase.settings.classPrefix + 'inlineWrap"></div>');
 
 					// Add custom attributes from lightcase.settings
@@ -338,7 +338,7 @@
 						}
 					});
 					break;
-				case 'flash' :
+				case 'flash':
 					$object = $('<embed src="' + lightcase.objectData.url + '" type="application/x-shockwave-flash"></embed>');
 
 					// Add custom attributes from lightcase.settings
@@ -346,7 +346,7 @@
 						$object.attr(name, value);
 					});
 					break;
-				case 'video' :
+				case 'video':
 					$object = $('<video></video>');
 					$object.attr('src', lightcase.objectData.url);
 
@@ -358,7 +358,7 @@
 				default :
 					$object = $('<iframe></iframe>');
 					$object.attr({
-						'src' : lightcase.objectData.url
+						'src': lightcase.objectData.url
 					});
 
 					// Add custom attributes from lightcase.settings
@@ -377,7 +377,7 @@
 		 * @param	{object}	$object
 		 * @return	{void}
 		 */
-		addObject : function ($object) {
+		addObject: function ($object) {
 			// Add object to content holder
 			$contentInner.html($object);
 
@@ -421,24 +421,24 @@
 		 * @param	{object}	$object
 		 * @return	{void}
 		 */
-		loadObject : function ($object) {
+		loadObject: function ($object) {
 			// Load the object
 			switch (lightcase.objectData.type) {
-				case 'inline' :
+				case 'inline':
 					if ($(lightcase.objectData.url)) {
 						lightcase.showContent($object);
 					} else {
 						lightcase.error();
 					}
 					break;
-				case 'ajax' :
+				case 'ajax':
 					$.ajax(
 						$.extend({}, lightcase.settings.ajax, {
-							url : lightcase.objectData.url,
-							type : lightcase.objectData.requestType,
-							dataType : lightcase.objectData.requestDataType,
-							data : lightcase.objectData.requestData,
-							success : function (data, textStatus, jqXHR) {
+							url: lightcase.objectData.url,
+							type: lightcase.objectData.requestType,
+							dataType: lightcase.objectData.requestDataType,
+							data: lightcase.objectData.requestData,
+							success: function (data, textStatus, jqXHR) {
 								// Unserialize if data is transferred as json
 								if (lightcase.objectData.requestDataType === 'json') {
 									lightcase.objectData.data = data;
@@ -447,23 +447,23 @@
 								}
 								lightcase.showContent($object);
 							},
-							error : function (jqXHR, textStatus, errorThrown) {
+							error: function (jqXHR, textStatus, errorThrown) {
 								lightcase.error();
 							}
 						})
 					);
 					break;
-				case 'flash' :
+				case 'flash':
 					lightcase.showContent($object);
 					break;
-				case 'video' :
+				case 'video':
 					if (typeof($object.get(0).canPlayType) === 'function' || $case.find('video').length === 0) {
 						lightcase.showContent($object);
 					} else {
 						lightcase.error();
 					}
 					break;
-				default :
+				default:
 					if (lightcase.objectData.url) {
 						$object.load(function () {
 							lightcase.showContent($object);
@@ -482,7 +482,7 @@
 		 *
 		 * @return	{void}
 		 */
-		error : function () {
+		error: function () {
 			lightcase.objectData.type = 'error';
 			var $object = $('<div class="' + lightcase.settings.classPrefix + 'inlineWrap"></div>');
 
@@ -498,13 +498,13 @@
 		 * @param	{object}	$object
 		 * @return	{void}
 		 */
-		calculateDimensions : function ($object) {
+		calculateDimensions: function ($object) {
 			lightcase.cleanupDimensions();
 
 			// Set default dimensions
 			var dimensions = {
-				objectWidth : $object.attr('width') ? $object.attr('width') : $object.attr(lightcase.prefixAttributeName('width')),
-				objectHeight : $object.attr('height') ? $object.attr('height') : $object.attr(lightcase.prefixAttributeName('height'))
+				objectWidth: $object.attr('width') ? $object.attr('width') : $object.attr(lightcase.prefixAttributeName('width')),
+				objectHeight: $object.attr('height') ? $object.attr('height') : $object.attr(lightcase.prefixAttributeName('height'))
 			};
 
 			if (!lightcase.settings.disableShrink) {
@@ -525,9 +525,9 @@
 				dimensions.differenceHeightAsPercent = parseInt(100 / dimensions.maxHeight * dimensions.objectHeight);
 				
 				switch (lightcase.objectData.type) {
-					case 'image' :
-					case 'flash' :
-					case 'video' :
+					case 'image':
+					case 'flash':
+					case 'video':
 						if (dimensions.differenceWidthAsPercent > 100 && dimensions.differenceWidthAsPercent > dimensions.differenceHeightAsPercent) {
 							dimensions.objectWidth = dimensions.maxWidth;
 							dimensions.objectHeight = parseInt(dimensions.objectHeight / dimensions.differenceWidthAsPercent * 100);
@@ -542,13 +542,13 @@
 						}
 
 						break;
-					case 'error' :
+					case 'error':
 						if (!isNaN(dimensions.objectWidth) && dimensions.objectWidth > dimensions.maxWidth) {
 							dimensions.objectWidth = dimensions.maxWidth;
 						}
 
 						break;
-					default :
+					default:
 						if ((isNaN(dimensions.objectWidth) || dimensions.objectWidth > dimensions.maxWidth) && !lightcase.settings.forceWidth) {
 							dimensions.objectWidth = dimensions.maxWidth;
 						}
@@ -568,29 +568,29 @@
 		 * @param	{object}	dimensions
 		 * @return	{void}
 		 */
-		adjustDimensions : function ($object, dimensions) {
+		adjustDimensions: function ($object, dimensions) {
 			// Adjust width and height
 			$object.css({
-				'width' : dimensions.objectWidth,
-				'height' : dimensions.objectHeight,
-				'max-width' : $object.attr(lightcase.prefixAttributeName('max-width')) ? $object.attr(lightcase.prefixAttributeName('max-width')) : dimensions.maxWidth,
-				'max-height' : $object.attr(lightcase.prefixAttributeName('max-height')) ? $object.attr(lightcase.prefixAttributeName('max-height')) : dimensions.maxHeight
+				'width': dimensions.objectWidth,
+				'height': dimensions.objectHeight,
+				'max-width': $object.attr(lightcase.prefixAttributeName('max-width')) ? $object.attr(lightcase.prefixAttributeName('max-width')) : dimensions.maxWidth,
+				'max-height': $object.attr(lightcase.prefixAttributeName('max-height')) ? $object.attr(lightcase.prefixAttributeName('max-height')) : dimensions.maxHeight
 			});
 			
 			$contentInner.css({
-				'width' : $object.outerWidth(),
-				'height' : $object.outerHeight(),
-				'max-width' : '100%'
+				'width': $object.outerWidth(),
+				'height': $object.outerHeight(),
+				'max-width': '100%'
 			});
 
 			$case.css({
-				'width' : $contentInner.outerWidth()
+				'width': $contentInner.outerWidth()
 			});
 
 			// Adjust margin
 			$case.css({
-				'margin-top' : parseInt(-($case.outerHeight() / 2)),
-				'margin-left' : parseInt(-($case.outerWidth() / 2))
+				'margin-top': parseInt(-($case.outerHeight() / 2)),
+				'margin-left': parseInt(-($case.outerWidth() / 2))
 			});
 		},
 
@@ -600,7 +600,7 @@
 		 * @param	{string}	process
 		 * @return	{void}
 		 */
-		loading : function (process) {
+		loading: function (process) {
 			if (process === 'start') {
 				$case.addClass(lightcase.settings.classPrefix + 'loading');
 				$loading.show();
@@ -616,10 +616,10 @@
 		 *
 		 * @return	{object}	dimensions
 		 */
-		getDimensions : function () {
+		getDimensions: function () {
 			return {
-				windowWidth : $(window).innerWidth(),
-				windowHeight : $(window).innerHeight()
+				windowWidth: $(window).innerWidth(),
+				windowHeight: $(window).innerHeight()
 			};
 		},
 
@@ -629,7 +629,7 @@
 		 * @param	{string}	dataUrl
 		 * @return	{string}	dataUrl	Clean url for processing content
 		 */
-		verifyDataUrl : function (dataUrl) {
+		verifyDataUrl: function (dataUrl) {
 			if (!dataUrl || dataUrl === undefined || dataUrl === '') {
 				return false;
 			}
@@ -648,7 +648,7 @@
 		 * @param	{string}			url
 		 * @return	{string|boolean}	Array key if expression matched, else false
 		 */
-		verifyDataType : function (url) {
+		verifyDataType: function (url) {
 			var url = lightcase.verifyDataUrl(url),
 				typeMapping = lightcase.settings.typeMapping;
 
@@ -680,7 +680,7 @@
 		 *
 		 * @return	{void}
 		 */
-		addElements : function () {
+		addElements: function () {
 			if (typeof($case) !== 'undefined' && $('#' + $case.attr('id')).length) {
 				return;
 			}
@@ -694,7 +694,7 @@
 		 * @param	{object}	$object
 		 * @return	{void}
 		 */
-		showContent : function ($object) {
+		showContent: function ($object) {
 			// Add data attribute with the object type
 			$case.attr(lightcase.prefixAttributeName('type'), lightcase.objectData.type);
 
@@ -705,26 +705,26 @@
 			lightcase.callHooks(lightcase.settings.onFinish);
 
 			switch (lightcase.settings.transitionIn) {
-				case 'scrollTop' :
-				case 'scrollRight' :
-				case 'scrollBottom' :
-				case 'scrollLeft' :
-				case 'scrollHorizontal' :
-				case 'scrollVertical' :
+				case 'scrollTop':
+				case 'scrollRight':
+				case 'scrollBottom':
+				case 'scrollLeft':
+				case 'scrollHorizontal':
+				case 'scrollVertical':
 					lightcase.transition.scroll($case, 'in', lightcase.settings.speedIn);
 					lightcase.transition.fade($contentInner, 'in', lightcase.settings.speedIn);
 					break;
-				case 'elastic' :
+				case 'elastic':
 					if ($case.css('opacity') < 1) {
 						lightcase.transition.zoom($case, 'in', lightcase.settings.speedIn);
 						lightcase.transition.fade($contentInner, 'in', lightcase.settings.speedIn);
 					}
-				case 'fade' :
-				case 'fadeInline' :
+				case 'fade':
+				case 'fadeInline':
 					lightcase.transition.fade($case, 'in', lightcase.settings.speedIn);
 					lightcase.transition.fade($contentInner, 'in', lightcase.settings.speedIn);
 					break;
-				default :
+				default:
 					lightcase.transition.fade($case, 'in', 0);
 			}
 
@@ -738,16 +738,16 @@
 		 *
 		 * @return	{void}
 		 */
-		processContent : function () {
+		processContent: function () {
 			lightcase.busy = true;
 			
 			switch (lightcase.settings.transitionOut) {
-				case 'scrollTop' :
-				case 'scrollRight' :
-				case 'scrollBottom' :
-				case 'scrollLeft' :
-				case 'scrollVertical' :
-				case 'scrollHorizontal' :
+				case 'scrollTop':
+				case 'scrollRight':
+				case 'scrollBottom':
+				case 'scrollLeft':
+				case 'scrollVertical':
+				case 'scrollHorizontal':
 					if ($case.is(':hidden')) {
 						lightcase.transition.fade($case, 'out', 0, 0, function () {
 							lightcase.loadContent();
@@ -759,7 +759,7 @@
 						});
 					}
 					break;
-				case 'fade' :
+				case 'fade':
 					if ($case.is(':hidden')) {
 						lightcase.transition.fade($case, 'out', 0, 0, function () {
 							lightcase.loadContent();
@@ -770,8 +770,8 @@
 						});
 					}
 					break;
-				case 'fadeInline' :
-				case 'elastic' :
+				case 'fadeInline':
+				case 'elastic':
 					if ($case.is(':hidden')) {
 						lightcase.transition.fade($case, 'out', 0, 0, function () {
 							lightcase.loadContent();
@@ -782,7 +782,7 @@
 						});
 					}
 					break;
-				default :
+				default:
 					lightcase.transition.fade($case, 'out', 0, 0, function () {
 						lightcase.loadContent();
 					});
@@ -794,7 +794,7 @@
 		 *
 		 * @return	{void}
 		 */
-		handleEvents : function () {
+		handleEvents: function () {
 			lightcase.unbindEvents();
 
 			$nav.children().not($close).hide();
@@ -902,7 +902,7 @@
 		 *
 		 * @return	{void}
 		 */
-		addKeyEvents : function () {
+		addKeyEvents: function () {
 			$(document).bind('keyup.lightcase', function (event) {
 				// Do nothing if lightcase is in process
 				if (lightcase.busy) {
@@ -911,17 +911,17 @@
 
 				switch (event.keyCode) {
 					// Escape key
-					case 27 :
+					case 27:
 						$close.click();
 						break;
 					// Backward key
-					case 37 :
+					case 37:
 						if (lightcase.objectData.isPartOfSequence) {
 							$prev.click();
 						}
 						break;
 					// Forward key
-					case 39 :
+					case 39:
 						if (lightcase.objectData.isPartOfSequence) {
 							$next.click();
 						}
@@ -935,7 +935,7 @@
 		 *
 		 * @return	{void}
 		 */
-		startTimeout : function () {
+		startTimeout: function () {
 			$play.hide();
 			$pause.show();
 			
@@ -952,7 +952,7 @@
 		 *
 		 * @return	{void}
 		 */
-		stopTimeout : function () {
+		stopTimeout: function () {
 			$play.show();
 			$pause.hide();
 
@@ -966,12 +966,12 @@
 		 *
 		 * @return	{object}	items
 		 */
-		setNavigation : function () {
+		setNavigation: function () {
 			var $links = $((lightcase.cache.selector || lightcase.settings.attr)),
 				sequenceLength = lightcase.objectData.sequenceLength - 1,
 				items = {
-					$prevItem : $links.eq(lightcase.objectData.prevIndex),
-					$nextItem : $links.eq(lightcase.objectData.nextIndex)
+					$prevItem: $links.eq(lightcase.objectData.prevIndex),
+					$nextItem: $links.eq(lightcase.objectData.nextIndex)
 				};
 
 			if (lightcase.objectData.currentIndex > 0) {
@@ -997,13 +997,13 @@
 		 * Item information/status
 		 *
 		 */
-		item : {
+		item: {
 			/**
 			 * Verifies if the current item is first item.
 			 *
 			 * @return	{boolean}
 			 */
-			isFirst : function () {
+			isFirst: function () {
 				return (lightcase.objectData.currentIndex === 0);
 			},
 
@@ -1012,7 +1012,7 @@
 			 *
 			 * @return	{boolean}
 			 */
-			isLast : function () {
+			isLast: function () {
 				return (lightcase.objectData.currentIndex === (lightcase.objectData.sequenceLength - 1));
 			}
 		},
@@ -1023,7 +1023,7 @@
 		 * @param	{object}	$object
 		 * @return	{object}	$clone
 		 */
-		cloneObject : function ($object) {
+		cloneObject: function ($object) {
 			var $clone = $object.clone(),
 				objectId = $object.attr('id');
 
@@ -1044,7 +1044,7 @@
 		 *
 		 * @return	{boolean}
 		 */
-		isMobileDevice : function () {
+		isMobileDevice: function () {
 			var deviceAgent = navigator.userAgent.toLowerCase(),
 				agentId = deviceAgent.match(lightcase.settings.mobileMatchExpression);
 
@@ -1056,15 +1056,15 @@
 		 *
 		 * @return	{string|boolean}	The transition prefix if supported, else false.
 		 */
-		isTransitionSupported : function () {
+		isTransitionSupported: function () {
 			var body = $('body').get(0),
 				isTransitionSupported = false,
 				transitionMapping = {
-					'transition' : '',
-					'WebkitTransition' : '-webkit-',
-					'MozTransition' : '-moz-',
-					'OTransition' : '-o-',
-					'MsTransition' : '-ms-'
+					'transition': '',
+					'WebkitTransition': '-webkit-',
+					'MozTransition': '-moz-',
+					'OTransition': '-o-',
+					'MsTransition': '-ms-'
 				};
 
 			for (var key in transitionMapping) {
@@ -1081,7 +1081,7 @@
 		 * Transition types
 		 *
 		 */
-		transition : {
+		transition: {
 			/**
 			 * Fades in/out the object
 			 *
@@ -1092,12 +1092,12 @@
 			 * @param	{function}	callback
 			 * @return	{void}		Animates an object
 			 */
-			fade : function ($object, type, speed, opacity, callback) {
+			fade: function ($object, type, speed, opacity, callback) {
 				var isInTransition = type === 'in',
 					startTransition = {},
 					startOpacity = $object.css('opacity'),
 					endTransition = {},
-					endOpacity = opacity ? opacity : isInTransition ? 1 : 0;
+					endOpacity = opacity ? opacity: isInTransition ? 1 : 0;
 				
 				if (!lightcase.open && isInTransition) return;
 					
@@ -1137,7 +1137,7 @@
 			 * @param	{function}	callback
 			 * @return	{void}		Animates an object
 			 */
-			scroll : function ($object, type, speed, callback) {
+			scroll: function ($object, type, speed, callback) {
 				var isInTransition = type === 'in',
 					transition = isInTransition ? lightcase.settings.transitionIn : lightcase.settings.transitionOut,
 					direction = 'left',
@@ -1151,23 +1151,23 @@
 				if (!lightcase.open && isInTransition) return;
 
 				switch (transition) {
-					case 'scrollTop' :
+					case 'scrollTop':
 						direction = 'top';
 						break;
-					case 'scrollRight' :
+					case 'scrollRight':
 						startOffset = isInTransition ? '150%' : '50%';
 						endOffset = isInTransition ? '50%' : '150%';
 						break;
-					case 'scrollBottom' :
+					case 'scrollBottom':
 						direction = 'top';
 						startOffset = isInTransition ? '150%' : '50%';
 						endOffset = isInTransition ? '50%' : '150%';
 						break;
-					case 'scrollHorizontal' : 
+					case 'scrollHorizontal': 
 						startOffset = isInTransition ? '150%' : '50%';
 						endOffset = isInTransition ? '50%' : '-50%';
 						break;
-					case 'scrollVertical' :
+					case 'scrollVertical':
 						direction = 'top';
 						startOffset = isInTransition ? '-50%' : '50%';
 						endOffset = isInTransition ? '50%' : '150%';
@@ -1176,11 +1176,11 @@
 
 				if (lightcase.cache.action === 'prev') {
 					switch (transition) {
-						case 'scrollHorizontal' : 
+						case 'scrollHorizontal': 
 							startOffset = isInTransition ? '-50%' : '50%';
 							endOffset = isInTransition ? '50%' : '150%';
 							break;
-						case 'scrollVertical' : 
+						case 'scrollVertical': 
 							startOffset = isInTransition ? '150%' : '50%';
 							endOffset = isInTransition ? '50%' : '-50%';
 							break;
@@ -1226,7 +1226,7 @@
 			 * @param	{function}	callback
 			 * @return	{void}		Animates an object
 			 */
-			zoom : function ($object, type, speed, callback) {
+			zoom: function ($object, type, speed, callback) {
 				var isInTransition = type === 'in',
 					startTransition = {},
 					startOpacity = $object.css('opacity'),
@@ -1275,7 +1275,7 @@
 		 * @param	{object}	hooks
 		 * @return	{void}
 		 */
-		callHooks : function (hooks) {
+		callHooks: function (hooks) {
 			if (typeof(hooks) === 'object') {
 				$.each(hooks, function(index, hook) {
 					if (typeof(hook) === 'function') {
@@ -1291,10 +1291,10 @@
 		 * @param	{object}	$object
 		 * @return	{void}
 		 */
-		cacheObjectData : function ($object) {
+		cacheObjectData: function ($object) {
 			$.data($object, 'cache', {
-				id : $object.attr('id'),
-				content : $object.html()
+				id: $object.attr('id'),
+				content: $object.html()
 			});
 
 			lightcase.cache.originalObject = $object;
@@ -1305,7 +1305,7 @@
 		 *
 		 * @return	void
 		 */
-		restoreObject : function () {
+		restoreObject: function () {
 			var $object = $('[id^="' + lightcase.settings.idPrefix + 'temp-"]');
 		
 			$object.attr('id', $.data(lightcase.cache.originalObject, 'cache').id);
@@ -1318,7 +1318,7 @@
 		 *
 		 * @return	{void}
 		 */
-		resize : function () {
+		resize: function () {
 			if (!lightcase.open) return;
 
 			if (lightcase.isSlideshowEnabled()) {
@@ -1334,12 +1334,12 @@
 		 *
 		 * @return	{void}
 		 */
-		cacheScrollPosition : function () {
+		cacheScrollPosition: function () {
 			var	$window = $(window),
 				$document = $(document),
 				offset = {
-					'top' : $window.scrollTop(),
-					'left' :  $window.scrollLeft()
+					'top': $window.scrollTop(),
+					'left':  $window.scrollLeft()
 				};
 
 			lightcase.cache.scrollPosition = lightcase.cache.scrollPosition || {};
@@ -1357,7 +1357,7 @@
 		 *
 		 * @return	{void}
 		 */
-		watchResizeInteraction : function () {
+		watchResizeInteraction: function () {
 			$(window).resize(lightcase.resize);
 		},
 		
@@ -1366,7 +1366,7 @@
 		 *
 		 * @return	{void}
 		 */
-		unwatchResizeInteraction : function () {
+		unwatchResizeInteraction: function () {
 			$(window).off('resize', lightcase.resize);
 		},
 
@@ -1375,7 +1375,7 @@
 		 *
 		 * @return	{void}
 		 */
-		watchScrollInteraction : function () {
+		watchScrollInteraction: function () {
 			$(window).scroll(lightcase.cacheScrollPosition);
 		},
 
@@ -1384,7 +1384,7 @@
 		 *
 		 * @return	{void}
 		 */
-		unwatchScrollInteraction : function () {
+		unwatchScrollInteraction: function () {
 			$(window).off('scroll', lightcase.cacheScrollPosition);
 		},
 		
@@ -1394,7 +1394,7 @@
 		 *
 		 * @return	{void}
 		 */
-		restoreScrollPosition : function () {
+		restoreScrollPosition: function () {
 			$(window)
 				.scrollTop(parseInt(lightcase.cache.scrollPosition.top))
 				.scrollLeft(parseInt(lightcase.cache.scrollPosition.left))
@@ -1406,7 +1406,7 @@
 		 *
 		 * @return	{void}
 		 */
-		switchToFullScreenMode : function () {
+		switchToFullScreenMode: function () {
 			lightcase.settings.shrinkFactor = 1;
 			lightcase.settings.overlayOpacity = 1;
 
@@ -1418,7 +1418,7 @@
 		 *
 		 * @return	{void}
 		 */
-		lightcaseOpen : function () {
+		lightcaseOpen: function () {
 			lightcase.open = true;
 
 			lightcase.support.transitions = lightcase.settings.cssTransitions ? lightcase.isTransitionSupported() : false;
@@ -1439,15 +1439,15 @@
 			}
 
 			switch (lightcase.settings.transitionIn) {
-				case 'fade' :
-				case 'fadeInline' :
-				case 'elastic' :
-				case 'scrollTop' :
-				case 'scrollRight' :
-				case 'scrollBottom' :
-				case 'scrollLeft' :
-				case 'scrollVertical' :
-				case 'scrollHorizontal' :
+				case 'fade':
+				case 'fadeInline':
+				case 'elastic':
+				case 'scrollTop':
+				case 'scrollRight':
+				case 'scrollBottom':
+				case 'scrollLeft':
+				case 'scrollVertical':
+				case 'scrollHorizontal':
 					if ($case.is(':hidden')) {
 						$close.css('opacity', 0);
 						$overlay.css('opacity', 0);
@@ -1460,7 +1460,7 @@
 						lightcase.processContent();
 					});
 					break;
-				default :
+				default:
 					lightcase.transition.fade($overlay, 'in', 0, lightcase.settings.overlayOpacity, function () {
 						lightcase.transition.fade($close, 'in', 0);
 						lightcase.handleEvents();
@@ -1477,7 +1477,7 @@
 		 *
 		 * @return	{void}
 		 */
-		lightcaseClose : function () {
+		lightcaseClose: function () {
 			lightcase.open = false;
 
 			if (lightcase.isSlideshowEnabled()) {
@@ -1503,28 +1503,28 @@
 			lightcase.callHooks(lightcase.settings.onClose);
 
 			switch (lightcase.settings.transitionOut) {
-				case 'fade' :
-				case 'fadeInline' :
-				case 'scrollTop' :
-				case 'scrollRight' :
-				case 'scrollBottom' :
-				case 'scrollLeft' :
-				case 'scrollHorizontal' :
-				case 'scrollVertical' :
+				case 'fade':
+				case 'fadeInline':
+				case 'scrollTop':
+				case 'scrollRight':
+				case 'scrollBottom':
+				case 'scrollLeft':
+				case 'scrollHorizontal':
+				case 'scrollVertical':
 					lightcase.transition.fade($case, 'out', lightcase.settings.speedOut, 0, function () {
 						lightcase.transition.fade($overlay, 'out', lightcase.settings.speedOut, 0, function () {
 							lightcase.cleanup();
 						});
 					});
 					break;
-				case 'elastic' :
+				case 'elastic':
 					lightcase.transition.zoom($case, 'out', lightcase.settings.speedOut, function () {
 						lightcase.transition.fade($overlay, 'out', lightcase.settings.speedOut, 0, function () {
 							lightcase.cleanup();
 						});
 					});
 					break;
-				default :
+				default:
 					lightcase.cleanup();
 			}
 		},
@@ -1534,7 +1534,7 @@
 		 *
 		 * @return	{void}
 		 */
-		unbindEvents : function () {
+		unbindEvents: function () {
 			// Unbind overlay event
 			$overlay.unbind('click');
 
@@ -1556,16 +1556,16 @@
 		 *
 		 * @return	{void}
 		 */
-		cleanupDimensions : function () {
+		cleanupDimensions: function () {
 			var opacity = $contentInner.css('opacity');
 
 			$case.css({
-				'width' : '',
-				'height' : '',
-				'top' : '',
-				'left' : '',
-				'margin-top' : '',
-				'margin-left' : ''
+				'width': '',
+				'height': '',
+				'top': '',
+				'left': '',
+				'margin-top': '',
+				'margin-left': ''
 			});
 
 			$contentInner.removeAttr('style').css('opacity', opacity);
@@ -1577,7 +1577,7 @@
 		 *
 		 * @return	{void}
 		 */
-		cleanup : function () {
+		cleanup: function () {
 			lightcase.cleanupDimensions();
 
 			$loading.hide();
