@@ -1,0 +1,18 @@
+/**
+ * Lightcase Settings
+
+ * Note: Override default settings for your project without touching this source code by simply
+ * defining those variables within a map called $lightcase-custom.
+ *
+ * // Example
+ * $lightcase-custom: (
+ *   'key': 'value';
+ * );
+ */
+$lightcase-default: (
+  'screen-sm-max': 640px,
+  'screen-md-min': 641px
+);
+
+$lightcase-custom: ()!default;
+$lightcase-settings: map-merge($lightcase-default, $lightcase-custom);

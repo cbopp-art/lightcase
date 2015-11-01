@@ -1,0 +1,28 @@
+@media screen {}
+
+@media screen and (max-width: #{map-get($lightcase-settings, 'screen-sm-max')}) {
+
+  #lightcase-nav .lightcase-icon-close {
+    position: absolute;
+    z-index: 9997;
+    top: 15px;
+    right: 15px;
+
+    opacity: 0;
+  }
+
+}
+
+@media screen and (min-width: #{map-get($lightcase-settings, 'screen-md-min')}) {
+
+  #lightcase-nav a.lightcase-icon-close {
+ 		position: fixed;
+ 		z-index: 9997;
+
+ 		top: 15px;
+ 		right: 15px;
+
+ 		outline: none;
+ 	}
+
+}

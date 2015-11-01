@@ -1,13 +1,3 @@
-/*
- * Lightcase - jQuery Plugin
- * The smart and flexible Lightbox Plugin.
- *
- * @author		Cornel Boppart <cornel@bopp-art.com>
- * @copyright	Author
- *
- * @version		2.2.0 (28/10/2015)
- */
-
 @font-face {
   font-family: 'lightcase';
   src: url('../fonts/lightcase.eot?55356177');
@@ -20,7 +10,7 @@
 }
  
 [class*='lightcase-icon-']:before {
-  font-family: 'lightcase';
+  font-family: 'lightcase', sans-serif;
   font-style: normal;
   font-weight: normal;
   speak: none;

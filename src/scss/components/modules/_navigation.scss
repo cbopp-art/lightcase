@@ -1,0 +1,91 @@
+@media screen {
+
+  /* For mobile (touch) devices */
+  .lightcase-isMobileDevice #lightcase-nav a:hover {
+    color: #aaa;
+    text-shadow: none;
+  }
+
+}
+
+@media screen and (max-width: #{map-get($lightcase-settings, 'screen-sm-max')}) {
+
+  .lightcase-open #lightcase-nav[data-lc-ispartofsequence]:before {
+    content: '';
+    position: fixed;
+    z-index: 9998;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 55px;
+
+    background: rgba(60,60,60,0.9);
+  }
+
+  #lightcase-nav a {
+    position: fixed;
+    z-index: 9999;
+    bottom: 15px;
+
+    outline: none;
+    cursor: pointer;
+    font-size: 24px;
+  }
+  #lightcase-nav a:hover {
+    text-shadow: 0 0 15px #fff;
+  }
+
+  /* Icon positioning */
+  #lightcase-nav .lightcase-icon-pause,
+  #lightcase-nav .lightcase-icon-play {
+    left: 50%;
+    margin-left: -0.5em;
+  }
+  #lightcase-nav .lightcase-icon-prev {
+    left: 15px;
+  }
+  #lightcase-nav .lightcase-icon-next {
+    right: 15px;
+  }
+
+}
+
+@media screen and (min-width: #{map-get($lightcase-settings, 'screen-md-min')}) {
+
+  #lightcase-nav a {
+    bottom: 50%;
+    margin-bottom: -0.5em;
+
+    outline: none;
+    cursor: pointer;
+  }
+  #lightcase-nav a.lightcase-icon-close {
+    margin: 0;
+  }
+  #lightcase-nav a.lightcase-icon-close,
+  #lightcase-nav a.lightcase-icon-play,
+  #lightcase-nav a.lightcase-icon-pause {
+    opacity: 0;
+  }
+  #lightcase-nav a:hover {
+    text-shadow: 0 0 15px #fff;
+  }
+  #lightcase-nav a:hover,
+  #lightcase-case:hover ~ #lightcase-nav a {
+    opacity: 1;
+  }
+
+  /* Icon positioning */
+  #lightcase-nav a.lightcase-icon-play,
+  #lightcase-nav a.lightcase-icon-pause {
+    left: 50%;
+    margin-left: -0.5em;
+  }
+  #lightcase-nav a.lightcase-icon-prev {
+    left: 15px;
+  }
+  #lightcase-nav a.lightcase-icon-next {
+    right: 15px;
+  }
+
+}

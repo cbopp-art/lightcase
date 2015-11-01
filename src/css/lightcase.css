@@ -1,0 +1,653 @@
+/**
+ * Lightcase - jQuery Plugin
+ * The smart and flexible Lightbox Plugin.
+ *
+ * @author		Cornel Boppart <cornel@bopp-art.com>
+ * @copyright	Author
+ *
+ * @version		2.2.0 (28/10/2015)
+ */
+/* Import settings */
+/**
+ * Lightcase Settings
+
+ * Note: Override default settings for your project without touching this source code by simply
+ * defining those variables within a map called $lightcase-custom.
+ *
+ * // Example
+ * $lightcase-custom: (
+ *   'key': 'value';
+ * );
+ */
+/* Import icon font */
+@font-face {
+  font-family: 'lightcase';
+  src: url("../fonts/lightcase.eot?55356177");
+  src: url("../fonts/lightcase.eot?55356177#iefix") format("embedded-opentype"), url("../fonts/lightcase.woff?55356177") format("woff"), url("../fonts/lightcase.ttf?55356177") format("truetype"), url("../fonts/lightcase.svg?55356177#lightcase") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+/* line 12, ../scss/components/fonts/_font-lightcase.scss */
+[class*='lightcase-icon-']:before {
+  font-family: 'lightcase', sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  speak: none;
+  display: inline-block;
+  text-decoration: inherit;
+  width: 1em;
+  text-align: center;
+  /* For safety - reset parent styles, that can break glyph codes*/
+  font-variant: normal;
+  text-transform: none;
+  /* fix buttons height, for twitter bootstrap */
+  line-height: 1em;
+  /* Uncomment for 3D effect */
+  /* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3); */
+}
+
+/* Codes */
+/* line 35, ../scss/components/fonts/_font-lightcase.scss */
+.lightcase-icon-play:before {
+  content: '\e800';
+}
+
+/* line 36, ../scss/components/fonts/_font-lightcase.scss */
+.lightcase-icon-pause:before {
+  content: '\e801';
+}
+
+/* line 37, ../scss/components/fonts/_font-lightcase.scss */
+.lightcase-icon-close:before {
+  content: '\e802';
+}
+
+/* line 38, ../scss/components/fonts/_font-lightcase.scss */
+.lightcase-icon-prev:before {
+  content: '\e803';
+}
+
+/* line 39, ../scss/components/fonts/_font-lightcase.scss */
+.lightcase-icon-next:before {
+  content: '\e804';
+}
+
+/* line 40, ../scss/components/fonts/_font-lightcase.scss */
+.lightcase-icon-spin:before {
+  content: '\e805';
+}
+
+/* Import icon animations */
+/**
+ * Resets dimensions including width, height, position as well as margins, paddings and styles.
+ * Used to enforce a neutral and unstyled look and behavoir!
+ *
+ * @param boolean $important
+ */
+/* Import modules */
+/* Animation for loading spin icon */
+@-webkit-keyframes lightcase-loading-spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+    -moz-transform: rotate(359deg);
+    -o-transform: rotate(359deg);
+    transform: rotate(359deg);
+  }
+}
+@-moz-keyframes lightcase-loading-spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+    -moz-transform: rotate(359deg);
+    -o-transform: rotate(359deg);
+    transform: rotate(359deg);
+  }
+}
+@-o-keyframes lightcase-loading-spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+    -moz-transform: rotate(359deg);
+    -o-transform: rotate(359deg);
+    transform: rotate(359deg);
+  }
+}
+@-ms-keyframes lightcase-loading-spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+    -moz-transform: rotate(359deg);
+    -o-transform: rotate(359deg);
+    transform: rotate(359deg);
+  }
+}
+@keyframes lightcase-loading-spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+    -moz-transform: rotate(359deg);
+    -o-transform: rotate(359deg);
+    transform: rotate(359deg);
+  }
+}
+@media screen {
+  /* line 3, ../scss/components/modules/_case.scss */
+  #lightcase-case {
+    display: none;
+    position: fixed;
+    z-index: 1002;
+    top: 50%;
+    left: 50%;
+  }
+}
+/* Reduced layout for smaller screens/devices */
+@media screen and (max-width: 640px) {
+  /* line 17, ../scss/components/modules/_case.scss */
+  #lightcase-case {
+    font-family: arial, sans-serif;
+    font-size: 13px;
+    line-height: 18px;
+    text-align: left;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  }
+
+  /* line 26, ../scss/components/modules/_case.scss */
+  #lightcase-case:not([data-lc-type=image]):not([data-lc-type=video]):not([data-lc-type=flash]):not([data-lc-type=error]) {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    width: auto !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    background: none !important;
+  }
+}
+/* Full layout for larger screens upwards of 640px
+ * (e.g. really big phones, tablets, desktop)
+ */
+@media screen and (min-width: 641px) {
+  /* line 37, ../scss/components/modules/_case.scss */
+  #lightcase-case {
+    font-family: arial, sans-serif;
+    font-size: 13px;
+    line-height: 18px;
+    text-align: left;
+    color: #aaa;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  }
+}
+@media screen and (max-width: 640px) {
+  /* line 5, ../scss/components/modules/_close.scss */
+  #lightcase-nav .lightcase-icon-close {
+    position: absolute;
+    z-index: 9997;
+    top: 15px;
+    right: 15px;
+    opacity: 0;
+  }
+}
+@media screen and (min-width: 641px) {
+  /* line 18, ../scss/components/modules/_close.scss */
+  #lightcase-nav a.lightcase-icon-close {
+    position: fixed;
+    z-index: 9997;
+    top: 15px;
+    right: 15px;
+    outline: none;
+  }
+}
+@media screen {
+  /* For mobile (touch) devices */
+  /* line 4, ../scss/components/modules/_content.scss */
+  .lightcase-isMobileDevice #lightcase-case .lightcase-inlineWrap,
+  .lightcase-isMobileDevice #lightcase-case[data-lc-type=iframe] .lightcase-contentInner {
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+@media screen and (max-width: 640px) {
+  /*
+   * Content - Extend with further selectors and colors in case you
+   * have elements like <ul>, <li>, <span> or similar displayed in lightcase.
+   */
+  /* line 18, ../scss/components/modules/_content.scss */
+  #lightcase-case .lightcase-content h1,
+  #lightcase-case .lightcase-content h2,
+  #lightcase-case .lightcase-content h3,
+  #lightcase-case .lightcase-content h4,
+  #lightcase-case .lightcase-content h5,
+  #lightcase-case .lightcase-content h6,
+  #lightcase-case .lightcase-content p {
+    color: #aaa;
+  }
+
+  /* Content and inlineWrap */
+  /* line 29, ../scss/components/modules/_content.scss */
+  #lightcase-case:not([data-lc-type=image]):not([data-lc-type=video]):not([data-lc-type=flash]):not([data-lc-type=error]) .lightcase-contentInner,
+  #lightcase-case:not([data-lc-type=image]):not([data-lc-type=video]):not([data-lc-type=flash]):not([data-lc-type=error]) .lightcase-inlineWrap {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    width: auto !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    background: none !important;
+  }
+
+  /* line 34, ../scss/components/modules/_content.scss */
+  #lightcase-case:not([data-lc-type=image]):not([data-lc-type=video]):not([data-lc-type=flash]):not([data-lc-type=error]) .lightcase-content {
+    padding: 14px;
+    border: none;
+    background: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    -o-box-shadow: none;
+    box-shadow: none;
+  }
+
+  /* line 44, ../scss/components/modules/_content.scss */
+  #lightcase-case:not([data-lc-type=image]):not([data-lc-type=video]):not([data-lc-type=flash]):not([data-lc-type=error]) .lightcase-contentInner,
+  #lightcase-case:not([data-lc-type=image]):not([data-lc-type=video]):not([data-lc-type=flash]):not([data-lc-type=error]) .lightcase-contentInner > * {
+    width: 100% !important;
+    max-width: none !important;
+  }
+
+  /*
+  * Set auto height to each element except iframes, because of that
+  * those cannot have a natural/native height and it must be especially defined.
+  */
+  /* line 54, ../scss/components/modules/_content.scss */
+  #lightcase-case:not([data-lc-type=image]):not([data-lc-type=video]):not([data-lc-type=flash]):not([data-lc-type=error]) .lightcase-contentInner > *:not(iframe) {
+    height: auto !important;
+    max-height: none !important;
+  }
+}
+@media screen and (min-width: 641px) {
+  /*
+   * Content - Extend with further selectors and colors in case you
+   * have elements like <ul>, <li>, <span> or similar displayed in lightcase.
+   */
+  /* line 67, ../scss/components/modules/_content.scss */
+  #lightcase-case .lightcase-content h1,
+  #lightcase-case .lightcase-content h2,
+  #lightcase-case .lightcase-content h3,
+  #lightcase-case .lightcase-content h4,
+  #lightcase-case .lightcase-content h5,
+  #lightcase-case .lightcase-content h6,
+  #lightcase-case .lightcase-content p {
+    color: #333;
+  }
+
+  /* Content and inlineWrap */
+  /* line 78, ../scss/components/modules/_content.scss */
+  #lightcase-case:not([data-lc-type=error]) .lightcase-content {
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+    text-shadow: none;
+    background-color: #fff;
+    -webkit-box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+    -moz-box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+    -o-box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+    -webkit-backface-visibility: hidden;
+  }
+
+  /* line 94, ../scss/components/modules/_content.scss */
+  #lightcase-case[data-lc-type=image] .lightcase-content,
+  #lightcase-case[data-lc-type=video] .lightcase-content {
+    background-color: #333;
+  }
+
+  /* line 98, ../scss/components/modules/_content.scss */
+  #lightcase-case[data-lc-type=image] .lightcase-contentInner,
+  #lightcase-case[data-lc-type=video] .lightcase-contentInner {
+    line-height: 0.75;
+  }
+
+  /* line 102, ../scss/components/modules/_content.scss */
+  #lightcase-case:not([data-lc-type=error]) .lightcase-inlineWrap {
+    padding: 30px;
+    overflow: auto;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -o-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+}
+@media screen and (max-width: 640px) {
+  /* line 5, ../scss/components/modules/_error.scss */
+  #lightcase-case p.lightcase-error {
+    padding: 30px 0;
+    font-size: 17px;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #aaa;
+  }
+}
+@media screen and (min-width: 641px) {
+  /* line 21, ../scss/components/modules/_error.scss */
+  #lightcase-case p.lightcase-error {
+    margin: 0;
+    padding: 0;
+    font-size: 17px;
+    color: #aaa;
+  }
+}
+/* Styles and overrides for outer scope of lightcase */
+@media screen {
+  /* For mobile (touch) devices */
+  /* line 5, ../scss/components/modules/_global.scss */
+  .lightcase-isMobileDevice.lightcase-open,
+  .lightcase-isMobileDevice.lightcase-open body {
+    max-width: 100%;
+    max-height: 100%;
+    overflow: hidden;
+  }
+}
+@media screen and (max-width: 640px) {
+  /* line 16, ../scss/components/modules/_global.scss */
+  .lightcase-open body {
+    padding: 55px 0 70px 0;
+  }
+
+  /* line 20, ../scss/components/modules/_global.scss */
+  .lightcase-open body > *:not([id*=lightcase-]) {
+    position: fixed !important;
+    top: -9999px !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+  }
+}
+/* line 1, ../scss/components/modules/_icons.scss */
+[class*='lightcase-icon-'] {
+  width: 1.123em;
+  height: auto;
+  /*
+   * For adjusting the icon size, just change the
+   * value for "font-size" here!
+   */
+  font-size: 38px;
+  line-height: 1;
+  text-align: center;
+  text-shadow: none;
+}
+
+/* line 16, ../scss/components/modules/_icons.scss */
+a[class*='lightcase-icon-'],
+a[class*='lightcase-icon-']:focus {
+  position: fixed;
+  z-index: 9999;
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.6);
+  -webkit-tap-highlight-color: transparent;
+  -webkit-transition: color, opacity, ease-in-out 0.25s;
+  -moz-transition: color, opacity, ease-in-out 0.25s;
+  -o-transition: color, opacity, ease-in-out 0.25s;
+  transition: color, opacity, ease-in-out 0.25s;
+}
+
+/* line 32, ../scss/components/modules/_icons.scss */
+a[class*='lightcase-icon-']:hover {
+  color: white;
+}
+
+/* line 36, ../scss/components/modules/_icons.scss */
+a[class*='lightcase-icon-'] > span {
+  display: inline-block;
+  text-indent: -9999px;
+}
+
+@media screen {
+  /* line 3, ../scss/components/modules/_info.scss */
+  #lightcase-case .lightcase-info {
+    /*
+     * You can change to position "static" or "relative" instead, but consider
+     * that this height will be integrated and calculated
+     * to the maximum height additionally to the image height.
+     */
+    position: absolute;
+    padding-top: 15px;
+  }
+
+  /* line 14, ../scss/components/modules/_info.scss */
+  #lightcase-case .lightcase-caption {
+    clear: both;
+  }
+
+  /* line 18, ../scss/components/modules/_info.scss */
+  #lightcase-case .lightcase-title,
+  #lightcase-case .lightcase-caption {
+    margin: 0;
+    padding: 0;
+    font-size: 17px;
+    line-height: 1.5;
+    font-weight: normal;
+    text-overflow: ellipsis;
+  }
+
+  /* line 29, ../scss/components/modules/_info.scss */
+  #lightcase-case .lightcase-caption {
+    font-size: 13px;
+  }
+
+  /* line 33, ../scss/components/modules/_info.scss */
+  #lightcase-case .lightcase-sequenceInfo {
+    font-size: 11px;
+  }
+}
+@media screen and (max-width: 640px) {
+  /* line 41, ../scss/components/modules/_info.scss */
+  #lightcase-case .lightcase-info {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  /* line 46, ../scss/components/modules/_info.scss */
+  #lightcase-case:not([data-lc-type=image]):not([data-lc-type=video]):not([data-lc-type=flash]):not([data-lc-type=error]) .lightcase-info {
+    position: static;
+  }
+
+  /* line 50, ../scss/components/modules/_info.scss */
+  #lightcase-case .lightcase-title {
+    position: fixed;
+    top: 10px;
+    left: 0;
+    padding: 5px 15px;
+    background: rgba(51, 51, 51, 0.9);
+  }
+}
+@media screen {
+  /* line 3, ../scss/components/modules/_loading.scss */
+  #lightcase-loading {
+    position: fixed;
+    z-index: 1001;
+    top: 50%;
+    left: 50%;
+    margin-top: -0.5em;
+    margin-left: -0.5em;
+    opacity: 1;
+    font-size: 32px;
+    /* Fixes the icon wobble issue in firefox */
+    -moz-transform-origin: 50% 53%;
+    -webkit-animation: lightcase-loading-spin 0.5s infinite linear;
+    -moz-animation: lightcase-loading-spin 0.5s infinite linear;
+    -o-animation: lightcase-loading-spin 0.5s infinite linear;
+    animation: lightcase-loading-spin 0.5s infinite linear;
+  }
+}
+@media screen and (max-width: 640px) {
+  /* line 29, ../scss/components/modules/_loading.scss */
+  #lightcase-loading {
+    color: #aaa;
+  }
+}
+@media screen and (min-width: 641px) {
+  /* line 37, ../scss/components/modules/_loading.scss */
+  #lightcase-loading {
+    color: #fff;
+    text-shadow: 0 0 15px #fff;
+  }
+}
+@media screen {
+  /* For mobile (touch) devices */
+  /* line 4, ../scss/components/modules/_navigation.scss */
+  .lightcase-isMobileDevice #lightcase-nav a:hover {
+    color: #aaa;
+    text-shadow: none;
+  }
+}
+@media screen and (max-width: 640px) {
+  /* line 13, ../scss/components/modules/_navigation.scss */
+  .lightcase-open #lightcase-nav[data-lc-ispartofsequence]:before {
+    content: '';
+    position: fixed;
+    z-index: 9998;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 55px;
+    background: rgba(60, 60, 60, 0.9);
+  }
+
+  /* line 25, ../scss/components/modules/_navigation.scss */
+  #lightcase-nav a {
+    position: fixed;
+    z-index: 9999;
+    bottom: 15px;
+    outline: none;
+    cursor: pointer;
+    font-size: 24px;
+  }
+
+  /* line 34, ../scss/components/modules/_navigation.scss */
+  #lightcase-nav a:hover {
+    text-shadow: 0 0 15px #fff;
+  }
+
+  /* Icon positioning */
+  /* line 39, ../scss/components/modules/_navigation.scss */
+  #lightcase-nav .lightcase-icon-pause,
+  #lightcase-nav .lightcase-icon-play {
+    left: 50%;
+    margin-left: -0.5em;
+  }
+
+  /* line 44, ../scss/components/modules/_navigation.scss */
+  #lightcase-nav .lightcase-icon-prev {
+    left: 15px;
+  }
+
+  /* line 47, ../scss/components/modules/_navigation.scss */
+  #lightcase-nav .lightcase-icon-next {
+    right: 15px;
+  }
+}
+@media screen and (min-width: 641px) {
+  /* line 55, ../scss/components/modules/_navigation.scss */
+  #lightcase-nav a {
+    bottom: 50%;
+    margin-bottom: -0.5em;
+    outline: none;
+    cursor: pointer;
+  }
+
+  /* line 62, ../scss/components/modules/_navigation.scss */
+  #lightcase-nav a.lightcase-icon-close {
+    margin: 0;
+  }
+
+  /* line 65, ../scss/components/modules/_navigation.scss */
+  #lightcase-nav a.lightcase-icon-close,
+  #lightcase-nav a.lightcase-icon-play,
+  #lightcase-nav a.lightcase-icon-pause {
+    opacity: 0;
+  }
+
+  /* line 70, ../scss/components/modules/_navigation.scss */
+  #lightcase-nav a:hover {
+    text-shadow: 0 0 15px #fff;
+  }
+
+  /* line 73, ../scss/components/modules/_navigation.scss */
+  #lightcase-nav a:hover,
+  #lightcase-case:hover ~ #lightcase-nav a {
+    opacity: 1;
+  }
+
+  /* Icon positioning */
+  /* line 79, ../scss/components/modules/_navigation.scss */
+  #lightcase-nav a.lightcase-icon-play,
+  #lightcase-nav a.lightcase-icon-pause {
+    left: 50%;
+    margin-left: -0.5em;
+  }
+
+  /* line 84, ../scss/components/modules/_navigation.scss */
+  #lightcase-nav a.lightcase-icon-prev {
+    left: 15px;
+  }
+
+  /* line 87, ../scss/components/modules/_navigation.scss */
+  #lightcase-nav a.lightcase-icon-next {
+    right: 15px;
+  }
+}
+@media screen {
+  /* line 3, ../scss/components/modules/_overlay.scss */
+  #lightcase-overlay {
+    display: none;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+  }
+}
+@media screen and (max-width: 640px) {
+  /* line 18, ../scss/components/modules/_overlay.scss */
+  #lightcase-overlay {
+    opacity: 1 !important;
+    background: #333;
+  }
+}
+@media screen and (min-width: 641px) {
+  /* line 27, ../scss/components/modules/_overlay.scss */
+  #lightcase-overlay {
+    background: #333;
+  }
+}
