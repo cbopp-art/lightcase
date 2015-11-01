@@ -77,7 +77,7 @@
   content: '\e805';
 }
 
-/* Import icon animations */
+/* Import mixins */
 /**
  * Resets dimensions including width, height, position as well as margins, paddings and styles.
  * Used to enforce a neutral and unstyled look and behavoir!
