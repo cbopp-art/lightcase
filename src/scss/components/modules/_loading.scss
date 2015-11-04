@@ -1,42 +1,31 @@
-@media screen {
+#lightcase-loading {
+  @include icon();
 
-  #lightcase-loading {
-    position: fixed;
-    z-index: 1001;
-    top: 50%;
-    left: 50%;
+  position: fixed;
+  z-index: 1001;
+  top: 50%;
+  left: 50%;
 
-    margin-top: -0.5em;
-    margin-left: -0.5em;
+  margin-top: -0.5em;
+  margin-left: -0.5em;
 
-    opacity: 1;
+  opacity: 1;
 
-    font-size: 32px;
+  font-size: 32px;
 
-    // Fixes the icon wobble issue in firefox
-    -moz-transform-origin: 50% 53%;
+  // Fixes the icon wobble issue in firefox
+  -moz-transform-origin: 50% 53%;
 
-    -webkit-animation: lightcase-loading-spin 0.5s infinite linear;
-    -moz-animation: lightcase-loading-spin 0.5s infinite linear;
-    -o-animation: lightcase-loading-spin 0.5s infinite linear;
-    animation: lightcase-loading-spin 0.5s infinite linear;
-  }
+  -webkit-animation: lightcase-loading-spin 0.5s infinite linear;
+  -moz-animation: lightcase-loading-spin 0.5s infinite linear;
+  -o-animation: lightcase-loading-spin 0.5s infinite linear;
+  animation: lightcase-loading-spin 0.5s infinite linear;
 
-}
-
-@media screen and (max-width: #{map-get($lightcase-settings, 'breakpoint')-1}) {
-
-  #lightcase-loading {
+  @media screen and (max-width: #{map-get($lightcase-settings, 'breakpoint')-1}) {
     color: #aaa;
   }
-
-}
-
-@media screen and (min-width: #{map-get($lightcase-settings, 'breakpoint')}) {
-
-  #lightcase-loading {
+  @media screen and (min-width: #{map-get($lightcase-settings, 'breakpoint')}) {
     color: #fff;
     text-shadow: 0 0 15px #fff;
   }
-
 }

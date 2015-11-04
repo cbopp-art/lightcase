@@ -1,44 +1,25 @@
-@media screen {
+#lightcase-case {
+  display: none;
 
-  #lightcase-case {
-    display: none;
+  position: fixed;
+  z-index: 1002;
+  top: 50%;
+  left: 50%;
 
-    position: fixed;
-    z-index: 1002;
-    top: 50%;
-    left: 50%;
-  }
+  font-family: arial, sans-serif;
+  font-size: 13px;
+  line-height: 18px;
+  text-align: left;
+  text-shadow: 0 0 10px rgba(0,0,0,0.5);
 
-}
-
-@media screen and (max-width: #{map-get($lightcase-settings, 'breakpoint')-1}) {
-
-  #lightcase-case {
-    // Not type: image, video, flash or error
-    &:not([data-lc-type=image]):not([data-lc-type=video]):not([data-lc-type=flash]):not([data-lc-type=error]) {
-      @include debase(true);
+  // Not type: image, video, flash or error
+  &:not([data-lc-type=image]):not([data-lc-type=video]):not([data-lc-type=flash]):not([data-lc-type=error]) {
+    @media screen and (max-width: #{map-get($lightcase-settings, 'breakpoint')-1}) {
+      @include clear(true);
     }
-
-    font-family: arial, sans-serif;
-    font-size: 13px;
-    line-height: 18px;
-    text-align: left;
-
-    text-shadow: 0 0 10px rgba(0,0,0,0.5);
   }
 
-}
-
-@media screen and (min-width: #{map-get($lightcase-settings, 'breakpoint')}) {
-
-  #lightcase-case {
-    font-family: arial, sans-serif;
-    font-size: 13px;
-    line-height: 18px;
-    text-align: left;
-
+  @media screen and (min-width: #{map-get($lightcase-settings, 'breakpoint')}) {
     color: #aaa;
-    text-shadow: 0 0 10px rgba(0,0,0,0.5);
   }
-
 }

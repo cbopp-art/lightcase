@@ -1,9 +1,6 @@
-@media screen {}
-
-@media screen and (max-width: #{map-get($lightcase-settings, 'breakpoint')-1}) {
-
-  #lightcase-case p.lightcase-error {
-    padding: 30px 0;
+#lightcase-case {
+  p.lightcase-error {
+    margin: 0;
     font-size: 17px;
     text-align: center;
 
@@ -12,18 +9,13 @@
     text-overflow: ellipsis;
 
     color: #aaa;
+
+    @media screen and (max-width: #{map-get($lightcase-settings, 'breakpoint')-1}) {
+      padding: 30px 0;
+    }
+
+    @media screen and (min-width: #{map-get($lightcase-settings, 'breakpoint')}) {
+      padding: 0;
+    }
   }
-
-}
-
-@media screen and (min-width: #{map-get($lightcase-settings, 'breakpoint')}) {
-
-  #lightcase-case p.lightcase-error {
-    margin: 0;
-    padding: 0;
-
-    font-size: 17px;
-    color: #aaa;
-  }
-
 }

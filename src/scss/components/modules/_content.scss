@@ -1,116 +1,116 @@
-@media screen {
+#lightcase-content {
+  // Not type: error
+  #lightcase-case:not([data-lc-type=error]) & {
+    @media screen and (min-width: #{map-get($lightcase-settings, 'breakpoint')}) {
+      position: relative;
+      z-index: 1;
+      overflow: hidden;
 
-  // For mobile (touch) devices
-  .lightcase-isMobileDevice {
-    #lightcase-case .lightcase-inlineWrap,
-    #lightcase-case[data-lc-type=iframe] .lightcase-contentInner {
-      overflow: auto;
-      -webkit-overflow-scrolling: touch;
+      text-shadow: none;
+
+      background-color: #fff;
+
+      -webkit-box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+      -moz-box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+      -o-box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+
+      -webkit-backface-visibility: hidden;
     }
   }
 
-}
+  // Type: image + video
+  #lightcase-case[data-lc-type=image] &,
+  #lightcase-case[data-lc-type=video] & {
+    @media screen and (min-width: #{map-get($lightcase-settings, 'breakpoint')}) {
+      background-color: #333;
+    }
+  }
 
-@media screen and (max-width: #{map-get($lightcase-settings, 'breakpoint')-1}) {
+  // Not type: image, video, flash or error
+  #lightcase-case:not([data-lc-type=image]):not([data-lc-type=video]):not([data-lc-type=flash]):not([data-lc-type=error]) & {
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    -o-box-shadow: none;
+    box-shadow: none;
 
-  #lightcase-case {
-
-    .lightcase-content {
-      // Content - Extend with further selectors and colors in case you
-      // have elements like <ul>, <li>, <span> or similar displayed in lightcase.
-      h1,h2,h3,h4,h5,h6,p {
-        color: #aaa;
-      }
+    @media screen and (max-width: #{map-get($lightcase-settings, 'breakpoint')-1}) {
+      @include clear(true);
     }
 
-    // Not type: image, video, flash or error
-    &:not([data-lc-type=image]):not([data-lc-type=video]):not([data-lc-type=flash]):not([data-lc-type=error]) {
-      .lightcase-content,
-      .lightcase-inlineWrap {
-        @include debase(true);
-      }
+    .lightcase-contentInner {
+      @media screen and (max-width: #{map-get($lightcase-settings, 'breakpoint')-1}) {
+        padding: 15px;
 
-      .lightcase-content {
-        -webkit-box-shadow: none;
-        -moz-box-shadow: none;
-        -o-box-shadow: none;
-        box-shadow: none;
+        &, & > * {
+          width: 100% !important;
+          max-width: none !important;
+        }
 
-        .lightcase-contentInner {
-          padding: 15px;
-
-          &, & > * {
-            width: 100% !important;
-            max-width: none !important;
-          }
-
-          // Set auto height to each element except iframes, because of that
-          //those cannot have a natural/native height and it must be especially defined.
-          & > *:not(iframe) {
-            height: auto !important;
-            max-height: none !important;
-          }
+        // Set auto height to each element except iframes, because of that
+        //those cannot have a natural/native height and it must be especially defined.
+        & > *:not(iframe) {
+          height: auto !important;
+          max-height: none !important;
         }
       }
     }
   }
 
-}
-
-@media screen and (min-width: #{map-get($lightcase-settings, 'breakpoint')}) {
-
-  #lightcase-case {
-
-    .lightcase-content {
-      // Content - Extend with further selectors and colors in case you
-      // have elements like <ul>, <li>, <span> or similar displayed in lightcase.
-      h1, h2, h3, h4, h5, h6, p {
-        color: #333;
+  .lightcase-contentInner {
+    @media screen and (max-width: #{map-get($lightcase-settings, 'breakpoint')-1}) {
+      // For mobile (touch) devices
+      .lightcase-isMobileDevice #lightcase-case[data-lc-type=iframe] & {
+        @include overflow();
       }
-    }
-
-    // Not type: error
-    &:not([data-lc-type=error]) {
-      .lightcase-content {
-        position: relative;
-        z-index: 1;
-        overflow: hidden;
-
-        text-shadow: none;
-
-        background-color: #fff;
-
-        -webkit-box-shadow: 0 0 30px rgba(0,0,0,0.5);
-        -moz-box-shadow: 0 0 30px rgba(0,0,0,0.5);
-        -o-box-shadow: 0 0 30px rgba(0,0,0,0.5);
-        box-shadow: 0 0 30px rgba(0,0,0,0.5);
-
-        -webkit-backface-visibility: hidden;
-      }
-      .lightcase-inlineWrap {
-        padding: 30px;
-
-        overflow: auto;
-
-        -webkit-box-sizing: border-box;
-        -moz-box-sizing: border-box;
-        -o-box-sizing: border-box;
-        box-sizing: border-box;
-      }
-    }
-
-    // Type: image + video
-    &[data-lc-type=image],
-    &[data-lc-type=video] {
-      .lightcase-content {
-        background-color: #333;
-
-        .lightcase-contentInner {
+      // Type: image + video
+      [data-lc-type=image] &,
+      [data-lc-type=video] & {
+        @media screen and (min-width: #{map-get($lightcase-settings, 'breakpoint')}) {
           line-height: 0.75;
         }
       }
     }
 
+    // Note: This is a very special wrap only added for few
+    // types of content, type 'inline' and 'ajax'.
+    .lightcase-inlineWrap {
+      // For mobile (touch) devices
+      .lightcase-isMobileDevice #lightcase-case[data-lc-type=iframe] & {
+         @include overflow();
+      }
+
+      // Not type: image, video, flash or error
+      #lightcase-case:not([data-lc-type=image]):not([data-lc-type=video]):not([data-lc-type=flash]):not([data-lc-type=error]) & {
+        @media screen and (max-width: #{map-get($lightcase-settings, 'breakpoint')-1}) {
+         @include clear(true);
+        }
+      }
+
+      // Not type: error
+      #lightcase-case:not([data-lc-type=error]) & {
+        @media screen and (min-width: #{map-get($lightcase-settings, 'breakpoint')}) {
+          padding: 30px;
+
+          overflow: auto;
+
+          -webkit-box-sizing: border-box;
+          -moz-box-sizing: border-box;
+          -o-box-sizing: border-box;
+          box-sizing: border-box;
+        }
+      }
+    }
   }
 
+  // Content - Extend with further selectors and colors in case you
+  // have elements like <ul>, <li>, <span> or similar displayed in lightcase.
+  h1, h2, h3, h4, h5, h6, p {
+    @media screen and (max-width: #{map-get($lightcase-settings, 'breakpoint')-1}) {
+      color: #aaa;
+    }
+    @media screen and (min-width: #{map-get($lightcase-settings, 'breakpoint')}) {
+      color: #333;
+    }
+  }
 }

@@ -1,20 +1,9 @@
-@media screen {
+#lightcase-nav {
 
-  // For mobile (touch) devices
-  .lightcase-isMobileDevice {
-    #lightcase-nav a:hover {
-      color: #aaa;
-      text-shadow: none;
-    }
-  }
-
-}
-
-@media screen and (max-width: #{map-get($lightcase-settings, 'breakpoint')-1}) {
-
-  #lightcase-nav {
-
-    .lightcase-open &[data-lc-ispartofsequence]:before {
+  // For small breakpoint show navigation buttons at the bottom of the page
+  // and with an extra background.
+  .lightcase-open &[data-lc-ispartofsequence]:before {
+    @media screen and (max-width: #{map-get($lightcase-settings, 'breakpoint')-1}) {
       content: '';
       position: fixed;
       z-index: 9998;
@@ -25,80 +14,82 @@
 
       background: rgba(60,60,60,0.9);
     }
+  }
 
-    a {
-      position: fixed;
-      z-index: 9999;
-      bottom: 15px;
+  // Generic styles for all navigation links
+  a[class*='lightcase-icon-'] {
+    @include icon();
 
-      outline: none;
-      cursor: pointer;
-      font-size: 24px;
+    outline: none;
+    cursor: pointer;
 
+    // Default hover state
+    &:hover {
+      color: rgba(255, 255, 255, 1);
+      text-shadow: 0 0 15px #fff;
+    }
+    // Hover state for mobile (touch) devices
+    .lightcase-isMobileDevice & {
       &:hover {
-        text-shadow: 0 0 15px #fff;
-      }
-
-      // Icon positioning
-      &.lightcase-icon-pause,
-      &.lightcase-icon-play {
-        left: 50%;
-        margin-left: -0.5em;
-      }
-      &.lightcase-icon-prev {
-        left: 15px;
-      }
-      &.lightcase-icon-next {
-        right: 15px;
+        color: #aaa;
+        text-shadow: none;
       }
     }
 
-  }
+    // Prev button
+    &.lightcase-icon-prev {
+      left: 15px;
+    }
 
-}
+    // Next button
+    &.lightcase-icon-next {
+      right: 15px;
+    }
 
-@media screen and (min-width: #{map-get($lightcase-settings, 'breakpoint')}) {
+    // Play/Pause button
+    &.lightcase-icon-pause,
+    &.lightcase-icon-play {
+      left: 50%;
+      margin-left: -0.5em;
 
-  #lightcase-nav {
+      @media screen and (min-width: #{map-get($lightcase-settings, 'breakpoint')}) {
+        opacity: 0;
+      }
+    }
 
-    a {
+    // Close button
+    &.lightcase-icon-close {
+      z-index: 9997;
+      top: 15px;
+      right: 15px;
+      margin: 0;
+      opacity: 0;
+
+      @media screen and (max-width: #{map-get($lightcase-settings, 'breakpoint')-1}) {
+        position: absolute;
+      }
+
+      @media screen and (min-width: #{map-get($lightcase-settings, 'breakpoint')}) {
+        position: fixed;
+        outline: none;
+      }
+    }
+
+    @media screen and (max-width: #{map-get($lightcase-settings, 'breakpoint')-1}) {
+      position: fixed;
+      z-index: 9999;
+      bottom: 15px;
+      font-size: 24px;
+    }
+
+    @media screen and (min-width: #{map-get($lightcase-settings, 'breakpoint')}) {
       bottom: 50%;
       margin-bottom: -0.5em;
 
-      outline: none;
-      cursor: pointer;
-
-      &:hover {
-        text-shadow: 0 0 15px #fff;
-      }
       &:hover,
       #lightcase-case:hover ~ & {
         opacity: 1;
       }
-
-      &.lightcase-icon-close {
-        margin: 0;
-      }
-      &.lightcase-icon-close,
-      &.lightcase-icon-play,
-      &.lightcase-icon-pause {
-        opacity: 0;
-      }
-
-      // Icon positioning
-      &.lightcase-icon-play,
-      &.lightcase-icon-pause {
-        left: 50%;
-        margin-left: -0.5em;
-      }
-      &.lightcase-icon-prev {
-        left: 15px;
-      }
-      &.lightcase-icon-next {
-        right: 15px;
-      }
     }
-
   }
-
 }

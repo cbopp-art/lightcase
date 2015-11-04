@@ -9,23 +9,14 @@
     z-index: 1000;
     top: 0;
     left: 0;
-  }
 
-}
-
-@media screen and (max-width: #{map-get($lightcase-settings, 'breakpoint')-1}) {
-
-  #lightcase-overlay {
-    opacity: 1 !important;
-    background: #333;
-  }
-
-}
-
-@media screen and (min-width: #{map-get($lightcase-settings, 'breakpoint')}) {
-
-  #lightcase-overlay {
-    background: #333;
+    @media screen and (max-width: #{map-get($lightcase-settings, 'breakpoint')-1}) {
+      opacity: 1 !important;
+      background: #{map-get($lightcase-settings, 'overlayColor')};
+    }
+    @media screen and (min-width: #{map-get($lightcase-settings, 'breakpoint')}) {
+      background: #{map-get($lightcase-settings, 'overlayColor')};
+    }
   }
 
 }

@@ -141,16 +141,16 @@
 						$pause = $('<a href="#" class="' + lightcase.settings.classPrefix + 'icon-pause"><span>' + lightcase.labels['navigator.pause'] + '</span></a>').hide()
 					);
 					$case.append(
-						$content = $('<div class="' + lightcase.settings.classPrefix + 'content"></div>'),
-						$info = $('<div class="' + lightcase.settings.classPrefix + 'info"></div>')
+						$content = $('<div id="' + lightcase.settings.idPrefix + 'content"></div>'),
+						$info = $('<div id="' + lightcase.settings.idPrefix + 'info"></div>')
 					);
 					$content.append(
 						$contentInner = $('<div class="' + lightcase.settings.classPrefix + 'contentInner"></div>')
 					);
 					$info.append(
-						$sequenceInfo = $('<div class="' + lightcase.settings.classPrefix + 'sequenceInfo"></div>'),
-						$title = $('<h4 class="' + lightcase.settings.classPrefix + 'title"></h4>'),
-						$caption = $('<p class="' + lightcase.settings.classPrefix + 'caption"></p>')
+						$sequenceInfo = $('<div id="' + lightcase.settings.idPrefix + 'sequenceInfo"></div>'),
+						$title = $('<h4 id="' + lightcase.settings.idPrefix + 'title"></h4>'),
+						$caption = $('<p id="' + lightcase.settings.idPrefix + 'caption"></p>')
 					);
 				},
 				onInit: {},

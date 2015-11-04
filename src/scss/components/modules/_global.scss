@@ -1,34 +1,26 @@
-/* Styles and overrides for outer scope of lightcase */
-@media screen {
+// Styles and overrides for outer scope of lightcase
 
-  /* For mobile (touch) devices */
-  .lightcase-isMobileDevice {
-    &.lightcase-open,
-    &.lightcase-open body {
+// For mobile (touch) devices
+.lightcase-open {
+  body {
+    .lightcase-isMobileDevice & {
       max-width: 100%;
       max-height: 100%;
       overflow: hidden;
     }
-  }
 
-}
+    @media screen and (max-width: #{map-get($lightcase-settings, 'breakpoint')-1}) {
+      padding: 55px 0 70px 0;
 
-@media screen and (max-width: #{map-get($lightcase-settings, 'breakpoint')-1}) {
+      & > *:not([id*='lightcase-']) {
+        position: fixed !important;
+        top: -9999px !important;
 
-  .lightcase-open body {
-    padding: 55px 0 70px 0;
+        width: 0 !important;
+        height: 0 !important;
 
-    & > *:not([id*=lightcase-]) {
-      position: fixed !important;
-      top: -9999px !important;
-
-      width: 0 !important;
-      height: 0 !important;
-
-      overflow: hidden !important;
+        overflow: hidden !important;
+      }
     }
   }
-
 }
-
-@media screen and (min-width: #{map-get($lightcase-settings, 'breakpoint')}) {}
