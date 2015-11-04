@@ -11,29 +11,29 @@
 
   text-align: center;
   text-shadow: none;
-}
 
-a[class*='lightcase-icon-'],
-a[class*='lightcase-icon-']:focus {
-  position: fixed;
-  z-index: 9999;
+  &, &:focus {
+    position: fixed;
+    z-index: 9999;
 
-  text-decoration: none;
-  color: rgba(255,255,255,0.6);
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.6);
 
-  -webkit-tap-highlight-color: rgba(0,0,0,0);
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 
-  -webkit-transition: color, opacity, ease-in-out 0.25s;
-  -moz-transition: color, opacity, ease-in-out 0.25s;
-  -o-transition: color, opacity, ease-in-out 0.25s;
-  transition: color, opacity, ease-in-out 0.25s;
-}
+    -webkit-transition: color, opacity, ease-in-out 0.25s;
+    -moz-transition: color, opacity, ease-in-out 0.25s;
+    -o-transition: color, opacity, ease-in-out 0.25s;
+    transition: color, opacity, ease-in-out 0.25s;
+  }
 
-a[class*='lightcase-icon-']:hover {
-  color: rgba(255,255,255,1);
-}
+  &:hover {
+    color: rgba(255, 255, 255, 1);
+  }
 
-a[class*='lightcase-icon-'] > span {
-  display: inline-block;
-  text-indent: -9999px;
+  & > span {
+    display: inline-block;
+    text-indent: -9999px;
+  }
+
 }

@@ -11,10 +11,14 @@
 
 }
 
-/* Reduced layout for smaller screens/devices */
-@media screen and (max-width: #{map-get($lightcase-settings, 'screen-sm-max')}) {
+@media screen and (max-width: #{map-get($lightcase-settings, 'breakpoint')-1}) {
 
   #lightcase-case {
+    // Not type: image, video, flash or error
+    &:not([data-lc-type=image]):not([data-lc-type=video]):not([data-lc-type=flash]):not([data-lc-type=error]) {
+      @include debase(true);
+    }
+
     font-family: arial, sans-serif;
     font-size: 13px;
     line-height: 18px;
@@ -23,16 +27,9 @@
     text-shadow: 0 0 10px rgba(0,0,0,0.5);
   }
 
-  #lightcase-case:not([data-lc-type=image]):not([data-lc-type=video]):not([data-lc-type=flash]):not([data-lc-type=error]) {
-    @include debase(true);
-  }
-
 }
 
-/* Full layout for larger screens upwards of 640px
- * (e.g. really big phones, tablets, desktop)
- */
-@media screen and (min-width: #{map-get($lightcase-settings, 'screen-md-min')}) {
+@media screen and (min-width: #{map-get($lightcase-settings, 'breakpoint')}) {
 
   #lightcase-case {
     font-family: arial, sans-serif;

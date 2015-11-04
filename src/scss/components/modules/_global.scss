@@ -2,31 +2,33 @@
 @media screen {
 
   /* For mobile (touch) devices */
-  .lightcase-isMobileDevice.lightcase-open,
-  .lightcase-isMobileDevice.lightcase-open body {
-    max-width: 100%;
-    max-height: 100%;
-    overflow: hidden;
+  .lightcase-isMobileDevice {
+    &.lightcase-open,
+    &.lightcase-open body {
+      max-width: 100%;
+      max-height: 100%;
+      overflow: hidden;
+    }
   }
 
 }
 
-@media screen and (max-width: #{map-get($lightcase-settings, 'screen-sm-max')}) {
+@media screen and (max-width: #{map-get($lightcase-settings, 'breakpoint')-1}) {
 
   .lightcase-open body {
     padding: 55px 0 70px 0;
-  }
 
-  .lightcase-open body > *:not([id*=lightcase-]) {
-    position: fixed !important;
-    top: -9999px !important;
+    & > *:not([id*=lightcase-]) {
+      position: fixed !important;
+      top: -9999px !important;
 
-    width: 0 !important;
-    height: 0 !important;
+      width: 0 !important;
+      height: 0 !important;
 
-    overflow: hidden !important;
+      overflow: hidden !important;
+    }
   }
 
 }
 
-@media screen and (min-width: #{map-get($lightcase-settings, 'screen-md-min')}) {}
+@media screen and (min-width: #{map-get($lightcase-settings, 'breakpoint')}) {}

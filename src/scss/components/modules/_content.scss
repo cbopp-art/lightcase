@@ -1,113 +1,116 @@
 @media screen {
 
-  /* For mobile (touch) devices */
-  .lightcase-isMobileDevice #lightcase-case .lightcase-inlineWrap,
-  .lightcase-isMobileDevice #lightcase-case[data-lc-type=iframe] .lightcase-contentInner {
-    overflow: auto;
-    -webkit-overflow-scrolling: touch;
+  // For mobile (touch) devices
+  .lightcase-isMobileDevice {
+    #lightcase-case .lightcase-inlineWrap,
+    #lightcase-case[data-lc-type=iframe] .lightcase-contentInner {
+      overflow: auto;
+      -webkit-overflow-scrolling: touch;
+    }
   }
 
 }
 
-@media screen and (max-width: #{map-get($lightcase-settings, 'screen-sm-max')}) {
+@media screen and (max-width: #{map-get($lightcase-settings, 'breakpoint')-1}) {
 
-  /*
-   * Content - Extend with further selectors and colors in case you
-   * have elements like <ul>, <li>, <span> or similar displayed in lightcase.
-   */
-  #lightcase-case .lightcase-content h1,
-  #lightcase-case .lightcase-content h2,
-  #lightcase-case .lightcase-content h3,
-  #lightcase-case .lightcase-content h4,
-  #lightcase-case .lightcase-content h5,
-  #lightcase-case .lightcase-content h6,
-  #lightcase-case .lightcase-content p {
-    color: #aaa;
-  }
+  #lightcase-case {
 
-  /* Content and inlineWrap */
-  #lightcase-case:not([data-lc-type=image]):not([data-lc-type=video]):not([data-lc-type=flash]):not([data-lc-type=error]) .lightcase-contentInner,
-  #lightcase-case:not([data-lc-type=image]):not([data-lc-type=video]):not([data-lc-type=flash]):not([data-lc-type=error]) .lightcase-inlineWrap {
-      @include debase(true);
-  }
+    .lightcase-content {
+      // Content - Extend with further selectors and colors in case you
+      // have elements like <ul>, <li>, <span> or similar displayed in lightcase.
+      h1,h2,h3,h4,h5,h6,p {
+        color: #aaa;
+      }
+    }
 
-  #lightcase-case:not([data-lc-type=image]):not([data-lc-type=video]):not([data-lc-type=flash]):not([data-lc-type=error]) .lightcase-content {
-    padding: 14px;
-    border: none;
-    background: none;
+    // Not type: image, video, flash or error
+    &:not([data-lc-type=image]):not([data-lc-type=video]):not([data-lc-type=flash]):not([data-lc-type=error]) {
+      .lightcase-content,
+      .lightcase-inlineWrap {
+        @include debase(true);
+      }
 
-    -webkit-box-shadow: none;
-    -moz-box-shadow: none;
-    -o-box-shadow: none;
-    box-shadow: none;
-  }
-  #lightcase-case:not([data-lc-type=image]):not([data-lc-type=video]):not([data-lc-type=flash]):not([data-lc-type=error]) .lightcase-contentInner,
-  #lightcase-case:not([data-lc-type=image]):not([data-lc-type=video]):not([data-lc-type=flash]):not([data-lc-type=error]) .lightcase-contentInner > * {
-    width: 100% !important;
-    max-width: none !important;
-  }
+      .lightcase-content {
+        -webkit-box-shadow: none;
+        -moz-box-shadow: none;
+        -o-box-shadow: none;
+        box-shadow: none;
 
-  /*
-  * Set auto height to each element except iframes, because of that
-  * those cannot have a natural/native height and it must be especially defined.
-  */
-  #lightcase-case:not([data-lc-type=image]):not([data-lc-type=video]):not([data-lc-type=flash]):not([data-lc-type=error]) .lightcase-contentInner > *:not(iframe) {
-    height: auto !important;
-    max-height: none !important;
+        .lightcase-contentInner {
+          padding: 15px;
+
+          &, & > * {
+            width: 100% !important;
+            max-width: none !important;
+          }
+
+          // Set auto height to each element except iframes, because of that
+          //those cannot have a natural/native height and it must be especially defined.
+          & > *:not(iframe) {
+            height: auto !important;
+            max-height: none !important;
+          }
+        }
+      }
+    }
   }
 
 }
 
-@media screen and (min-width: #{map-get($lightcase-settings, 'screen-md-min')}) {
+@media screen and (min-width: #{map-get($lightcase-settings, 'breakpoint')}) {
 
-  /*
-   * Content - Extend with further selectors and colors in case you
-   * have elements like <ul>, <li>, <span> or similar displayed in lightcase.
-   */
-  #lightcase-case .lightcase-content h1,
-  #lightcase-case .lightcase-content h2,
-  #lightcase-case .lightcase-content h3,
-  #lightcase-case .lightcase-content h4,
-  #lightcase-case .lightcase-content h5,
-  #lightcase-case .lightcase-content h6,
-  #lightcase-case .lightcase-content p {
-    color: #333;
-  }
+  #lightcase-case {
 
-  /* Content and inlineWrap */
-  #lightcase-case:not([data-lc-type=error]) .lightcase-content {
-    position: relative;
-    z-index: 1;
-    overflow: hidden;
+    .lightcase-content {
+      // Content - Extend with further selectors and colors in case you
+      // have elements like <ul>, <li>, <span> or similar displayed in lightcase.
+      h1, h2, h3, h4, h5, h6, p {
+        color: #333;
+      }
+    }
 
-    text-shadow: none;
+    // Not type: error
+    &:not([data-lc-type=error]) {
+      .lightcase-content {
+        position: relative;
+        z-index: 1;
+        overflow: hidden;
 
-    background-color: #fff;
+        text-shadow: none;
 
-    -webkit-box-shadow: 0 0 30px rgba(0,0,0,0.5);
-    -moz-box-shadow: 0 0 30px rgba(0,0,0,0.5);
-    -o-box-shadow: 0 0 30px rgba(0,0,0,0.5);
-    box-shadow: 0 0 30px rgba(0,0,0,0.5);
+        background-color: #fff;
 
-    -webkit-backface-visibility: hidden;
-  }
-  #lightcase-case[data-lc-type=image] .lightcase-content,
-  #lightcase-case[data-lc-type=video] .lightcase-content {
-    background-color: #333;
-  }
-  #lightcase-case[data-lc-type=image] .lightcase-contentInner,
-  #lightcase-case[data-lc-type=video] .lightcase-contentInner {
-    line-height: 0.75;
-  }
-  #lightcase-case:not([data-lc-type=error]) .lightcase-inlineWrap {
-    padding: 30px;
+        -webkit-box-shadow: 0 0 30px rgba(0,0,0,0.5);
+        -moz-box-shadow: 0 0 30px rgba(0,0,0,0.5);
+        -o-box-shadow: 0 0 30px rgba(0,0,0,0.5);
+        box-shadow: 0 0 30px rgba(0,0,0,0.5);
 
-    overflow: auto;
+        -webkit-backface-visibility: hidden;
+      }
+      .lightcase-inlineWrap {
+        padding: 30px;
 
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    -o-box-sizing: border-box;
-    box-sizing: border-box;
+        overflow: auto;
+
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        -o-box-sizing: border-box;
+        box-sizing: border-box;
+      }
+    }
+
+    // Type: image + video
+    &[data-lc-type=image],
+    &[data-lc-type=video] {
+      .lightcase-content {
+        background-color: #333;
+
+        .lightcase-contentInner {
+          line-height: 0.75;
+        }
+      }
+    }
+
   }
 
 }

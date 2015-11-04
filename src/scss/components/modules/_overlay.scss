@@ -13,7 +13,7 @@
 
 }
 
-@media screen and (max-width: #{map-get($lightcase-settings, 'screen-sm-max')}) {
+@media screen and (max-width: #{map-get($lightcase-settings, 'breakpoint')-1}) {
 
   #lightcase-overlay {
     opacity: 1 !important;
@@ -22,7 +22,7 @@
 
 }
 
-@media screen and (min-width: #{map-get($lightcase-settings, 'screen-md-min')}) {
+@media screen and (min-width: #{map-get($lightcase-settings, 'breakpoint')}) {
 
   #lightcase-overlay {
     background: #333;

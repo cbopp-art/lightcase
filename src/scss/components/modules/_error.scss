@@ -1,6 +1,6 @@
 @media screen {}
 
-@media screen and (max-width: #{map-get($lightcase-settings, 'screen-sm-max')}) {
+@media screen and (max-width: #{map-get($lightcase-settings, 'breakpoint')-1}) {
 
   #lightcase-case p.lightcase-error {
     padding: 30px 0;
@@ -16,7 +16,7 @@
 
 }
 
-@media screen and (min-width: #{map-get($lightcase-settings, 'screen-md-min')}) {
+@media screen and (min-width: #{map-get($lightcase-settings, 'breakpoint')}) {
 
   #lightcase-case p.lightcase-error {
     margin: 0;

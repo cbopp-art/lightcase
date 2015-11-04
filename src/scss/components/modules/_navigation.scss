@@ -1,91 +1,104 @@
 @media screen {
 
-  /* For mobile (touch) devices */
-  .lightcase-isMobileDevice #lightcase-nav a:hover {
-    color: #aaa;
-    text-shadow: none;
+  // For mobile (touch) devices
+  .lightcase-isMobileDevice {
+    #lightcase-nav a:hover {
+      color: #aaa;
+      text-shadow: none;
+    }
   }
 
 }
 
-@media screen and (max-width: #{map-get($lightcase-settings, 'screen-sm-max')}) {
+@media screen and (max-width: #{map-get($lightcase-settings, 'breakpoint')-1}) {
 
-  .lightcase-open #lightcase-nav[data-lc-ispartofsequence]:before {
-    content: '';
-    position: fixed;
-    z-index: 9998;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    height: 55px;
+  #lightcase-nav {
 
-    background: rgba(60,60,60,0.9);
-  }
+    .lightcase-open &[data-lc-ispartofsequence]:before {
+      content: '';
+      position: fixed;
+      z-index: 9998;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      height: 55px;
 
-  #lightcase-nav a {
-    position: fixed;
-    z-index: 9999;
-    bottom: 15px;
+      background: rgba(60,60,60,0.9);
+    }
 
-    outline: none;
-    cursor: pointer;
-    font-size: 24px;
-  }
-  #lightcase-nav a:hover {
-    text-shadow: 0 0 15px #fff;
-  }
+    a {
+      position: fixed;
+      z-index: 9999;
+      bottom: 15px;
 
-  /* Icon positioning */
-  #lightcase-nav .lightcase-icon-pause,
-  #lightcase-nav .lightcase-icon-play {
-    left: 50%;
-    margin-left: -0.5em;
-  }
-  #lightcase-nav .lightcase-icon-prev {
-    left: 15px;
-  }
-  #lightcase-nav .lightcase-icon-next {
-    right: 15px;
+      outline: none;
+      cursor: pointer;
+      font-size: 24px;
+
+      &:hover {
+        text-shadow: 0 0 15px #fff;
+      }
+
+      // Icon positioning
+      &.lightcase-icon-pause,
+      &.lightcase-icon-play {
+        left: 50%;
+        margin-left: -0.5em;
+      }
+      &.lightcase-icon-prev {
+        left: 15px;
+      }
+      &.lightcase-icon-next {
+        right: 15px;
+      }
+    }
+
   }
 
 }
 
-@media screen and (min-width: #{map-get($lightcase-settings, 'screen-md-min')}) {
+@media screen and (min-width: #{map-get($lightcase-settings, 'breakpoint')}) {
 
-  #lightcase-nav a {
-    bottom: 50%;
-    margin-bottom: -0.5em;
+  #lightcase-nav {
 
-    outline: none;
-    cursor: pointer;
-  }
-  #lightcase-nav a.lightcase-icon-close {
-    margin: 0;
-  }
-  #lightcase-nav a.lightcase-icon-close,
-  #lightcase-nav a.lightcase-icon-play,
-  #lightcase-nav a.lightcase-icon-pause {
-    opacity: 0;
-  }
-  #lightcase-nav a:hover {
-    text-shadow: 0 0 15px #fff;
-  }
-  #lightcase-nav a:hover,
-  #lightcase-case:hover ~ #lightcase-nav a {
-    opacity: 1;
-  }
+    a {
+      bottom: 50%;
+      margin-bottom: -0.5em;
 
-  /* Icon positioning */
-  #lightcase-nav a.lightcase-icon-play,
-  #lightcase-nav a.lightcase-icon-pause {
-    left: 50%;
-    margin-left: -0.5em;
-  }
-  #lightcase-nav a.lightcase-icon-prev {
-    left: 15px;
-  }
-  #lightcase-nav a.lightcase-icon-next {
-    right: 15px;
+      outline: none;
+      cursor: pointer;
+
+      &:hover {
+        text-shadow: 0 0 15px #fff;
+      }
+      &:hover,
+      #lightcase-case:hover ~ & {
+        opacity: 1;
+      }
+
+      &.lightcase-icon-close {
+        margin: 0;
+      }
+      &.lightcase-icon-close,
+      &.lightcase-icon-play,
+      &.lightcase-icon-pause {
+        opacity: 0;
+      }
+
+      // Icon positioning
+      &.lightcase-icon-play,
+      &.lightcase-icon-pause {
+        left: 50%;
+        margin-left: -0.5em;
+      }
+      &.lightcase-icon-prev {
+        left: 15px;
+      }
+      &.lightcase-icon-next {
+        right: 15px;
+      }
+    }
+
   }
 
 }

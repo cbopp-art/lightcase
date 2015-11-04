@@ -8,16 +8,16 @@
  * @version		2.2.0 (28/10/2015)
  */
 
-/* Import settings */
-@import "components/settings";
+// Import settings
+@import 'components/settings';
 
-/* Import icon font */
+// Import icon font
 @import 'components/fonts/font-lightcase';
 
-/* Import mixins */
+// Import mixins
 @import 'components/mixins/misc';
 
-/* Import modules */
+// Import modules
 @import 'components/modules/animations';
 @import 'components/modules/case';
 @import 'components/modules/close';

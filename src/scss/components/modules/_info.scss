@@ -1,60 +1,68 @@
 @media screen {
 
-  #lightcase-case .lightcase-info {
-    /*
-     * You can change to position "static" or "relative" instead, but consider
-     * that this height will be integrated and calculated
-     * to the maximum height additionally to the image height.
-     */
-    position: absolute;
+  #lightcase-case {
 
-    padding-top: 15px;
-  }
+    .lightcase-info {
+      /*
+       * You can change to position "static" or "relative" instead, but consider
+       * that this height will be integrated and calculated
+       * to the maximum height additionally to the image height.
+       */
+      position: absolute;
 
-  #lightcase-case .lightcase-caption {
-    clear: both;
-  }
+      padding-top: 15px;
+    }
 
-  #lightcase-case .lightcase-title,
-  #lightcase-case .lightcase-caption {
-    margin: 0;
-    padding: 0;
+    .lightcase-title,
+    .lightcase-caption {
+      margin: 0;
+      padding: 0;
 
-    font-size: 17px;
-    line-height: 1.5;
-    font-weight: normal;
-    text-overflow: ellipsis;
-  }
+      font-size: 17px;
+      line-height: 1.5;
+      font-weight: normal;
+      text-overflow: ellipsis;
+    }
 
-  #lightcase-case .lightcase-caption {
-    font-size: 13px;
-  }
+    .lightcase-caption {
+      clear: both;
+      font-size: 13px;
+    }
 
-  #lightcase-case .lightcase-sequenceInfo {
-    font-size: 11px;
-  }
+    .lightcase-sequenceInfo {
+      font-size: 11px;
+    }
 
-}
-
-@media screen and (max-width: #{map-get($lightcase-settings, 'screen-sm-max')}) {
-
-  #lightcase-case .lightcase-info {
-    padding-left: 15px;
-    padding-right: 15px;
-  }
-
-  #lightcase-case:not([data-lc-type=image]):not([data-lc-type=video]):not([data-lc-type=flash]):not([data-lc-type=error]) .lightcase-info {
-    position: static;
-  }
-
-  #lightcase-case .lightcase-title {
-    position: fixed;
-    top: 10px;
-    left: 0;
-    padding: 5px 15px;
-    background: rgba(51,51,51,0.9);
   }
 
 }
 
-@media screen and (min-width: #{map-get($lightcase-settings, 'screen-md-min')}) {}
+@media screen and (max-width: #{map-get($lightcase-settings, 'breakpoint')-1}) {
+
+  #lightcase-case {
+
+    .lightcase-info {
+      padding-left: 15px;
+      padding-right: 15px;
+    }
+
+    // Not type: image, video, flash or error
+    &:not([data-lc-type=image]):not([data-lc-type=video]):not([data-lc-type=flash]):not([data-lc-type=error]) {
+      .lightcase-info {
+        position: static;
+      }
+    }
+
+    .lightcase-title {
+      position: fixed;
+      top: 10px;
+      left: 0;
+      padding: 5px 15px;
+      background: rgba(51,51,51,0.9);
+    }
+
+  }
+
+}
+
+@media screen and (min-width: #{map-get($lightcase-settings, 'breakpoint')}) {}
