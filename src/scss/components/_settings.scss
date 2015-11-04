@@ -4,9 +4,9 @@
  * Note: Override default settings for your project without touching this source code by simply
  * defining those variables within a map called $lightcase-custom.
  *
- * // Example
+ * // Example usage
  * $lightcase-custom: (
- *   'key': 'value';
+ *   'breakpoint': 768px
  * );
  */
 $lightcase-default: (
