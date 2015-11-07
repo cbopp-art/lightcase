@@ -9,39 +9,37 @@
   padding-top: 15px;
 
   #lightcase-title,
-  #lightcase-caption,
-  #lightcase-sequenceInfo {
-    color: #aaa;
-  }
-
-  #lightcase-title,
   #lightcase-caption {
     margin: 0;
     padding: 0;
 
-    font-size: 17px;
     line-height: 1.5;
     font-weight: normal;
     text-overflow: ellipsis;
   }
 
-  #lightcase-caption {
-    clear: both;
-    font-size: 13px;
-  }
-
-  #lightcase-sequenceInfo {
-    font-size: 11px;
-  }
-
   #lightcase-title {
+    font-size: #{map-get($lightcase-settings, 'title-font-size')};
+    color: #{map-get($lightcase-settings, 'title-color')};
+
     @media screen and (max-width: #{map-get($lightcase-settings, 'breakpoint')-1}) {
       position: fixed;
       top: 10px;
       left: 0;
       padding: 5px 15px;
-      background: rgba(51, 51, 51, 0.9);
+      background: #{map-get($lightcase-settings, 'overlay-color')};
     }
+  }
+
+  #lightcase-caption {
+    clear: both;
+    font-size: #{map-get($lightcase-settings, 'caption-font-size')};
+    color: #{map-get($lightcase-settings, 'caption-color')};
+  }
+
+  #lightcase-sequenceInfo {
+    font-size: #{map-get($lightcase-settings, 'sequenceInfo-font-size')};
+    color: #{map-get($lightcase-settings, 'sequenceInfo-color')};
   }
 
   @media screen and (max-width: #{map-get($lightcase-settings, 'breakpoint')-1}) {

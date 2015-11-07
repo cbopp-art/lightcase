@@ -1,0 +1,40 @@
+/**
+ * Provides natural content overflow behavior and scrolling support
+ * even so for touch devices.
+ *
+ * Example usage:
+ * @include overflow()
+ */
+@mixin overflow() {
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/**
+ * Neutralizes/resets dimensions including width, height, position as well as margins,
+ * paddings and styles. Used to enforce a neutral and unstyled look and behavoir!
+ *
+ * Example usage:
+ * @include clear(true)
+ *
+ * @param boolean $important
+ */
+@mixin clear($important) {
+  @if $important {
+    $important: !important;
+  }
+
+  position: relative $important;
+
+  top: auto $important;
+  left: auto $important;
+
+  width: auto $important;
+  height: auto $important;
+
+  margin: 0 $important;
+  padding: 0 $important;
+
+  border: none $important;
+  background: none $important;
+}

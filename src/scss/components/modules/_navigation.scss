@@ -12,7 +12,7 @@
       left: 0;
       height: 55px;
 
-      background: rgba(60,60,60,0.9);
+      background: #{map-get($lightcase-settings, 'navigation-background')};
     }
   }
 
@@ -64,6 +64,7 @@
       right: 15px;
       margin: 0;
       opacity: 0;
+      outline: none;
 
       @media screen and (max-width: #{map-get($lightcase-settings, 'breakpoint')-1}) {
         position: absolute;
@@ -71,7 +72,6 @@
 
       @media screen and (min-width: #{map-get($lightcase-settings, 'breakpoint')}) {
         position: fixed;
-        outline: none;
       }
     }
 

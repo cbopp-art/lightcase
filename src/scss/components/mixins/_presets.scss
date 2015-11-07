@@ -1,0 +1,36 @@
+/**
+ * Mixin providing icon defaults to be used on top of font-lightcase.
+ *
+ * Example usage:
+ * @include icon(#fff)
+ */
+@mixin icon($color: rgba(255, 255, 255, 0.6)) {
+  position: fixed;
+  z-index: 9999;
+
+  width: 1.123em;
+  height: auto;
+
+  font-size: #{map-get($lightcase-settings, 'icon-font-size')};
+  line-height: 1;
+
+  text-align: center;
+  text-shadow: none;
+
+  &, &:focus {
+    text-decoration: none;
+    color: $color;
+
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+
+    -webkit-transition: color, opacity, ease-in-out 0.25s;
+    -moz-transition: color, opacity, ease-in-out 0.25s;
+    -o-transition: color, opacity, ease-in-out 0.25s;
+    transition: color, opacity, ease-in-out 0.25s;
+  }
+
+  & > span {
+    display: inline-block;
+    text-indent: -9999px;
+  }
+}

@@ -15,7 +15,8 @@
 @import 'components/fonts/font-lightcase';
 
 // Import mixins
-@import 'components/mixins/misc';
+@import 'components/mixins/presets';
+@import 'components/mixins/utilities';
 
 // Import modules
 @import 'components/modules/animations';

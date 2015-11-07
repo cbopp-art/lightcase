@@ -11,7 +11,15 @@
  */
 $lightcase-default: (
   'breakpoint': 641px,
-  'overlayColor': #333
+  'overlay-color': #333,
+  'navigation-background': rgba(60, 60, 60, 0.9),
+  'icon-font-size': 38px,
+  'title-font-size': 17px,
+  'title-color': #aaa,
+  'caption-font-size': 13px,
+  'caption-color': #aaa,
+  'sequenceInfo-font-size': 11px,
+  'sequenceInfo-color': #aaa
 );
 
 $lightcase-custom: ()!default;

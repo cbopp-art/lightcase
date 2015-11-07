@@ -76,6 +76,12 @@
 }
 
 /**
+ * Mixin providing icon defaults to be used on top of font-lightcase.
+ *
+ * Example usage:
+ * @include icon(#fff)
+ */
+/**
  * Provides natural content overflow behavior and scrolling support
  * even so for touch devices.
  *
@@ -90,13 +96,6 @@
  * @include clear(true)
  *
  * @param boolean $important
- */
-/**
- * Mixin providing icon defaults to be used on top of font-lightcase.
- * Also brings with a default status for :hover and :focus.
- *
- * Example usage:
- * @include icon()
  */
 @-webkit-keyframes lightcase-loading-spin {
   0% {
@@ -373,38 +372,38 @@
 }
 /* line 11, ../scss/components/modules/_info.scss */
 #lightcase-info #lightcase-title,
-#lightcase-info #lightcase-caption,
-#lightcase-info #lightcase-sequenceInfo {
-  color: #aaa;
-}
-/* line 17, ../scss/components/modules/_info.scss */
-#lightcase-info #lightcase-title,
 #lightcase-info #lightcase-caption {
   margin: 0;
   padding: 0;
-  font-size: 17px;
   line-height: 1.5;
   font-weight: normal;
   text-overflow: ellipsis;
 }
-/* line 28, ../scss/components/modules/_info.scss */
-#lightcase-info #lightcase-caption {
-  clear: both;
-  font-size: 13px;
-}
-/* line 33, ../scss/components/modules/_info.scss */
-#lightcase-info #lightcase-sequenceInfo {
-  font-size: 11px;
+/* line 21, ../scss/components/modules/_info.scss */
+#lightcase-info #lightcase-title {
+  font-size: 17px;
+  color: #aaa;
 }
 @media screen and (max-width: 640px) {
-  /* line 37, ../scss/components/modules/_info.scss */
+  /* line 21, ../scss/components/modules/_info.scss */
   #lightcase-info #lightcase-title {
     position: fixed;
     top: 10px;
     left: 0;
     padding: 5px 15px;
-    background: rgba(51, 51, 51, 0.9);
+    background: #333;
   }
+}
+/* line 34, ../scss/components/modules/_info.scss */
+#lightcase-info #lightcase-caption {
+  clear: both;
+  font-size: 13px;
+  color: #aaa;
+}
+/* line 40, ../scss/components/modules/_info.scss */
+#lightcase-info #lightcase-sequenceInfo {
+  font-size: 11px;
+  color: #aaa;
 }
 @media screen and (max-width: 640px) {
   /* line 1, ../scss/components/modules/_info.scss */
@@ -412,7 +411,7 @@
     padding-left: 15px;
     padding-right: 15px;
   }
-  /* line 52, ../scss/components/modules/_info.scss */
+  /* line 50, ../scss/components/modules/_info.scss */
   #lightcase-case:not([data-lc-type=image]):not([data-lc-type=video]):not([data-lc-type=flash]):not([data-lc-type=error]) #lightcase-info {
     position: static;
   }
@@ -420,6 +419,8 @@
 
 /* line 1, ../scss/components/modules/_loading.scss */
 #lightcase-loading {
+  position: fixed;
+  z-index: 9999;
   width: 1.123em;
   height: auto;
   font-size: 38px;
@@ -440,10 +441,8 @@
   -o-animation: lightcase-loading-spin 0.5s infinite linear;
   animation: lightcase-loading-spin 0.5s infinite linear;
 }
-/* line 61, ../scss/components/mixins/_misc.scss */
+/* line 20, ../scss/components/mixins/_presets.scss */
 #lightcase-loading, #lightcase-loading:focus {
-  position: fixed;
-  z-index: 9999;
   text-decoration: none;
   color: rgba(255, 255, 255, 0.6);
   -webkit-tap-highlight-color: transparent;
@@ -452,7 +451,7 @@
   -o-transition: color, opacity, ease-in-out 0.25s;
   transition: color, opacity, ease-in-out 0.25s;
 }
-/* line 76, ../scss/components/mixins/_misc.scss */
+/* line 32, ../scss/components/mixins/_presets.scss */
 #lightcase-loading > span {
   display: inline-block;
   text-indent: -9999px;
@@ -486,6 +485,8 @@
 }
 /* line 20, ../scss/components/modules/_navigation.scss */
 #lightcase-nav a[class*='lightcase-icon-'] {
+  position: fixed;
+  z-index: 9999;
   width: 1.123em;
   height: auto;
   font-size: 38px;
@@ -495,10 +496,8 @@
   outline: none;
   cursor: pointer;
 }
-/* line 61, ../scss/components/mixins/_misc.scss */
+/* line 20, ../scss/components/mixins/_presets.scss */
 #lightcase-nav a[class*='lightcase-icon-'], #lightcase-nav a[class*='lightcase-icon-']:focus {
-  position: fixed;
-  z-index: 9999;
   text-decoration: none;
   color: rgba(255, 255, 255, 0.6);
   -webkit-tap-highlight-color: transparent;
@@ -507,7 +506,7 @@
   -o-transition: color, opacity, ease-in-out 0.25s;
   transition: color, opacity, ease-in-out 0.25s;
 }
-/* line 76, ../scss/components/mixins/_misc.scss */
+/* line 32, ../scss/components/mixins/_presets.scss */
 #lightcase-nav a[class*='lightcase-icon-'] > span {
   display: inline-block;
   text-indent: -9999px;
@@ -548,6 +547,7 @@
   right: 15px;
   margin: 0;
   opacity: 0;
+  outline: none;
 }
 @media screen and (max-width: 640px) {
   /* line 61, ../scss/components/modules/_navigation.scss */
@@ -559,7 +559,6 @@
   /* line 61, ../scss/components/modules/_navigation.scss */
   #lightcase-nav a[class*='lightcase-icon-'].lightcase-icon-close {
     position: fixed;
-    outline: none;
   }
 }
 @media screen and (max-width: 640px) {
@@ -593,18 +592,12 @@
     z-index: 1000;
     top: 0;
     left: 0;
+    background: #333;
   }
 }
 @media screen and (max-width: 640px) {
   /* line 3, ../scss/components/modules/_overlay.scss */
   #lightcase-overlay {
     opacity: 1 !important;
-    background: #333;
-  }
-}
-@media screen and (min-width: 641px) {
-  /* line 3, ../scss/components/modules/_overlay.scss */
-  #lightcase-overlay {
-    background: #333;
   }
 }
