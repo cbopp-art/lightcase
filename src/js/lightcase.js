@@ -182,8 +182,8 @@
 		 */
 		getObjectData: function ($object) {
 		 	var objectData = {
-				title: lightcase.settings.title || $object.attr('title'),
-				caption: lightcase.settings.caption || $object.children('img').attr('alt'),
+				title: lightcase.settings.title || $object.attr(lightcase.prefixAttributeName('title')) || $object.attr('title'),
+				caption: lightcase.settings.caption || $object.attr(lightcase.prefixAttributeName('caption')) || $object.children('img').attr('alt'),
 				url: lightcase.verifyDataUrl(lightcase.determineLinkTarget()),
 				requestType: lightcase.settings.ajax.type,
 				requestData: lightcase.settings.ajax.data,
@@ -224,7 +224,7 @@
 		 * @return	{string}
 		 */
 		determineLinkTarget: function () {
-			return lightcase.settings.href || $(lightcase.origin).attr('data-href') || $(lightcase.origin).attr('href');
+			return lightcase.settings.href || $(lightcase.origin).attr(lightcase.prefixAttributeName('href')) || $(lightcase.origin).attr('href');
 		},
 
 		/**
