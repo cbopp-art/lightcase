@@ -2,9 +2,9 @@
  * Mixin providing icon defaults to be used on top of font-lightcase.
  *
  * Example usage:
- * @include icon(#fff)
+ * @include icon(#e9e9e9)
  */
-@mixin icon($color: rgba(255, 255, 255, 0.6)) {
+@mixin icon($color: #fff) {
   position: fixed;
   z-index: 9999;
 
@@ -32,5 +32,22 @@
   & > span {
     display: inline-block;
     text-indent: -9999px;
+  }
+}
+
+/**
+ * Mixin providing icon defaults including a hover status to be used
+ * on top of font-lightcase.
+ *
+ * Example usage:
+ * @include icon-hover(#e9e9e9, #fff)
+ */
+@mixin icon-hover($color: #fff, $color-hover: #f9f9f9) {
+  @include icon($color);
+
+  // Default hover status
+  &:hover {
+    color: $color-hover;
+    text-shadow: 0 0 15px $color-hover;
   }
 }

@@ -1,20 +1,16 @@
-@media screen {
+#lightcase-overlay {
+  display: none;
+  width: 100%;
+  height: 100%;
 
-  #lightcase-overlay {
-    display: none;
-    width: 100%;
-    height: 100%;
+  position: fixed;
+  z-index: 1000;
+  top: 0;
+  left: 0;
 
-    position: fixed;
-    z-index: 1000;
-    top: 0;
-    left: 0;
+  background: #{map-get($lightcase-settings, 'overlay-color')};
 
-    background: #{map-get($lightcase-settings, 'overlay-color')};
-
-    @media screen and (max-width: #{map-get($lightcase-settings, 'breakpoint')-1}) {
-      opacity: 1 !important;
-    }
+  @media screen and (max-width: #{map-get($lightcase-settings, 'breakpoint')-1}) {
+    opacity: 1 !important;
   }
-
 }

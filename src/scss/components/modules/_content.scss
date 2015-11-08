@@ -1,4 +1,5 @@
 #lightcase-content {
+
   // Not type: error
   #lightcase-case:not([data-lc-type=error]) & {
     @media screen and (min-width: #{map-get($lightcase-settings, 'breakpoint')}) {
@@ -8,7 +9,7 @@
 
       text-shadow: none;
 
-      background-color: #fff;
+      background-color: #{map-get($lightcase-settings, 'case-background')};
 
       -webkit-box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
       -moz-box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
@@ -23,7 +24,7 @@
   #lightcase-case[data-lc-type=image] &,
   #lightcase-case[data-lc-type=video] & {
     @media screen and (min-width: #{map-get($lightcase-settings, 'breakpoint')}) {
-      background-color: #333;
+      background-color: #{map-get($lightcase-settings, 'case-background-media')};
     }
   }
 
@@ -48,7 +49,7 @@
         }
 
         // Set auto height to each element except iframes, because of that
-        //those cannot have a natural/native height and it must be especially defined.
+        // those cannot have a natural/native height and it must be especially defined.
         & > *:not(iframe) {
           height: auto !important;
           max-height: none !important;
@@ -103,14 +104,16 @@
     }
   }
 
-  // Content - Extend with further selectors and colors in case you
-  // have elements like <ul>, <li>, <span> or similar displayed in lightcase.
+  // Content - Extend with further selectors and colors in case you have
+  // elements like <ul>, <li>, <span> or other as part of content within lightcase.
   h1, h2, h3, h4, h5, h6, p {
     @media screen and (max-width: #{map-get($lightcase-settings, 'breakpoint')-1}) {
-      color: #aaa;
+      color: #{map-get($lightcase-settings, 'text-color-viewport-small')};
     }
+
     @media screen and (min-width: #{map-get($lightcase-settings, 'breakpoint')}) {
-      color: #333;
+      color: #{map-get($lightcase-settings, 'text-color-viewport-large')};
     }
   }
+
 }

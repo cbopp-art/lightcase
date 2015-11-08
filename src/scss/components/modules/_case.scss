@@ -8,18 +8,14 @@
 
   font-family: arial, sans-serif;
   font-size: 13px;
-  line-height: 18px;
+  line-height: 1.5;
   text-align: left;
-  text-shadow: 0 0 10px rgba(0,0,0,0.5);
+  text-shadow: #{map-get($lightcase-settings, 'text-shadow')};
 
   // Not type: image, video, flash or error
   &:not([data-lc-type=image]):not([data-lc-type=video]):not([data-lc-type=flash]):not([data-lc-type=error]) {
     @media screen and (max-width: #{map-get($lightcase-settings, 'breakpoint')-1}) {
       @include clear(true);
     }
-  }
-
-  @media screen and (min-width: #{map-get($lightcase-settings, 'breakpoint')}) {
-    color: #aaa;
   }
 }

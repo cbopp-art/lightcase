@@ -1,5 +1,5 @@
-// Animation for loading spin icon
-@-webkit-keyframes lightcase-loading-spin {
+// Spin animation
+@-webkit-keyframes lightcase-spin {
 
 	0% {
 		-webkit-transform: rotate(0deg);
@@ -16,7 +16,7 @@
 
 }
 
-@-moz-keyframes lightcase-loading-spin {
+@-moz-keyframes lightcase-spin {
 
 	0% {
 		-webkit-transform: rotate(0deg);
@@ -33,7 +33,7 @@
 
 }
 
-@-o-keyframes lightcase-loading-spin {
+@-o-keyframes lightcase-spin {
 
 	0% {
 		-webkit-transform: rotate(0deg);
@@ -50,7 +50,7 @@
 
 }
 
-@-ms-keyframes lightcase-loading-spin {
+@-ms-keyframes lightcase-spin {
 
 	0% {
 		-webkit-transform: rotate(0deg);
@@ -67,7 +67,7 @@
 
 }
 
-@keyframes lightcase-loading-spin {
+@keyframes lightcase-spin {
 
 	0% {
 		-webkit-transform: rotate(0deg);

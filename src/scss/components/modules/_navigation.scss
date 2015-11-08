@@ -18,17 +18,12 @@
 
   // Generic styles for all navigation links
   a[class*='lightcase-icon-'] {
-    @include icon();
+    @include icon-hover(#{map-get($lightcase-settings, 'icon-color')}, #{map-get($lightcase-settings, 'icon-color-hover')});
 
     outline: none;
     cursor: pointer;
 
-    // Default hover state
-    &:hover {
-      color: rgba(255, 255, 255, 1);
-      text-shadow: 0 0 15px #fff;
-    }
-    // Hover state for mobile (touch) devices
+    // Hover status for mobile (touch) devices
     .lightcase-isMobileDevice & {
       &:hover {
         color: #aaa;
@@ -62,6 +57,7 @@
       z-index: 9997;
       top: 15px;
       right: 15px;
+      bottom: auto;
       margin: 0;
       opacity: 0;
       outline: none;
@@ -76,8 +72,6 @@
     }
 
     @media screen and (max-width: #{map-get($lightcase-settings, 'breakpoint')-1}) {
-      position: fixed;
-      z-index: 9999;
       bottom: 15px;
       font-size: 24px;
     }
@@ -92,4 +86,5 @@
       }
     }
   }
+
 }

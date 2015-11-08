@@ -1,8 +1,8 @@
 /**
- * Lightcase Settings
-
+ * Lightcase settings
+ *
  * Note: Override default settings for your project without touching this source code by simply
- * defining those variables within a map called $lightcase-custom.
+ * defining those variables within a SASS map called '$lightcase-custom'.
  *
  * // Example usage
  * $lightcase-custom: (
@@ -11,15 +11,30 @@
  */
 $lightcase-default: (
   'breakpoint': 641px,
+
   'overlay-color': #333,
+
+  'case-background': #fff,
+  'case-background-media': #333,
+
   'navigation-background': rgba(60, 60, 60, 0.9),
+
   'icon-font-size': 38px,
+  'icon-color': rgba(255, 255, 255, 0.6),
+  'icon-color-hover': rgba(255, 255, 255, 1),
+
   'title-font-size': 17px,
   'title-color': #aaa,
+
   'caption-font-size': 13px,
   'caption-color': #aaa,
+
   'sequenceInfo-font-size': 11px,
-  'sequenceInfo-color': #aaa
+  'sequenceInfo-color': #aaa,
+
+  'text-shadow': 0 0 10px rgba(0, 0, 0, 0.5),
+  'text-color-viewport-small': #aaa,
+  'text-color-viewport-large': #333
 );
 
 $lightcase-custom: ()!default;

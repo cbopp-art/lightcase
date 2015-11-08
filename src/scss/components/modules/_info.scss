@@ -1,9 +1,7 @@
 #lightcase-info {
-  /*
-   * You can change to position "static" or "relative" instead, but consider
-   * that this height will be integrated and calculated
-   * to the maximum height additionally to the image height.
-   */
+  // You can change to position "static" or "relative" instead, but consider
+  // that this height will be integrated and calculated
+  // to the maximum height additionally to the image height.
   position: absolute;
 
   padding-top: 15px;
@@ -43,8 +41,10 @@
   }
 
   @media screen and (max-width: #{map-get($lightcase-settings, 'breakpoint')-1}) {
-    padding-left: 15px;
-    padding-right: 15px;
+    .lightcase-fullScreenMode & {
+      padding-left: 15px;
+      padding-right: 15px;
+    }
 
     // Not type: image, video, flash or error
     #lightcase-case:not([data-lc-type=image]):not([data-lc-type=video]):not([data-lc-type=flash]):not([data-lc-type=error]) & {

@@ -1,5 +1,5 @@
 #lightcase-loading {
-  @include icon();
+  @include icon(#fff);
 
   position: fixed;
   z-index: 1001;
@@ -13,19 +13,13 @@
 
   font-size: 32px;
 
+  text-shadow: 0 0 15px #fff;
+
   // Fixes the icon wobble issue in firefox
   -moz-transform-origin: 50% 53%;
 
-  -webkit-animation: lightcase-loading-spin 0.5s infinite linear;
-  -moz-animation: lightcase-loading-spin 0.5s infinite linear;
-  -o-animation: lightcase-loading-spin 0.5s infinite linear;
-  animation: lightcase-loading-spin 0.5s infinite linear;
-
-  @media screen and (max-width: #{map-get($lightcase-settings, 'breakpoint')-1}) {
-    color: #aaa;
-  }
-  @media screen and (min-width: #{map-get($lightcase-settings, 'breakpoint')}) {
-    color: #fff;
-    text-shadow: 0 0 15px #fff;
-  }
+  -webkit-animation: lightcase-spin 0.5s infinite linear;
+  -moz-animation: lightcase-spin 0.5s infinite linear;
+  -o-animation: lightcase-spin 0.5s infinite linear;
+  animation: lightcase-spin 0.5s infinite linear;
 }
