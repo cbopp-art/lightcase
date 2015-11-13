@@ -1,21 +1,5 @@
 #lightcase-nav {
 
-  // For small breakpoint show navigation buttons at the bottom of the page
-  // and with an extra background.
-  .lightcase-open &[data-lc-ispartofsequence]:before {
-    @media screen and (max-width: #{map-get($lightcase-settings, 'breakpoint')-1}) {
-      content: '';
-      position: fixed;
-      z-index: 9998;
-      right: 0;
-      bottom: 0;
-      left: 0;
-      height: 55px;
-
-      background: #{map-get($lightcase-settings, 'navigation-background')};
-    }
-  }
-
   // Generic styles for all navigation links
   a[class*='lightcase-icon-'] {
     @include icon-hover(#{map-get($lightcase-settings, 'icon-color')}, #{map-get($lightcase-settings, 'icon-color-hover')});

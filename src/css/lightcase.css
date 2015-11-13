@@ -454,20 +454,7 @@
   text-indent: -9999px;
 }
 
-@media screen and (max-width: 640px) {
-  /* line 5, ../scss/components/modules/_navigation.scss */
-  .lightcase-open #lightcase-nav[data-lc-ispartofsequence]:before {
-    content: '';
-    position: fixed;
-    z-index: 9998;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    height: 55px;
-    background: rgba(60, 60, 60, 0.9);
-  }
-}
-/* line 20, ../scss/components/modules/_navigation.scss */
+/* line 4, ../scss/components/modules/_navigation.scss */
 #lightcase-nav a[class*='lightcase-icon-'] {
   position: fixed;
   z-index: 9999;
@@ -500,31 +487,31 @@
   color: white;
   text-shadow: 0 0 15px white;
 }
-/* line 28, ../scss/components/modules/_navigation.scss */
+/* line 12, ../scss/components/modules/_navigation.scss */
 .lightcase-isMobileDevice #lightcase-nav a[class*='lightcase-icon-']:hover {
   color: #aaa;
   text-shadow: none;
 }
-/* line 35, ../scss/components/modules/_navigation.scss */
+/* line 19, ../scss/components/modules/_navigation.scss */
 #lightcase-nav a[class*='lightcase-icon-'].lightcase-icon-prev {
   left: 15px;
 }
-/* line 40, ../scss/components/modules/_navigation.scss */
+/* line 24, ../scss/components/modules/_navigation.scss */
 #lightcase-nav a[class*='lightcase-icon-'].lightcase-icon-next {
   right: 15px;
 }
-/* line 45, ../scss/components/modules/_navigation.scss */
+/* line 29, ../scss/components/modules/_navigation.scss */
 #lightcase-nav a[class*='lightcase-icon-'].lightcase-icon-pause, #lightcase-nav a[class*='lightcase-icon-'].lightcase-icon-play {
   left: 50%;
   margin-left: -0.5em;
 }
 @media screen and (min-width: 641px) {
-  /* line 45, ../scss/components/modules/_navigation.scss */
+  /* line 29, ../scss/components/modules/_navigation.scss */
   #lightcase-nav a[class*='lightcase-icon-'].lightcase-icon-pause, #lightcase-nav a[class*='lightcase-icon-'].lightcase-icon-play {
     opacity: 0;
   }
 }
-/* line 56, ../scss/components/modules/_navigation.scss */
+/* line 40, ../scss/components/modules/_navigation.scss */
 #lightcase-nav a[class*='lightcase-icon-'].lightcase-icon-close {
   z-index: 9997;
   top: 15px;
@@ -535,31 +522,31 @@
   outline: none;
 }
 @media screen and (max-width: 640px) {
-  /* line 56, ../scss/components/modules/_navigation.scss */
+  /* line 40, ../scss/components/modules/_navigation.scss */
   #lightcase-nav a[class*='lightcase-icon-'].lightcase-icon-close {
     position: absolute;
   }
 }
 @media screen and (min-width: 641px) {
-  /* line 56, ../scss/components/modules/_navigation.scss */
+  /* line 40, ../scss/components/modules/_navigation.scss */
   #lightcase-nav a[class*='lightcase-icon-'].lightcase-icon-close {
     position: fixed;
   }
 }
 @media screen and (max-width: 640px) {
-  /* line 20, ../scss/components/modules/_navigation.scss */
+  /* line 4, ../scss/components/modules/_navigation.scss */
   #lightcase-nav a[class*='lightcase-icon-'] {
     bottom: 15px;
     font-size: 24px;
   }
 }
 @media screen and (min-width: 641px) {
-  /* line 20, ../scss/components/modules/_navigation.scss */
+  /* line 4, ../scss/components/modules/_navigation.scss */
   #lightcase-nav a[class*='lightcase-icon-'] {
     bottom: 50%;
     margin-bottom: -0.5em;
   }
-  /* line 83, ../scss/components/modules/_navigation.scss */
+  /* line 67, ../scss/components/modules/_navigation.scss */
   #lightcase-nav a[class*='lightcase-icon-']:hover, #lightcase-case:hover ~ #lightcase-nav a[class*='lightcase-icon-'] {
     opacity: 1;
   }
