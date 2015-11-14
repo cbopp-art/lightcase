@@ -10,7 +10,7 @@
 
 ;(function ($) {
 
-	window.lightcase = {
+	var lightcase = {
 		cache: {},
 
 		support: {},
