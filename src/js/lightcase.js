@@ -9,6 +9,7 @@
  */
 
 ;(function ($) {
+
 	window.lightcase = {
 		cache: {},
 
@@ -268,11 +269,7 @@
 			var getSimilarLinks = $('[' + lightcase.settings.attr + '="' + rel + '"]'),
 				regexp = new RegExp(expression);
 
-			if (regexp.test(rel) && getSimilarLinks.length > 1) {
-				return true;
-			} else {
-				return false;
-			}
+			return (regexp.test(rel) && getSimilarLinks.length > 1);
 		},
 
 		/**
@@ -281,11 +278,7 @@
 		 * @return	{boolean}
 		 */
 		isSlideshowEnabled: function () {
-			if (lightcase.objectData.isPartOfSequence && (lightcase.settings.slideshow === true || lightcase.objectData.isPartOfSequenceWithSlideshow === true)) {
-				return true;
-			} else {
-				return false;
-			}
+			return (lightcase.objectData.isPartOfSequence && (lightcase.settings.slideshow === true || lightcase.objectData.isPartOfSequenceWithSlideshow === true));
 		},
 
 		/**
@@ -649,22 +642,29 @@
 		 * @return	{string|boolean}	Array key if expression matched, else false
 		 */
 		verifyDataType: function (url) {
-			var url = lightcase.verifyDataUrl(url),
+			var dataUrl = lightcase.verifyDataUrl(url),
 				typeMapping = lightcase.settings.typeMapping;
 
-			if (url) {
-				for (var key in typeMapping) {
+			// Early abort if dataUrl couldn't be verified
+			if (!dataUrl) {
+				return false;
+			}
+
+			// Verify the dataType of url according to typeMapping which
+			// has been defined in settings.
+			for (var key in typeMapping) {
+				if (typeMapping.hasOwnProperty(key)) {
 					var suffixArr = typeMapping[key].split(',');
 
 					for (var i = 0; i < suffixArr.length; i++) {
 						var suffix = suffixArr[i].toLowerCase()
 							,regexp = new RegExp('\.(' + suffix + ')$', 'i')
 							// Verify only the last 5 characters of the string
-							,str = url.toLowerCase().split('?')[0].substr(-5);
+							,str = dataUrl.toLowerCase().split('?')[0].substr(-5);
 
 						if (regexp.test(str) === true) {
 							return key;
-						} else if (key === 'inline' && (url.indexOf(suffix) > -1 || !url)) {
+						} else if (key === 'inline' && (dataUrl.indexOf(suffix) > -1 || !dataUrl)) {
 							return key;
 						}
 					}
