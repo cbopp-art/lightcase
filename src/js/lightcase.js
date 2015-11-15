@@ -220,7 +220,6 @@
 				currentIndex: $(_self._determineAttributeSelector()).index($object),
 				sequenceLength: $(_self._determineAttributeSelector()).length
 			};
-			console.log(objectData);
 
 			// Add sequence info to objectData
 			objectData.sequenceInfo = (objectData.currentIndex + 1) + _self.labels['sequenceInfo.of'] + objectData.sequenceLength;
@@ -291,17 +290,18 @@
 		 */
 		_determineUrl: function () {
 			var dataUrl = _self.verifyDataUrl(_self._determineLinkTarget()),
+				width = 0,
+				density = 1,
 				url;
 
 			$.each(dataUrl, function (index, src) {
-				if (_self._matchMedia()('screen and (min-width:' + src.width + 'px)')) {
-					console.log('image-width:' + src.width);
-					if (src.density && devicePixelRatio && src.density === devicePixelRatio) {
-						url = src.url;
-						console.log('image-density:'+ src.density + ', image-width:' + src.width);
-					} else {
-						url = src.url;
-					}
+				if (
+					_self._matchMedia()('screen and (min-width:' + src.width + 'px)') &&
+					parseInt(devicePixelRatio) >= src.density &&
+					src.density >= density &&
+					src.width >= width
+				) {
+					url = src.url;
 				}
 			});
 
@@ -319,7 +319,10 @@
 			var srcExp = /^\d+$/;
 
 			return url.split(',').map(function (str) {
-				var src = {};
+				var src = {
+					width: 0,
+					density: 1
+				};
 
 				str.trim().split(/\s+/).forEach(function (url, i) {
 					if (i === 0) {
