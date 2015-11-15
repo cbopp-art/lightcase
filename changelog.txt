@@ -1,3 +1,10 @@
+2015/11/15 - v2.3.0
+Added: bower manifest file
+Feature: Viewport and density support
+Cleanup: Set lightcase into private scope
+Cleanup: Implemented strict mode
+Feature: SASS implementation
+
 2015/10/28 - v2.2.0
 Feature: Prefixed name for all attributes for more uniqueness
 Feature: Possibility to use categories with collections
