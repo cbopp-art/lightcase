@@ -132,7 +132,7 @@
 				markup: function () {
 					$('body').append(
 						_self.objects.overlay = $('<div id="' + _self.settings.idPrefix + 'overlay"></div>'),
-						_self.objects.loading = $('<div id="' + _self.settings.idPrefix + '_loading" class="' + _self.settings.classPrefix + 'icon-spin"></div>'),
+						_self.objects.loading = $('<div id="' + _self.settings.idPrefix + 'loading" class="' + _self.settings.classPrefix + 'icon-spin"></div>'),
 						_self.objects.case = $('<div id="' + _self.settings.idPrefix + 'case" aria-hidden="true" role="dialog"></div>')
 					);
 					_self.objects.case.after(
@@ -705,7 +705,7 @@
 		 * @return	{void}
 		 */
 		_addElements: function () {
-			if (typeof(_self.objects.case) !== 'undefined' && $('#' + _self.objects.case.attr('id')).length) {
+			if (typeof _self.objects.case !== 'undefined' && $('#' + _self.objects.case.attr('id')).length) {
 				return;
 			}
 
@@ -754,7 +754,7 @@
 
 			// End loading.
 			_self._loading('end');
-			_self.busy = false;
+			_self.isBusy = false;
 		},
 
 		/**
@@ -763,7 +763,7 @@
 		 * @return	{void}
 		 */
 		_processContent: function () {
-			_self.busy = true;
+			_self.isBusy = true;
 
 			switch (_self.settings.transitionOut) {
 				case 'scrollTop':
@@ -929,7 +929,7 @@
 		_addKeyEvents: function () {
 			$(document).bind('keyup.lightcase', function (event) {
 				// Do nothing if lightcase is in process
-				if (_self.busy) {
+				if (_self.isBusy) {
 					return;
 				}
 
