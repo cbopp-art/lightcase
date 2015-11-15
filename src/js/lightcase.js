@@ -51,7 +51,8 @@
 		 * @return	{void}
 		 */
 		start: function (options) {
-			_self.origin = this;
+			_self.origin = lightcase.origin = this;
+
 			_self.settings = $.extend(true, {
 				idPrefix: 'lightcase-',
 				classPrefix: 'lightcase-',
@@ -296,11 +297,15 @@
 
 			$.each(dataUrl, function (index, src) {
 				if (
-					_self._matchMedia()('screen and (min-width:' + src.width + 'px)') &&
-					parseInt(devicePixelRatio) >= src.density &&
+					// Check density
+					_self._devicePixelRatio() >= src.density &&
 					src.density >= density &&
+					// Check viewport width
+					_self._matchMedia()('screen and (min-width:' + src.width + 'px)') &&
 					src.width >= width
 				) {
+					width = src.width;
+					density = src.density;
 					url = src.url;
 				}
 			});
@@ -333,7 +338,6 @@
 						lastChar = url[url.length - 1],
 						intVal = parseInt(value, 10),
 						floatVal = parseFloat(value);
-
 					if (lastChar === 'w' && srcExp.test(value)) {
 						src.width = intVal;
 					} else if (lastChar === 'h' && srcExp.test(value)) {
@@ -1689,12 +1693,23 @@
 		},
 
 		/**
-		 * Returns the supported match media
+		 * Returns the supported match media or undefined if the browser
+		 * doesn't support match media.
 		 *
-		 * @return	{mixed}	The supported media query or undefined if the browser doesn't support match media
+		 * @return	{mixed}
 		 */
 		_matchMedia: function () {
 			return window.matchMedia || window.msMatchMedia;
+		},
+
+		/**
+		 * Returns the devicePixelRatio if supported. Else, it simply returns
+		 * 1 as the default.
+		 *
+		 * @return	{number}
+		 */
+		_devicePixelRatio: function () {
+			return window.devicePixelRatio || 1;
 		},
 
 		/**
