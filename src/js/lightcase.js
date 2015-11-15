@@ -1639,7 +1639,7 @@
 		 * Exports all public methods to be accessible, callable
 		 * from global scope.
 		 *
-		 * @return	{boolean}
+		 * @return	{void}
 		 */
 		_export: function () {
 			window.lightcase = {};
