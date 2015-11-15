@@ -209,17 +209,18 @@
 				objectData = {
 				title: _self.settings.title || $object.attr(_self._prefixAttributeName('title')) || $object.attr('title'),
 				caption: _self.settings.caption || $object.attr(_self._prefixAttributeName('caption')) || $object.children('img').attr('alt'),
-				url: _self.verifyDataUrl(_self._determineLinkTarget()),
+				url: _self._determineUrl(),
 				requestType: _self.settings.ajax.type,
 				requestData: _self.settings.ajax.data,
 				requestDataType: _self.settings.ajax.dataType,
 				rel: $object.attr(_self._determineAttributeSelector()),
-				type: _self.settings.type || _self.verifyDataType(_self._determineLinkTarget()),
+				type: _self.settings.type || _self.verifyDataType(_self._determineUrl()),
 				isPartOfSequence: _self._isPartOfSequence($object.attr(_self.settings.attr), ':'),
 				isPartOfSequenceWithSlideshow: _self._isPartOfSequence($object.attr(_self.settings.attr), ':slideshow'),
 				currentIndex: $(_self._determineAttributeSelector()).index($object),
 				sequenceLength: $(_self._determineAttributeSelector()).length
 			};
+			console.log(objectData);
 
 			// Add sequence info to objectData
 			objectData.sequenceInfo = (objectData.currentIndex + 1) + _self.labels['sequenceInfo.of'] + objectData.sequenceLength;
@@ -280,6 +281,67 @@
 			_self.cache.selector = selector;
 
 			return selector;
+		},
+
+		/**
+		 * Determines the correct resource according to the
+		 * current viewport and density.
+		 *
+		 * @return	{string}	url
+		 */
+		_determineUrl: function () {
+			var dataUrl = _self.verifyDataUrl(_self._determineLinkTarget()),
+				url;
+
+			$.each(dataUrl, function (index, src) {
+				if (_self._matchMedia()('screen and (min-width:' + src.width + 'px)')) {
+					console.log('image-width:' + src.width);
+					if (src.density && devicePixelRatio && src.density === devicePixelRatio) {
+						url = src.url;
+						console.log('image-density:'+ src.density + ', image-width:' + src.width);
+					} else {
+						url = src.url;
+					}
+				}
+			});
+
+			return url;
+		},
+
+		/**
+		 * Normalizes an url and returns information about the resource path,
+		 * the viewport width as well as density if defined.
+		 *
+		 * @param	{string}	url	Path to resource in format of an url or srcset
+		 * @return	{object}
+		 */
+		_normalizeUrl: function (url) {
+			var srcExp = /^\d+$/;
+
+			return url.split(',').map(function (str) {
+				var src = {};
+
+				str.trim().split(/\s+/).forEach(function (url, i) {
+					if (i === 0) {
+						return src.url = url;
+					}
+
+					var value = url.substring(0, url.length - 1),
+						lastChar = url[url.length - 1],
+						intVal = parseInt(value, 10),
+						floatVal = parseFloat(value);
+
+					if (lastChar === 'w' && srcExp.test(value)) {
+						src.width = intVal;
+					} else if (lastChar === 'h' && srcExp.test(value)) {
+						src.height = intVal;
+					} else if (lastChar === 'x' && !isNaN(floatVal)) {
+						src.density = floatVal;
+					}
+				});
+
+				return src;
+			});
 		},
 
 		/**
@@ -644,7 +706,7 @@
 		 * Verifies the url
 		 *
 		 * @param	{string}	dataUrl
-		 * @return	{string}	dataUrl	Clean url for processing content
+		 * @return	{object}	dataUrl	Clean url for processing content
 		 */
 		verifyDataUrl: function (dataUrl) {
 			if (!dataUrl || dataUrl === undefined || dataUrl === '') {
@@ -656,7 +718,7 @@
 				dataUrl = '#' + dataUrl[dataUrl.length - 1];
 			}
 
-			return dataUrl.toString();
+			return _self._normalizeUrl(dataUrl.toString());
 		},
 
 		/**
@@ -666,11 +728,10 @@
 		 * @return	{string|boolean}	Array key if expression matched, else false
 		 */
 		verifyDataType: function (url) {
-			var dataUrl = _self.verifyDataUrl(url),
-				typeMapping = _self.settings.typeMapping;
+			var typeMapping = _self.settings.typeMapping;
 
 			// Early abort if dataUrl couldn't be verified
-			if (!dataUrl) {
+			if (!url) {
 				return false;
 			}
 
@@ -681,14 +742,12 @@
 					var suffixArr = typeMapping[key].split(',');
 
 					for (var i = 0; i < suffixArr.length; i++) {
-						var suffix = suffixArr[i].toLowerCase()
-							,regexp = new RegExp('\.(' + suffix + ')$', 'i')
+						var suffix = suffixArr[i].toLowerCase(),
+							regexp = new RegExp('\.(' + suffix + ')$', 'i'),
 							// Verify only the last 5 characters of the string
-							,str = dataUrl.toLowerCase().split('?')[0].substr(-5);
+							str = url.toLowerCase().split('?')[0].substr(-5);
 
-						if (regexp.test(str) === true) {
-							return key;
-						} else if (key === 'inline' && (dataUrl.indexOf(suffix) > -1 || !dataUrl)) {
+						if (regexp.test(str) === true || (key === 'inline' && (url.indexOf(suffix) > -1))) {
 							return key;
 						}
 					}
@@ -1624,6 +1683,15 @@
 			
 			// Restore cache
 			_self.cache = {};
+		},
+
+		/**
+		 * Returns the supported match media
+		 *
+		 * @return	{mixed}	The supported media query or undefined if the browser doesn't support match media
+		 */
+		_matchMedia: function () {
+			return window.matchMedia || window.msMatchMedia;
 		},
 
 		/**
