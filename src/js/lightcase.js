@@ -10,10 +10,14 @@
 
 ;(function ($) {
 
-	var lightcase = {
+	'use strict';
+
+	var _self = {
 		cache: {},
 
 		support: {},
+
+		objects: {},
 
 		labels: {
 			'errorMessage': 'Source could not be found...',
@@ -47,8 +51,8 @@
 		 * @return	{void}
 		 */
 		start: function (options) {
-			lightcase.origin = this;
-			lightcase.settings = $.extend(true, {
+			_self.origin = this;
+			_self.settings = $.extend(true, {
 				idPrefix: 'lightcase-',
 				classPrefix: 'lightcase-',
 				attrPrefix: 'lc-',
@@ -123,35 +127,35 @@
 					'inline': '#'
 				},
 				errorMessage: function () {
-					return '<p class="' + lightcase.settings.classPrefix + 'error">' + lightcase.labels['errorMessage'] + '</p>';
+					return '<p class="' + _self.settings.classPrefix + 'error">' + _self.labels['errorMessage'] + '</p>';
 				},
 				markup: function () {
 					$('body').append(
-						$overlay = $('<div id="' + lightcase.settings.idPrefix + 'overlay"></div>'),
-						$loading = $('<div id="' + lightcase.settings.idPrefix + 'loading" class="' + lightcase.settings.classPrefix + 'icon-spin"></div>'),
-						$case = $('<div id="' + lightcase.settings.idPrefix + 'case" aria-hidden="true" role="dialog"></div>')
+						_self.objects.overlay = $('<div id="' + _self.settings.idPrefix + 'overlay"></div>'),
+						_self.objects.loading = $('<div id="' + _self.settings.idPrefix + 'loading" class="' + _self.settings.classPrefix + 'icon-spin"></div>'),
+						_self.objects.case = $('<div id="' + _self.settings.idPrefix + 'case" aria-hidden="true" role="dialog"></div>')
 					);
-					$case.after(
-						$nav = $('<div id="' + lightcase.settings.idPrefix + 'nav"></div>')
+					_self.objects.case.after(
+						_self.objects.nav = $('<div id="' + _self.settings.idPrefix + 'nav"></div>')
 					);
-					$nav.append(
-						$close = $('<a href="#" class="' + lightcase.settings.classPrefix + 'icon-close"><span>' + lightcase.labels['close'] + '</span></a>'),
-						$prev = $('<a href="#" class="' + lightcase.settings.classPrefix + 'icon-prev"><span>' + lightcase.labels['navigator.prev'] + '</span></a>').hide(),
-						$next = $('<a href="#" class="' + lightcase.settings.classPrefix + 'icon-next"><span>' + lightcase.labels['navigator.next'] + '</span></a>').hide(),
-						$play = $('<a href="#" class="' + lightcase.settings.classPrefix + 'icon-play"><span>' + lightcase.labels['navigator.play'] + '</span></a>').hide(),
-						$pause = $('<a href="#" class="' + lightcase.settings.classPrefix + 'icon-pause"><span>' + lightcase.labels['navigator.pause'] + '</span></a>').hide()
+					_self.objects.nav.append(
+						_self.objects.close = $('<a href="#" class="' + _self.settings.classPrefix + 'icon-close"><span>' + _self.labels['close'] + '</span></a>'),
+						_self.objects.prev = $('<a href="#" class="' + _self.settings.classPrefix + 'icon-prev"><span>' + _self.labels['navigator.prev'] + '</span></a>').hide(),
+						_self.objects.next = $('<a href="#" class="' + _self.settings.classPrefix + 'icon-next"><span>' + _self.labels['navigator.next'] + '</span></a>').hide(),
+						_self.objects.play = $('<a href="#" class="' + _self.settings.classPrefix + 'icon-play"><span>' + _self.labels['navigator.play'] + '</span></a>').hide(),
+						_self.objects.pause = $('<a href="#" class="' + _self.settings.classPrefix + 'icon-pause"><span>' + _self.labels['navigator.pause'] + '</span></a>').hide()
 					);
-					$case.append(
-						$content = $('<div id="' + lightcase.settings.idPrefix + 'content"></div>'),
-						$info = $('<div id="' + lightcase.settings.idPrefix + 'info"></div>')
+					_self.objects.case.append(
+						_self.objects.content = $('<div id="' + _self.settings.idPrefix + 'content"></div>'),
+						_self.objects.info = $('<div id="' + _self.settings.idPrefix + 'info"></div>')
 					);
-					$content.append(
-						$contentInner = $('<div class="' + lightcase.settings.classPrefix + 'contentInner"></div>')
+					_self.objects.content.append(
+						_self.objects.contentInner = $('<div class="' + _self.settings.classPrefix + 'contentInner"></div>')
 					);
-					$info.append(
-						$sequenceInfo = $('<div id="' + lightcase.settings.idPrefix + 'sequenceInfo"></div>'),
-						$title = $('<h4 id="' + lightcase.settings.idPrefix + 'title"></h4>'),
-						$caption = $('<p id="' + lightcase.settings.idPrefix + 'caption"></p>')
+					_self.objects.info.append(
+						_self.objects.sequenceInfo = $('<div id="' + _self.settings.idPrefix + 'sequenceInfo"></div>'),
+						_self.objects.title = $('<h4 id="' + _self.settings.idPrefix + 'title"></h4>'),
+						_self.objects.caption = $('<p id="' + _self.settings.idPrefix + 'caption"></p>')
 					);
 				},
 				onInit: {},
@@ -162,17 +166,17 @@
 			}, options);
 
 			// Call onInit hook functions
-			lightcase.callHooks(lightcase.settings.onInit);
+			_self.callHooks(_self.settings.onInit);
 
-			lightcase.objectData = lightcase.getObjectData(this);
+			_self.objectData = _self.getObjectData(this);
 
-			lightcase.cacheScrollPosition();
-			lightcase.watchScrollInteraction();
+			_self.cacheScrollPosition();
+			_self.watchScrollInteraction();
 
-			lightcase.addElements();
-			lightcase.lightcaseOpen();
+			_self.addElements();
+			_self.open();
 
-			lightcase.dimensions = lightcase.getDimensions();
+			_self.dimensions = _self.getDimensions();
 		},
 
 		/**
@@ -183,22 +187,22 @@
 		 */
 		getObjectData: function ($object) {
 		 	var objectData = {
-				title: lightcase.settings.title || $object.attr(lightcase.prefixAttributeName('title')) || $object.attr('title'),
-				caption: lightcase.settings.caption || $object.attr(lightcase.prefixAttributeName('caption')) || $object.children('img').attr('alt'),
-				url: lightcase.verifyDataUrl(lightcase.determineLinkTarget()),
-				requestType: lightcase.settings.ajax.type,
-				requestData: lightcase.settings.ajax.data,
-				requestDataType: lightcase.settings.ajax.dataType,
-				rel: $object.attr(lightcase.determineAttributeSelector()),
-				type: lightcase.settings.type || lightcase.verifyDataType(lightcase.determineLinkTarget()),
-				isPartOfSequence: lightcase.isPartOfSequence($object.attr(lightcase.settings.attr), ':'),
-				isPartOfSequenceWithSlideshow: lightcase.isPartOfSequence($object.attr(lightcase.settings.attr), ':slideshow'),
-				currentIndex: $(lightcase.determineAttributeSelector()).index($object),
-				sequenceLength: $(lightcase.determineAttributeSelector()).length
+				title: _self.settings.title || $object.attr(_self.prefixAttributeName('title')) || $object.attr('title'),
+				caption: _self.settings.caption || $object.attr(_self.prefixAttributeName('caption')) || $object.children('img').attr('alt'),
+				url: _self.verifyDataUrl(_self.determineLinkTarget()),
+				requestType: _self.settings.ajax.type,
+				requestData: _self.settings.ajax.data,
+				requestDataType: _self.settings.ajax.dataType,
+				rel: $object.attr(_self.determineAttributeSelector()),
+				type: _self.settings.type || _self.verifyDataType(_self.determineLinkTarget()),
+				isPartOfSequence: _self.isPartOfSequence($object.attr(_self.settings.attr), ':'),
+				isPartOfSequenceWithSlideshow: _self.isPartOfSequence($object.attr(_self.settings.attr), ':slideshow'),
+				currentIndex: $(_self.determineAttributeSelector()).index($object),
+				sequenceLength: $(_self.determineAttributeSelector()).length
 			};
 
 			// Add sequence info to objectData
-			objectData.sequenceInfo = (objectData.currentIndex + 1) + lightcase.labels['sequenceInfo.of'] + objectData.sequenceLength;
+			objectData.sequenceInfo = (objectData.currentIndex + 1) + _self.labels['sequenceInfo.of'] + objectData.sequenceLength;
 
 			// Add next/prev index
 			objectData.prevIndex = objectData.currentIndex - 1;
@@ -215,7 +219,7 @@
 		 * @return	{string}
 		 */
 		prefixAttributeName: function (name) {
-			return 'data-' + lightcase.settings.attrPrefix + name;
+			return 'data-' + _self.settings.attrPrefix + name;
 		},
 
 		/**
@@ -225,7 +229,7 @@
 		 * @return	{string}
 		 */
 		determineLinkTarget: function () {
-			return lightcase.settings.href || $(lightcase.origin).attr(lightcase.prefixAttributeName('href')) || $(lightcase.origin).attr('href');
+			return _self.settings.href || $(_self.origin).attr(_self.prefixAttributeName('href')) || $(_self.origin).attr('href');
 		},
 
 		/**
@@ -235,25 +239,25 @@
 		 * @return	{string}	selector
 		 */
 		determineAttributeSelector: function () {
-			var	$origin = $(lightcase.origin),
+			var	$origin = $(_self.origin),
 				selector = '';
 
-			if (typeof lightcase.cache.selector !== 'undefined') {
-				selector = lightcase.cache.selector;
-			} else if (lightcase.settings.useCategories === true && $origin.attr(lightcase.prefixAttributeName('categories'))) {
-				var	categories = $origin.attr(lightcase.prefixAttributeName('categories')).split(' ');
+			if (typeof _self.cache.selector !== 'undefined') {
+				selector = _self.cache.selector;
+			} else if (_self.settings.useCategories === true && $origin.attr(_self.prefixAttributeName('categories'))) {
+				var	categories = $origin.attr(_self.prefixAttributeName('categories')).split(' ');
 
 				$.each(categories, function (index, category) {
 					if (index > 0) {
 						selector += ',';
 					}
-					selector += '[' + lightcase.prefixAttributeName('categories') + '~="' + category + '"]';
+					selector += '[' + _self.prefixAttributeName('categories') + '~="' + category + '"]';
 				});
 			} else {
-				selector = '[' + lightcase.settings.attr + '="' + $origin.attr(lightcase.settings.attr) + '"]';
+				selector = '[' + _self.settings.attr + '="' + $origin.attr(_self.settings.attr) + '"]';
 			}
 
-			lightcase.cache.selector = selector;
+			_self.cache.selector = selector;
 
 			return selector;
 		},
@@ -266,7 +270,7 @@
 		 * @return	{boolean}
 		 */
 		isPartOfSequence: function (rel, expression) {
-			var getSimilarLinks = $('[' + lightcase.settings.attr + '="' + rel + '"]'),
+			var getSimilarLinks = $('[' + _self.settings.attr + '="' + rel + '"]'),
 				regexp = new RegExp(expression);
 
 			return (regexp.test(rel) && getSimilarLinks.length > 1);
@@ -278,7 +282,7 @@
 		 * @return	{boolean}
 		 */
 		isSlideshowEnabled: function () {
-			return (lightcase.objectData.isPartOfSequence && (lightcase.settings.slideshow === true || lightcase.objectData.isPartOfSequenceWithSlideshow === true));
+			return (_self.objectData.isPartOfSequence && (_self.settings.slideshow === true || _self.objectData.isPartOfSequenceWithSlideshow === true));
 		},
 
 		/**
@@ -287,11 +291,11 @@
 		 * @return	{void}
 		 */
 		loadContent: function () {
-			if (lightcase.cache.originalObject) {
-				lightcase.restoreObject();
+			if (_self.cache.originalObject) {
+				_self.restoreObject();
 			}
-			
-			lightcase.createObject();
+
+			_self.createObject();
 		},
 
 		/**
@@ -303,65 +307,65 @@
 			var $object;
 
 			// Create object
-			switch (lightcase.objectData.type) {
+			switch (_self.objectData.type) {
 				case 'image':
 					$object = $(new Image());
 					$object.attr({
 						// The time expression is required to prevent the binding of an image load
-						'src': lightcase.objectData.url,
-						'alt': lightcase.objectData.title
+						'src': _self.objectData.url,
+						'alt': _self.objectData.title
 					});
 					break;
 				case 'inline':
-					$object = $('<div class="' + lightcase.settings.classPrefix + 'inlineWrap"></div>');
-					$object.html(lightcase.cloneObject($(lightcase.objectData.url)));
+					$object = $('<div class="' + _self.settings.classPrefix + 'inlineWrap"></div>');
+					$object.html(_self.cloneObject($(_self.objectData.url)));
 
-					// Add custom attributes from lightcase.settings
-					$.each(lightcase.settings.inline, function (name, value) {
-						$object.attr(lightcase.prefixAttributeName(name), value);
+					// Add custom attributes from _self.settings
+					$.each(_self.settings.inline, function (name, value) {
+						$object.attr(_self.prefixAttributeName(name), value);
 					});
 					break;
 				case 'ajax':
-					$object = $('<div class="' + lightcase.settings.classPrefix + 'inlineWrap"></div>');
+					$object = $('<div class="' + _self.settings.classPrefix + 'inlineWrap"></div>');
 
-					// Add custom attributes from lightcase.settings
-					$.each(lightcase.settings.ajax, function (name, value) {
+					// Add custom attributes from _self.settings
+					$.each(_self.settings.ajax, function (name, value) {
 						if (name !== 'data') {
-							$object.attr(lightcase.prefixAttributeName(name), value);
+							$object.attr(_self.prefixAttributeName(name), value);
 						}
 					});
 					break;
 				case 'flash':
-					$object = $('<embed src="' + lightcase.objectData.url + '" type="application/x-shockwave-flash"></embed>');
+					$object = $('<embed src="' + _self.objectData.url + '" type="application/x-shockwave-flash"></embed>');
 
-					// Add custom attributes from lightcase.settings
-					$.each(lightcase.settings.flash, function (name, value) {
+					// Add custom attributes from _self.settings
+					$.each(_self.settings.flash, function (name, value) {
 						$object.attr(name, value);
 					});
 					break;
 				case 'video':
 					$object = $('<video></video>');
-					$object.attr('src', lightcase.objectData.url);
+					$object.attr('src', _self.objectData.url);
 
-					// Add custom attributes from lightcase.settings
-					$.each(lightcase.settings.video, function (name, value) {
+					// Add custom attributes from _self.settings
+					$.each(_self.settings.video, function (name, value) {
 						$object.attr(name, value);
 					});
 					break;
 				default :
 					$object = $('<iframe></iframe>');
 					$object.attr({
-						'src': lightcase.objectData.url
+						'src': _self.objectData.url
 					});
 
-					// Add custom attributes from lightcase.settings
-					$.each(lightcase.settings.iframe, function (name, value) {
+					// Add custom attributes from _self.settings
+					$.each(_self.settings.iframe, function (name, value) {
 						$object.attr(name, value);
 					});
 			}
 
-			lightcase.addObject($object);
-			lightcase.loadObject($object);
+			_self.addObject($object);
+			_self.loadObject($object);
 		},
 
 		/**
@@ -372,39 +376,39 @@
 		 */
 		addObject: function ($object) {
 			// Add object to content holder
-			$contentInner.html($object);
+			_self.objects.contentInner.html($object);
 
 			// Start loading
-			lightcase.loading('start');
+			_self.loading('start');
 
 			// Call onStart hook functions
-			lightcase.callHooks(lightcase.settings.onStart);
-			
+			_self.callHooks(_self.settings.onStart);
+
 			// Call hook function on initialization
 
 			// Add sequenceInfo to the content holder or hide if its empty
-			if (lightcase.settings.showSequenceInfo === true && lightcase.objectData.isPartOfSequence) {
-				$sequenceInfo.html(lightcase.objectData.sequenceInfo);
-				$sequenceInfo.show();
+			if (_self.settings.showSequenceInfo === true && _self.objectData.isPartOfSequence) {
+				_self.objects.sequenceInfo.html(_self.objectData.sequenceInfo);
+				_self.objects.sequenceInfo.show();
 			} else {
-				$sequenceInfo.empty();
-				$sequenceInfo.hide();
+				_self.objects.sequenceInfo.empty();
+				_self.objects.sequenceInfo.hide();
 			}
 			// Add title to the content holder or hide if its empty
-			if (lightcase.settings.showTitle === true && lightcase.objectData.title !== undefined && lightcase.objectData.title !== '') {
-				$title.html(lightcase.objectData.title);
-				$title.show();
+			if (_self.settings.showTitle === true && _self.objectData.title !== undefined && _self.objectData.title !== '') {
+				_self.objects.title.html(_self.objectData.title);
+				_self.objects.title.show();
 			} else {
-				$title.empty();
-				$title.hide();
+				_self.objects.title.empty();
+				_self.objects.title.hide();
 			}
 			// Add caption to the content holder or hide if its empty
-			if (lightcase.settings.showCaption === true && lightcase.objectData.caption !== undefined && lightcase.objectData.caption !== '') {
-				$caption.html(lightcase.objectData.caption);
-				$caption.show();
+			if (_self.settings.showCaption === true && _self.objectData.caption !== undefined && _self.objectData.caption !== '') {
+				_self.objects.caption.html(_self.objectData.caption);
+				_self.objects.caption.show();
 			} else {
-				$caption.empty();
-				$caption.hide();
+				_self.objects.caption.empty();
+				_self.objects.caption.hide();
 			}
 		},
 
@@ -416,56 +420,56 @@
 		 */
 		loadObject: function ($object) {
 			// Load the object
-			switch (lightcase.objectData.type) {
+			switch (_self.objectData.type) {
 				case 'inline':
-					if ($(lightcase.objectData.url)) {
-						lightcase.showContent($object);
+					if ($(_self.objectData.url)) {
+						_self.showContent($object);
 					} else {
-						lightcase.error();
+						_self.error();
 					}
 					break;
 				case 'ajax':
 					$.ajax(
-						$.extend({}, lightcase.settings.ajax, {
-							url: lightcase.objectData.url,
-							type: lightcase.objectData.requestType,
-							dataType: lightcase.objectData.requestDataType,
-							data: lightcase.objectData.requestData,
+						$.extend({}, _self.settings.ajax, {
+							url: _self.objectData.url,
+							type: _self.objectData.requestType,
+							dataType: _self.objectData.requestDataType,
+							data: _self.objectData.requestData,
 							success: function (data, textStatus, jqXHR) {
 								// Unserialize if data is transferred as json
-								if (lightcase.objectData.requestDataType === 'json') {
-									lightcase.objectData.data = data;
+								if (_self.objectData.requestDataType === 'json') {
+									_self.objectData.data = data;
 								} else {
 									$object.html(data);
 								}
-								lightcase.showContent($object);
+								_self.showContent($object);
 							},
 							error: function (jqXHR, textStatus, errorThrown) {
-								lightcase.error();
+								_self.error();
 							}
 						})
 					);
 					break;
 				case 'flash':
-					lightcase.showContent($object);
+					_self.showContent($object);
 					break;
 				case 'video':
-					if (typeof($object.get(0).canPlayType) === 'function' || $case.find('video').length === 0) {
-						lightcase.showContent($object);
+					if (typeof($object.get(0).canPlayType) === 'function' || _self.objects.case.find('video').length === 0) {
+						_self.showContent($object);
 					} else {
-						lightcase.error();
+						_self.error();
 					}
 					break;
 				default:
-					if (lightcase.objectData.url) {
+					if (_self.objectData.url) {
 						$object.load(function () {
-							lightcase.showContent($object);
+							_self.showContent($object);
 						});
 						$object.error(function () {
-							lightcase.error();
+							_self.error();
 						});
 					} else {
-						lightcase.error();
+						_self.error();
 					}
 			}
 		},
@@ -476,13 +480,13 @@
 		 * @return	{void}
 		 */
 		error: function () {
-			lightcase.objectData.type = 'error';
-			var $object = $('<div class="' + lightcase.settings.classPrefix + 'inlineWrap"></div>');
+			_self.objectData.type = 'error';
+			var $object = $('<div class="' + _self.settings.classPrefix + 'inlineWrap"></div>');
 
-			$object.html(lightcase.settings.errorMessage);
-			$contentInner.html($object);
+			$object.html(_self.settings.errorMessage);
+			_self.objects.contentInner.html($object);
 
-			lightcase.showContent($contentInner);
+			_self.showContent(_self.objects.contentInner);
 		},
 
 		/**
@@ -492,32 +496,32 @@
 		 * @return	{void}
 		 */
 		calculateDimensions: function ($object) {
-			lightcase.cleanupDimensions();
+			_self.cleanupDimensions();
 
 			// Set default dimensions
 			var dimensions = {
-				objectWidth: $object.attr('width') ? $object.attr('width') : $object.attr(lightcase.prefixAttributeName('width')),
-				objectHeight: $object.attr('height') ? $object.attr('height') : $object.attr(lightcase.prefixAttributeName('height'))
+				objectWidth: $object.attr('width') ? $object.attr('width') : $object.attr(_self.prefixAttributeName('width')),
+				objectHeight: $object.attr('height') ? $object.attr('height') : $object.attr(_self.prefixAttributeName('height'))
 			};
 
-			if (!lightcase.settings.disableShrink) {
+			if (!_self.settings.disableShrink) {
 				// Add calculated maximum width/height to dimensions
-				dimensions.maxWidth = parseInt(lightcase.dimensions.windowWidth * lightcase.settings.shrinkFactor);
-				dimensions.maxHeight = parseInt(lightcase.dimensions.windowHeight * lightcase.settings.shrinkFactor);
+				dimensions.maxWidth = parseInt(_self.dimensions.windowWidth * _self.settings.shrinkFactor);
+				dimensions.maxHeight = parseInt(_self.dimensions.windowHeight * _self.settings.shrinkFactor);
 
 				// If the auto calculated maxWidth/maxHeight greather than the userdefined one, use that.
-				if (dimensions.maxWidth > lightcase.settings.maxWidth) {
-					dimensions.maxWidth = lightcase.settings.maxWidth;
+				if (dimensions.maxWidth > _self.settings.maxWidth) {
+					dimensions.maxWidth = _self.settings.maxWidth;
 				}
-				if (dimensions.maxHeight > lightcase.settings.maxHeight) {
-					dimensions.maxHeight = lightcase.settings.maxHeight;
+				if (dimensions.maxHeight > _self.settings.maxHeight) {
+					dimensions.maxHeight = _self.settings.maxHeight;
 				}
 
 				// Calculate the difference between screen width/height and image width/height
 				dimensions.differenceWidthAsPercent = parseInt(100 / dimensions.maxWidth * dimensions.objectWidth);
 				dimensions.differenceHeightAsPercent = parseInt(100 / dimensions.maxHeight * dimensions.objectHeight);
-				
-				switch (lightcase.objectData.type) {
+
+				switch (_self.objectData.type) {
 					case 'image':
 					case 'flash':
 					case 'video':
@@ -542,16 +546,16 @@
 
 						break;
 					default:
-						if ((isNaN(dimensions.objectWidth) || dimensions.objectWidth > dimensions.maxWidth) && !lightcase.settings.forceWidth) {
+						if ((isNaN(dimensions.objectWidth) || dimensions.objectWidth > dimensions.maxWidth) && !_self.settings.forceWidth) {
 							dimensions.objectWidth = dimensions.maxWidth;
 						}
-						if (((isNaN(dimensions.objectHeight) && dimensions.objectHeight !== 'auto') || dimensions.objectHeight > dimensions.maxHeight) && !lightcase.settings.forceHeight) {
+						if (((isNaN(dimensions.objectHeight) && dimensions.objectHeight !== 'auto') || dimensions.objectHeight > dimensions.maxHeight) && !_self.settings.forceHeight) {
 							dimensions.objectHeight = dimensions.maxHeight;
 						}
 				}
 			}
 
-			lightcase.adjustDimensions($object, dimensions);
+			_self.adjustDimensions($object, dimensions);
 		},
 
 		/**
@@ -566,24 +570,24 @@
 			$object.css({
 				'width': dimensions.objectWidth,
 				'height': dimensions.objectHeight,
-				'max-width': $object.attr(lightcase.prefixAttributeName('max-width')) ? $object.attr(lightcase.prefixAttributeName('max-width')) : dimensions.maxWidth,
-				'max-height': $object.attr(lightcase.prefixAttributeName('max-height')) ? $object.attr(lightcase.prefixAttributeName('max-height')) : dimensions.maxHeight
+				'max-width': $object.attr(_self.prefixAttributeName('max-width')) ? $object.attr(_self.prefixAttributeName('max-width')) : dimensions.maxWidth,
+				'max-height': $object.attr(_self.prefixAttributeName('max-height')) ? $object.attr(_self.prefixAttributeName('max-height')) : dimensions.maxHeight
 			});
-			
-			$contentInner.css({
+
+			_self.objects.contentInner.css({
 				'width': $object.outerWidth(),
 				'height': $object.outerHeight(),
 				'max-width': '100%'
 			});
 
-			$case.css({
-				'width': $contentInner.outerWidth()
+			_self.objects.case.css({
+				'width': _self.objects.contentInner.outerWidth()
 			});
 
 			// Adjust margin
-			$case.css({
-				'margin-top': parseInt(-($case.outerHeight() / 2)),
-				'margin-left': parseInt(-($case.outerWidth() / 2))
+			_self.objects.case.css({
+				'margin-top': parseInt(-(_self.objects.case.outerHeight() / 2)),
+				'margin-left': parseInt(-(_self.objects.case.outerWidth() / 2))
 			});
 		},
 
@@ -595,11 +599,11 @@
 		 */
 		loading: function (process) {
 			if (process === 'start') {
-				$case.addClass(lightcase.settings.classPrefix + 'loading');
-				$loading.show();
+				_self.objects.case.addClass(_self.settings.classPrefix + 'loading');
+				_self.objects.loading.show();
 			} else if (process === 'end') {
-				$case.removeClass(lightcase.settings.classPrefix + 'loading');
-				$loading.hide();
+				_self.objects.case.removeClass(_self.settings.classPrefix + 'loading');
+				_self.objects.loading.hide();
 			}
 		},
 
@@ -642,8 +646,8 @@
 		 * @return	{string|boolean}	Array key if expression matched, else false
 		 */
 		verifyDataType: function (url) {
-			var dataUrl = lightcase.verifyDataUrl(url),
-				typeMapping = lightcase.settings.typeMapping;
+			var dataUrl = _self.verifyDataUrl(url),
+				typeMapping = _self.settings.typeMapping;
 
 			// Early abort if dataUrl couldn't be verified
 			if (!dataUrl) {
@@ -681,11 +685,11 @@
 		 * @return	{void}
 		 */
 		addElements: function () {
-			if (typeof($case) !== 'undefined' && $('#' + $case.attr('id')).length) {
+			if (typeof(_self.objects.case) !== 'undefined' && $('#' + _self.objects.case.attr('id')).length) {
 				return;
 			}
 
-			lightcase.settings.markup();
+			_self.settings.markup();
 		},
 
 		/**
@@ -696,41 +700,41 @@
 		 */
 		showContent: function ($object) {
 			// Add data attribute with the object type
-			$case.attr(lightcase.prefixAttributeName('type'), lightcase.objectData.type);
+			_self.objects.case.attr(_self.prefixAttributeName('type'), _self.objectData.type);
 
-			lightcase.cache.object = $object;
-			lightcase.calculateDimensions($object);
+			_self.cache.object = $object;
+			_self.calculateDimensions($object);
 
 			// Call onFinish hook functions
-			lightcase.callHooks(lightcase.settings.onFinish);
+			_self.callHooks(_self.settings.onFinish);
 
-			switch (lightcase.settings.transitionIn) {
+			switch (_self.settings.transitionIn) {
 				case 'scrollTop':
 				case 'scrollRight':
 				case 'scrollBottom':
 				case 'scrollLeft':
 				case 'scrollHorizontal':
 				case 'scrollVertical':
-					lightcase.transition.scroll($case, 'in', lightcase.settings.speedIn);
-					lightcase.transition.fade($contentInner, 'in', lightcase.settings.speedIn);
+					_self.transition.scroll(_self.objects.case, 'in', _self.settings.speedIn);
+					_self.transition.fade(_self.objects.contentInner, 'in', _self.settings.speedIn);
 					break;
 				case 'elastic':
-					if ($case.css('opacity') < 1) {
-						lightcase.transition.zoom($case, 'in', lightcase.settings.speedIn);
-						lightcase.transition.fade($contentInner, 'in', lightcase.settings.speedIn);
+					if (_self.objects.case.css('opacity') < 1) {
+						_self.transition.zoom(_self.objects.case, 'in', _self.settings.speedIn);
+						_self.transition.fade(_self.objects.contentInner, 'in', _self.settings.speedIn);
 					}
 				case 'fade':
 				case 'fadeInline':
-					lightcase.transition.fade($case, 'in', lightcase.settings.speedIn);
-					lightcase.transition.fade($contentInner, 'in', lightcase.settings.speedIn);
+					_self.transition.fade(_self.objects.case, 'in', _self.settings.speedIn);
+					_self.transition.fade(_self.objects.contentInner, 'in', _self.settings.speedIn);
 					break;
 				default:
-					lightcase.transition.fade($case, 'in', 0);
+					_self.transition.fade(_self.objects.case, 'in', 0);
 			}
 
 			// End loading
-			lightcase.loading('end');
-			lightcase.busy = false;
+			_self.loading('end');
+			_self.busy = false;
 		},
 
 		/**
@@ -739,52 +743,52 @@
 		 * @return	{void}
 		 */
 		processContent: function () {
-			lightcase.busy = true;
-			
-			switch (lightcase.settings.transitionOut) {
+			_self.busy = true;
+
+			switch (_self.settings.transitionOut) {
 				case 'scrollTop':
 				case 'scrollRight':
 				case 'scrollBottom':
 				case 'scrollLeft':
 				case 'scrollVertical':
 				case 'scrollHorizontal':
-					if ($case.is(':hidden')) {
-						lightcase.transition.fade($case, 'out', 0, 0, function () {
-							lightcase.loadContent();
+					if (_self.objects.case.is(':hidden')) {
+						_self.transition.fade(_self.objects.case, 'out', 0, 0, function () {
+							_self.loadContent();
 						});
-						lightcase.transition.fade($contentInner, 'out', 0);
+						_self.transition.fade(_self.objects.contentInner, 'out', 0);
 					} else {
-						lightcase.transition.scroll($case, 'out', lightcase.settings.speedOut, function () {
-							lightcase.loadContent();
+						_self.transition.scroll(_self.objects.case, 'out', _self.settings.speedOut, function () {
+							_self.loadContent();
 						});
 					}
 					break;
 				case 'fade':
-					if ($case.is(':hidden')) {
-						lightcase.transition.fade($case, 'out', 0, 0, function () {
-							lightcase.loadContent();
+					if (_self.objects.case.is(':hidden')) {
+						_self.transition.fade(_self.objects.case, 'out', 0, 0, function () {
+							_self.loadContent();
 						});
 					} else {
-						lightcase.transition.fade($case, 'out', lightcase.settings.speedOut, 0, function () {
-							lightcase.loadContent();
+						_self.transition.fade(_self.objects.case, 'out', _self.settings.speedOut, 0, function () {
+							_self.loadContent();
 						});
 					}
 					break;
 				case 'fadeInline':
 				case 'elastic':
-					if ($case.is(':hidden')) {
-						lightcase.transition.fade($case, 'out', 0, 0, function () {
-							lightcase.loadContent();
+					if (_self.objects.case.is(':hidden')) {
+						_self.transition.fade(_self.objects.case, 'out', 0, 0, function () {
+							_self.loadContent();
 						});
 					} else {
-						lightcase.transition.fade($contentInner, 'out', lightcase.settings.speedOut, 0, function () {
-							lightcase.loadContent();
+						_self.transition.fade(_self.objects.contentInner, 'out', _self.settings.speedOut, 0, function () {
+							_self.loadContent();
 						});
 					}
 					break;
 				default:
-					lightcase.transition.fade($case, 'out', 0, 0, function () {
-						lightcase.loadContent();
+					_self.transition.fade(_self.objects.case, 'out', 0, 0, function () {
+						_self.loadContent();
 					});
 			}
 		},
@@ -795,101 +799,101 @@
 		 * @return	{void}
 		 */
 		handleEvents: function () {
-			lightcase.unbindEvents();
+			_self.unbindEvents();
 
-			$nav.children().not($close).hide();
+			_self.objects.nav.children().not(_self.objects.close).hide();
 
 			// If slideshow is enabled, show play/pause and start timeout.
-			if (lightcase.isSlideshowEnabled()) {
+			if (_self.isSlideshowEnabled()) {
 				// Only start the timeout if slideshow is not pausing
-				if (!$nav.hasClass(lightcase.settings.classPrefix + 'paused')) {
-					lightcase.startTimeout();
+				if (!_self.objects.nav.hasClass(_self.settings.classPrefix + 'paused')) {
+					_self.startTimeout();
 				} else {
-					lightcase.stopTimeout();
+					_self.stopTimeout();
 				}
 			}
 
-			if (lightcase.settings.liveResize) {
-				lightcase.watchResizeInteraction();
+			if (_self.settings.liveResize) {
+				_self.watchResizeInteraction();
 			}
 
-			$close.click(function (event) {
+			_self.objects.close.click(function (event) {
 				event.preventDefault();
-				lightcase.lightcaseClose();
+				_self.close();
 			});
 
-			if (lightcase.settings.closeOnOverlayClick === true) {
-				$overlay.css('cursor', 'pointer').click(function (event) {
+			if (_self.settings.closeOnOverlayClick === true) {
+				_self.objects.overlay.css('cursor', 'pointer').click(function (event) {
 					event.preventDefault();
-					
-					lightcase.lightcaseClose();
+
+					_self.close();
 				});
 			}
 
-			if (lightcase.settings.useKeys === true) {
-				lightcase.addKeyEvents();
+			if (_self.settings.useKeys === true) {
+				_self.addKeyEvents();
 			}
 
-			if (lightcase.objectData.isPartOfSequence) {
-				$nav.attr(lightcase.prefixAttributeName('ispartofsequence'), true);
-				lightcase.nav = lightcase.setNavigation();
+			if (_self.objectData.isPartOfSequence) {
+				_self.objects.nav.attr(_self.prefixAttributeName('ispartofsequence'), true);
+				_self.objects.nav.data('items', _self.setNavigation());
 
-				$prev.click(function (event) {
+				_self.objects.prev.click(function (event) {
 					event.preventDefault();
 
-					if (lightcase.settings.navigateEndless === true || !lightcase.item.isFirst()) {
-						$prev.unbind('click');
-						lightcase.cache.action = 'prev';
-						lightcase.nav.$prevItem.click();
-					
-						if (lightcase.isSlideshowEnabled()) {
-							lightcase.stopTimeout();
+					if (_self.settings.navigateEndless === true || !_self.item.isFirst()) {
+						_self.objects.prev.unbind('click');
+						_self.cache.action = 'prev';
+						_self.objects.nav.data('items').prev.click();
+
+						if (_self.isSlideshowEnabled()) {
+							_self.stopTimeout();
 						}
 					}
 				});
 
-				$next.click(function (event) {
+				_self.objects.next.click(function (event) {
 					event.preventDefault();
 
-					if (lightcase.settings.navigateEndless === true || !lightcase.item.isLast()) {
-						$next.unbind('click');
-						lightcase.cache.action = 'next';
-						lightcase.nav.$nextItem.click();
+					if (_self.settings.navigateEndless === true || !_self.item.isLast()) {
+						_self.objects.next.unbind('click');
+						_self.cache.action = 'next';
+						_self.objects.nav.data('items').next.click();
 
-						if (lightcase.isSlideshowEnabled()) {
-							lightcase.stopTimeout();
+						if (_self.isSlideshowEnabled()) {
+							_self.stopTimeout();
 						}
 					}
 				});
 
-				if (lightcase.isSlideshowEnabled()) {
-					$play.click(function (event) {
+				if (_self.isSlideshowEnabled()) {
+					_self.objects.play.click(function (event) {
 						event.preventDefault();
-						lightcase.startTimeout();
+						_self.startTimeout();
 					});
-					$pause.click(function (event) {
+					_self.objects.pause.click(function (event) {
 						event.preventDefault();
-						lightcase.stopTimeout();
+						_self.stopTimeout();
 					});
 				}
-				
+
 				// Enable swiping if activated
-				if (lightcase.settings.swipe === true) {
+				if (_self.settings.swipe === true) {
 					if ($.isPlainObject($.event.special.swipeleft)) {
-						$case.on('swipeleft', function (event) {
+						_self.objects.case.on('swipeleft', function (event) {
 							event.preventDefault();
-							$next.click();
-							if (lightcase.isSlideshowEnabled()) {
-								lightcase.stopTimeout();
+							_self.objects.next.click();
+							if (_self.isSlideshowEnabled()) {
+								_self.stopTimeout();
 							}
 						});
 					}
 					if ($.isPlainObject($.event.special.swiperight)) {
-						$case.on('swiperight', function (event) {
+						_self.objects.case.on('swiperight', function (event) {
 							event.preventDefault();
-							$prev.click();
-							if (lightcase.isSlideshowEnabled()) {
-								lightcase.stopTimeout();
+							_self.objects.prev.click();
+							if (_self.isSlideshowEnabled()) {
+								_self.stopTimeout();
 							}
 						});
 					}
@@ -905,25 +909,25 @@
 		addKeyEvents: function () {
 			$(document).bind('keyup.lightcase', function (event) {
 				// Do nothing if lightcase is in process
-				if (lightcase.busy) {
+				if (_self.busy) {
 					return;
 				}
 
 				switch (event.keyCode) {
 					// Escape key
 					case 27:
-						$close.click();
+						_self.objects.close.click();
 						break;
 					// Backward key
 					case 37:
-						if (lightcase.objectData.isPartOfSequence) {
-							$prev.click();
+						if (_self.objectData.isPartOfSequence) {
+							_self.objects.prev.click();
 						}
 						break;
 					// Forward key
 					case 39:
-						if (lightcase.objectData.isPartOfSequence) {
-							$next.click();
+						if (_self.objectData.isPartOfSequence) {
+							_self.objects.next.click();
 						}
 						break;
 				}
@@ -936,15 +940,15 @@
 		 * @return	{void}
 		 */
 		startTimeout: function () {
-			$play.hide();
-			$pause.show();
-			
-			lightcase.cache.action = 'next';
-			$nav.removeClass(lightcase.settings.classPrefix + 'paused');
+			_self.objects.play.hide();
+			_self.objects.pause.show();
 
-			lightcase.timeout = setTimeout(function () {
-				lightcase.nav.$nextItem.click();
-			}, lightcase.settings.timeout);
+			_self.cache.action = 'next';
+			_self.objects.nav.removeClass(_self.settings.classPrefix + 'paused');
+
+			_self.timeout = setTimeout(function () {
+				_self.objects.nav.data('items').next.click();
+			}, _self.settings.timeout);
 		},
 
 		/**
@@ -953,12 +957,12 @@
 		 * @return	{void}
 		 */
 		stopTimeout: function () {
-			$play.show();
-			$pause.hide();
+			_self.objects.play.show();
+			_self.objects.pause.hide();
 
-			$nav.addClass(lightcase.settings.classPrefix + 'paused');
+			_self.objects.nav.addClass(_self.settings.classPrefix + 'paused');
 
-			clearTimeout(lightcase.timeout);
+			clearTimeout(_self.timeout);
 		},
 
 		/**
@@ -967,27 +971,27 @@
 		 * @return	{object}	items
 		 */
 		setNavigation: function () {
-			var $links = $((lightcase.cache.selector || lightcase.settings.attr)),
-				sequenceLength = lightcase.objectData.sequenceLength - 1,
+			var $links = $((_self.cache.selector || _self.settings.attr)),
+				sequenceLength = _self.objectData.sequenceLength - 1,
 				items = {
-					$prevItem: $links.eq(lightcase.objectData.prevIndex),
-					$nextItem: $links.eq(lightcase.objectData.nextIndex)
+					prev: $links.eq(_self.objectData.prevIndex),
+					next: $links.eq(_self.objectData.nextIndex)
 				};
 
-			if (lightcase.objectData.currentIndex > 0) {
-				$prev.show();
+			if (_self.objectData.currentIndex > 0) {
+				_self.objects.prev.show();
 			} else {
-				items.$prevItem = $links.eq(sequenceLength);
+				items.prevItem = $links.eq(sequenceLength);
 			}
-			if (lightcase.objectData.nextIndex <= sequenceLength) {
-				$next.show();
+			if (_self.objectData.nextIndex <= sequenceLength) {
+				_self.objects.next.show();
 			} else {
-				items.$nextItem = $links.eq(0);
+				items.nextItem = $links.eq(0);
 			}
 
-			if (lightcase.settings.navigateEndless === true) {
-				$prev.show();
-				$next.show();
+			if (_self.settings.navigateEndless === true) {
+				_self.objects.prev.show();
+				_self.objects.next.show();
 			}
 
 			return items;
@@ -1004,7 +1008,7 @@
 			 * @return	{boolean}
 			 */
 			isFirst: function () {
-				return (lightcase.objectData.currentIndex === 0);
+				return (_self.objectData.currentIndex === 0);
 			},
 
 			/**
@@ -1013,7 +1017,7 @@
 			 * @return	{boolean}
 			 */
 			isLast: function () {
-				return (lightcase.objectData.currentIndex === (lightcase.objectData.sequenceLength - 1));
+				return (_self.objectData.currentIndex === (_self.objectData.sequenceLength - 1));
 			}
 		},
 
@@ -1029,8 +1033,8 @@
 
 			// If element is hidden, cache the object and remove
 			if ($object.is(':hidden')) {
-				lightcase.cacheObjectData($object);
-				$object.attr('id', lightcase.settings.idPrefix + 'temp-' + objectId).empty();
+				_self.cacheObjectData($object);
+				$object.attr('id', _self.settings.idPrefix + 'temp-' + objectId).empty();
 			} else {
 				// Prevent duplicated id's
 				$clone.removeAttr('id');
@@ -1046,7 +1050,7 @@
 		 */
 		isMobileDevice: function () {
 			var deviceAgent = navigator.userAgent.toLowerCase(),
-				agentId = deviceAgent.match(lightcase.settings.mobileMatchExpression);
+				agentId = deviceAgent.match(_self.settings.mobileMatchExpression);
 
 			return agentId ? true : false;
 		},
@@ -1069,7 +1073,7 @@
 
 			for (var key in transitionMapping) {
 				if (transitionMapping.hasOwnProperty(key) && key in body.style) {
-					lightcase.support.transition = transitionMapping[key];
+					_self.support.transition = transitionMapping[key];
 					isTransitionSupported = true;
 				}
 			}
@@ -1098,25 +1102,25 @@
 					startOpacity = $object.css('opacity'),
 					endTransition = {},
 					endOpacity = opacity ? opacity: isInTransition ? 1 : 0;
-				
-				if (!lightcase.open && isInTransition) return;
-					
+
+				if (!_self.isOpen && isInTransition) return;
+
 				startTransition['opacity'] = startOpacity;
 				endTransition['opacity'] = endOpacity;
 
 				$object.css(startTransition).show();
 
 				// Css transition
-				if (lightcase.support.transitions) {
-					endTransition[lightcase.support.transition + 'transition'] = speed + 'ms ease';
+				if (_self.support.transitions) {
+					endTransition[_self.support.transition + 'transition'] = speed + 'ms ease';
 
 					setTimeout(function () {
 						$object.css(endTransition);
 
 						setTimeout(function () {
-							$object.css(lightcase.support.transition + 'transition', '');
+							$object.css(_self.support.transition + 'transition', '');
 
-							if (callback && (lightcase.open || !isInTransition)) {
+							if (callback && (_self.isOpen || !isInTransition)) {
 								callback();
 							}
 						}, speed);
@@ -1139,7 +1143,7 @@
 			 */
 			scroll: function ($object, type, speed, callback) {
 				var isInTransition = type === 'in',
-					transition = isInTransition ? lightcase.settings.transitionIn : lightcase.settings.transitionOut,
+					transition = isInTransition ? _self.settings.transitionIn : _self.settings.transitionOut,
 					direction = 'left',
 					startTransition = {},
 					startOpacity = isInTransition ? 0 : 1,
@@ -1147,8 +1151,8 @@
 					endTransition = {},
 					endOpacity = isInTransition ? 1 : 0,
 					endOffset = isInTransition ? '50%' : '-50%';
-				
-				if (!lightcase.open && isInTransition) return;
+
+				if (!_self.isOpen && isInTransition) return;
 
 				switch (transition) {
 					case 'scrollTop':
@@ -1163,7 +1167,7 @@
 						startOffset = isInTransition ? '150%' : '50%';
 						endOffset = isInTransition ? '50%' : '150%';
 						break;
-					case 'scrollHorizontal': 
+					case 'scrollHorizontal':
 						startOffset = isInTransition ? '150%' : '50%';
 						endOffset = isInTransition ? '50%' : '-50%';
 						break;
@@ -1174,13 +1178,13 @@
 						break;
 				}
 
-				if (lightcase.cache.action === 'prev') {
+				if (_self.cache.action === 'prev') {
 					switch (transition) {
-						case 'scrollHorizontal': 
+						case 'scrollHorizontal':
 							startOffset = isInTransition ? '-50%' : '50%';
 							endOffset = isInTransition ? '50%' : '150%';
 							break;
-						case 'scrollVertical': 
+						case 'scrollVertical':
 							startOffset = isInTransition ? '150%' : '50%';
 							endOffset = isInTransition ? '50%' : '-50%';
 							break;
@@ -1196,16 +1200,16 @@
 				$object.css(startTransition).show();
 
 				// Css transition
-				if (lightcase.support.transitions) {
-					endTransition[lightcase.support.transition + 'transition'] = speed + 'ms ease';
+				if (_self.support.transitions) {
+					endTransition[_self.support.transition + 'transition'] = speed + 'ms ease';
 
 					setTimeout(function () {
 						$object.css(endTransition);
 
 						setTimeout(function () {
-							$object.css(lightcase.support.transition + 'transition', '');
+							$object.css(_self.support.transition + 'transition', '');
 
-							if (callback && (lightcase.open || !isInTransition)) {
+							if (callback && (_self.isOpen || !isInTransition)) {
 								callback();
 							}
 						}, speed);
@@ -1235,28 +1239,28 @@
 					endOpacity = isInTransition ? 1 : 0,
 					endScale = isInTransition ? 'scale(1)' : 'scale(0.75)';
 
-				if (!lightcase.open && isInTransition) return;
+				if (!_self.isOpen && isInTransition) return;
 
 				startTransition['opacity'] = startOpacity;
-				startTransition[lightcase.support.transition + 'transform'] = startScale;
+				startTransition[_self.support.transition + 'transform'] = startScale;
 
 				endTransition['opacity'] = endOpacity;
-					
+
 				$object.css(startTransition).show();
 
 				// Css transition
-				if (lightcase.support.transitions) {
-					endTransition[lightcase.support.transition + 'transform'] = endScale;
-					endTransition[lightcase.support.transition + 'transition'] = speed + 'ms ease';
-					
+				if (_self.support.transitions) {
+					endTransition[_self.support.transition + 'transform'] = endScale;
+					endTransition[_self.support.transition + 'transition'] = speed + 'ms ease';
+
 					setTimeout(function () {
 						$object.css(endTransition);
-					
+
 						setTimeout(function () {
-							$object.css(lightcase.support.transition + 'transform', '');
-							$object.css(lightcase.support.transition + 'transition', '');
-							
-							if (callback && (lightcase.open || !isInTransition)) {
+							$object.css(_self.support.transition + 'transform', '');
+							$object.css(_self.support.transition + 'transition', '');
+
+							if (callback && (_self.isOpen || !isInTransition)) {
 								callback();
 							}
 						}, speed);
@@ -1279,7 +1283,7 @@
 			if (typeof(hooks) === 'object') {
 				$.each(hooks, function(index, hook) {
 					if (typeof(hook) === 'function') {
-						hook.call(lightcase.origin);
+						hook.call(_self.origin);
 					}
 				});
 			}
@@ -1297,7 +1301,7 @@
 				content: $object.html()
 			});
 
-			lightcase.cache.originalObject = $object;
+			_self.cache.originalObject = $object;
 		},
 
 		/**
@@ -1306,10 +1310,10 @@
 		 * @return	void
 		 */
 		restoreObject: function () {
-			var $object = $('[id^="' + lightcase.settings.idPrefix + 'temp-"]');
-		
-			$object.attr('id', $.data(lightcase.cache.originalObject, 'cache').id);
-			$object.html($.data(lightcase.cache.originalObject, 'cache').content);
+			var $object = $('[id^="' + _self.settings.idPrefix + 'temp-"]');
+
+			$object.attr('id', $.data(_self.cache.originalObject, 'cache').id);
+			$object.html($.data(_self.cache.originalObject, 'cache').content);
 		},
 
 		/**
@@ -1319,14 +1323,14 @@
 		 * @return	{void}
 		 */
 		resize: function () {
-			if (!lightcase.open) return;
+			if (!_self.isOpen) return;
 
-			if (lightcase.isSlideshowEnabled()) {
-				lightcase.stopTimeout();
+			if (_self.isSlideshowEnabled()) {
+				_self.stopTimeout();
 			}
 
-			lightcase.dimensions = lightcase.getDimensions();
-			lightcase.calculateDimensions(lightcase.cache.object);
+			_self.dimensions = _self.getDimensions();
+			_self.calculateDimensions(_self.cache.object);
 		},
 
 		/**
@@ -1342,13 +1346,13 @@
 					'left':  $window.scrollLeft()
 				};
 
-			lightcase.cache.scrollPosition = lightcase.cache.scrollPosition || {};
+			_self.cache.scrollPosition = _self.cache.scrollPosition || {};
 
 			if ($document.width() > $window.width()) {
-				lightcase.cache.scrollPosition.left = offset.left;
+				_self.cache.scrollPosition.left = offset.left;
 			}
 			if ($document.height() > $window.height()) {
-				lightcase.cache.scrollPosition.top = offset.top;
+				_self.cache.scrollPosition.top = offset.top;
 			}
 		},
 
@@ -1358,16 +1362,16 @@
 		 * @return	{void}
 		 */
 		watchResizeInteraction: function () {
-			$(window).resize(lightcase.resize);
+			$(window).resize(_self.resize);
 		},
-		
+
 		/**
-		 * Stop watching any resize interaction related to lightcase.
+		 * Stop watching any resize interaction related to _self.
 		 *
 		 * @return	{void}
 		 */
 		unwatchResizeInteraction: function () {
-			$(window).off('resize', lightcase.resize);
+			$(window).off('resize', _self.resize);
 		},
 
 		/**
@@ -1376,18 +1380,18 @@
 		 * @return	{void}
 		 */
 		watchScrollInteraction: function () {
-			$(window).scroll(lightcase.cacheScrollPosition);
+			$(window).scroll(_self.cacheScrollPosition);
 		},
 
 		/**
-		 * Stop watching any scroll interaction related to lightcase.
+		 * Stop watching any scroll interaction related to _self.
 		 *
 		 * @return	{void}
 		 */
 		unwatchScrollInteraction: function () {
-			$(window).off('scroll', lightcase.cacheScrollPosition);
+			$(window).off('scroll', _self.cacheScrollPosition);
 		},
-		
+
 		/**
 		 * Restores to the original scoll position before
 		 * lightcase got initialized.
@@ -1396,8 +1400,8 @@
 		 */
 		restoreScrollPosition: function () {
 			$(window)
-				.scrollTop(parseInt(lightcase.cache.scrollPosition.top))
-				.scrollLeft(parseInt(lightcase.cache.scrollPosition.left))
+				.scrollTop(parseInt(_self.cache.scrollPosition.top))
+				.scrollLeft(parseInt(_self.cache.scrollPosition.left))
 				.resize();
 		},
 
@@ -1407,10 +1411,10 @@
 		 * @return	{void}
 		 */
 		switchToFullScreenMode: function () {
-			lightcase.settings.shrinkFactor = 1;
-			lightcase.settings.overlayOpacity = 1;
+			_self.settings.shrinkFactor = 1;
+			_self.settings.overlayOpacity = 1;
 
-			$('html').addClass(lightcase.settings.classPrefix + 'fullScreenMode');
+			$('html').addClass(_self.settings.classPrefix + 'fullScreenMode');
 		},
 
 		/**
@@ -1418,27 +1422,27 @@
 		 *
 		 * @return	{void}
 		 */
-		lightcaseOpen: function () {
-			lightcase.open = true;
+		open: function () {
+			_self.isOpen = true;
 
-			lightcase.support.transitions = lightcase.settings.cssTransitions ? lightcase.isTransitionSupported() : false;
-			lightcase.support.mobileDevice = lightcase.isMobileDevice();
+			_self.support.transitions = _self.settings.cssTransitions ? _self.isTransitionSupported() : false;
+			_self.support.mobileDevice = _self.isMobileDevice();
 
-			if (lightcase.support.mobileDevice) {
-				$('html').addClass(lightcase.settings.classPrefix + 'isMobileDevice');
+			if (_self.support.mobileDevice) {
+				$('html').addClass(_self.settings.classPrefix + 'isMobileDevice');
 
-				if (lightcase.settings.fullScreenModeForMobile) {
-					lightcase.switchToFullScreenMode();
+				if (_self.settings.fullScreenModeForMobile) {
+					_self.switchToFullScreenMode();
 				}
 			}
-			if (!lightcase.settings.transitionIn) {
-				lightcase.settings.transitionIn = lightcase.settings.transition;
+			if (!_self.settings.transitionIn) {
+				_self.settings.transitionIn = _self.settings.transition;
 			}
-			if (!lightcase.settings.transitionOut) {
-				lightcase.settings.transitionOut = lightcase.settings.transition;
+			if (!_self.settings.transitionOut) {
+				_self.settings.transitionOut = _self.settings.transition;
 			}
 
-			switch (lightcase.settings.transitionIn) {
+			switch (_self.settings.transitionIn) {
 				case 'fade':
 				case 'fadeInline':
 				case 'elastic':
@@ -1448,28 +1452,28 @@
 				case 'scrollLeft':
 				case 'scrollVertical':
 				case 'scrollHorizontal':
-					if ($case.is(':hidden')) {
-						$close.css('opacity', 0);
-						$overlay.css('opacity', 0);
-						$case.css('opacity', 0);
-						$contentInner.css('opacity', 0);
+					if (_self.objects.case.is(':hidden')) {
+						_self.objects.close.css('opacity', 0);
+						_self.objects.overlay.css('opacity', 0);
+						_self.objects.case.css('opacity', 0);
+						_self.objects.contentInner.css('opacity', 0);
 					}
-					lightcase.transition.fade($overlay, 'in', lightcase.settings.speedIn, lightcase.settings.overlayOpacity, function () {
-						lightcase.transition.fade($close, 'in', lightcase.settings.speedIn);
-						lightcase.handleEvents();
-						lightcase.processContent();
+					_self.transition.fade(_self.objects.overlay, 'in', _self.settings.speedIn, _self.settings.overlayOpacity, function () {
+						_self.transition.fade(_self.objects.close, 'in', _self.settings.speedIn);
+						_self.handleEvents();
+						_self.processContent();
 					});
 					break;
 				default:
-					lightcase.transition.fade($overlay, 'in', 0, lightcase.settings.overlayOpacity, function () {
-						lightcase.transition.fade($close, 'in', 0);
-						lightcase.handleEvents();
-						lightcase.processContent();
+					_self.transition.fade(_self.objects.overlay, 'in', 0, _self.settings.overlayOpacity, function () {
+						_self.transition.fade(_self.objects.close, 'in', 0);
+						_self.handleEvents();
+						_self.processContent();
 					});
 			}
 
-			$('html').addClass(lightcase.settings.classPrefix + 'open');
-			$case.attr('aria-hidden', 'false');
+			$('html').addClass(_self.settings.classPrefix + 'open');
+			_self.objects.case.attr('aria-hidden', 'false');
 		},
 
 		/**
@@ -1477,32 +1481,32 @@
 		 *
 		 * @return	{void}
 		 */
-		lightcaseClose: function () {
-			lightcase.open = false;
+		close: function () {
+			_self.isOpen = false;
 
-			if (lightcase.isSlideshowEnabled()) {
-				lightcase.stopTimeout();
-				$nav.removeClass(lightcase.settings.classPrefix + 'paused');
+			if (_self.isSlideshowEnabled()) {
+				_self.stopTimeout();
+				_self.objects.nav.removeClass(_self.settings.classPrefix + 'paused');
 			}
 
-			$loading.hide();
+			_self.objects.loading.hide();
 
-			lightcase.unbindEvents();
+			_self.unbindEvents();
 
-			lightcase.unwatchResizeInteraction();
-			lightcase.unwatchScrollInteraction();
+			_self.unwatchResizeInteraction();
+			_self.unwatchScrollInteraction();
 
-			$('html').removeClass(lightcase.settings.classPrefix + 'open');
-			$case.attr('aria-hidden', 'true');
+			$('html').removeClass(_self.settings.classPrefix + 'open');
+			_self.objects.case.attr('aria-hidden', 'true');
 
-			$nav.children().hide();
+			_self.objects.nav.children().hide();
 
-			lightcase.restoreScrollPosition();
-			
+			_self.restoreScrollPosition();
+
 			// Call onClose hook functions
-			lightcase.callHooks(lightcase.settings.onClose);
+			_self.callHooks(_self.settings.onClose);
 
-			switch (lightcase.settings.transitionOut) {
+			switch (_self.settings.transitionOut) {
 				case 'fade':
 				case 'fadeInline':
 				case 'scrollTop':
@@ -1511,21 +1515,21 @@
 				case 'scrollLeft':
 				case 'scrollHorizontal':
 				case 'scrollVertical':
-					lightcase.transition.fade($case, 'out', lightcase.settings.speedOut, 0, function () {
-						lightcase.transition.fade($overlay, 'out', lightcase.settings.speedOut, 0, function () {
-							lightcase.cleanup();
+					_self.transition.fade(_self.objects.case, 'out', _self.settings.speedOut, 0, function () {
+						_self.transition.fade(_self.objects.overlay, 'out', _self.settings.speedOut, 0, function () {
+							_self.cleanup();
 						});
 					});
 					break;
 				case 'elastic':
-					lightcase.transition.zoom($case, 'out', lightcase.settings.speedOut, function () {
-						lightcase.transition.fade($overlay, 'out', lightcase.settings.speedOut, 0, function () {
-							lightcase.cleanup();
+					_self.transition.zoom(_self.objects.case, 'out', _self.settings.speedOut, function () {
+						_self.transition.fade(_self.objects.overlay, 'out', _self.settings.speedOut, 0, function () {
+							_self.cleanup();
 						});
 					});
 					break;
 				default:
-					lightcase.cleanup();
+					_self.cleanup();
 			}
 		},
 
@@ -1536,19 +1540,19 @@
 		 */
 		unbindEvents: function () {
 			// Unbind overlay event
-			$overlay.unbind('click');
+			_self.objects.overlay.unbind('click');
 
 			// Unbind key events
 			$(document).unbind('keyup.lightcase');
 
 			// Unbind swipe events
-			$case.unbind('swipeleft').unbind('swiperight');
+			_self.objects.case.unbind('swipeleft').unbind('swiperight');
 
 			// Unbind navigator events
-			$nav.children('a').unbind('click');
+			_self.objects.nav.children('a').unbind('click');
 
 			// Unbind close event
-			$close.unbind('click');
+			_self.objects.close.unbind('click');
 		},
 
 		/**
@@ -1557,9 +1561,9 @@
 		 * @return	{void}
 		 */
 		cleanupDimensions: function () {
-			var opacity = $contentInner.css('opacity');
+			var opacity = _self.objects.contentInner.css('opacity');
 
-			$case.css({
+			_self.objects.case.css({
 				'width': '',
 				'height': '',
 				'top': '',
@@ -1568,8 +1572,8 @@
 				'margin-left': ''
 			});
 
-			$contentInner.removeAttr('style').css('opacity', opacity);
-			$contentInner.children().removeAttr('style');
+			_self.objects.contentInner.removeAttr('style').css('opacity', opacity);
+			_self.objects.contentInner.children().removeAttr('style');
 		},
 
 		/**
@@ -1578,37 +1582,37 @@
 		 * @return	{void}
 		 */
 		cleanup: function () {
-			lightcase.cleanupDimensions();
+			_self.cleanupDimensions();
 
-			$loading.hide();
-			$overlay.hide();
-			$case.hide();
-			$nav.children().hide();
+			_self.objects.loading.hide();
+			_self.objects.overlay.hide();
+			_self.objects.case.hide();
+			_self.objects.nav.children().hide();
 
-			$case.removeAttr(lightcase.prefixAttributeName('type'));
-			$nav.removeAttr(lightcase.prefixAttributeName('ispartofsequence'));
+			_self.objects.case.removeAttr(_self.prefixAttributeName('type'));
+			_self.objects.nav.removeAttr(_self.prefixAttributeName('ispartofsequence'));
 
-			$contentInner.empty().hide();
-			$info.children().empty();
+			_self.objects.contentInner.empty().hide();
+			_self.objects.info.children().empty();
 
-			if (lightcase.cache.originalObject) {
-				lightcase.restoreObject();
+			if (_self.cache.originalObject) {
+				_self.restoreObject();
 			}
 
 			// Call onCleanup hook functions
-			lightcase.callHooks(lightcase.settings.onCleanup);
+			_self.callHooks(_self.settings.onCleanup);
 			
 			// Restore cache
-			lightcase.cache = {};
+			_self.cache = {};
 		}
 	};
 
 	$.fn.lightcase = function (method) {
 		// Method calling logic
-		if (lightcase[method]) {
-			return lightcase[method].apply(this, Array.prototype.slice.call(arguments, 1));
+		if (_self[method]) {
+			return _self[method].apply(this, Array.prototype.slice.call(arguments, 1));
 		} else if (typeof method === 'object' || !method) {
-			return lightcase.init.apply(this, arguments);
+			return _self.init.apply(this, arguments);
 		} else {
 			$.error('Method ' + method + ' does not exist on jQuery.lightcase');
 		}
