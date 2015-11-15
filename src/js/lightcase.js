@@ -132,7 +132,7 @@
 				markup: function () {
 					$('body').append(
 						_self.objects.overlay = $('<div id="' + _self.settings.idPrefix + 'overlay"></div>'),
-						_self.objects.loading = $('<div id="' + _self.settings.idPrefix + 'loading" class="' + _self.settings.classPrefix + 'icon-spin"></div>'),
+						_self.objects._loading = $('<div id="' + _self.settings.idPrefix + '_loading" class="' + _self.settings.classPrefix + 'icon-spin"></div>'),
 						_self.objects.case = $('<div id="' + _self.settings.idPrefix + 'case" aria-hidden="true" role="dialog"></div>')
 					);
 					_self.objects.case.after(
@@ -166,39 +166,59 @@
 			}, options);
 
 			// Call onInit hook functions
-			_self.callHooks(_self.settings.onInit);
+			_self._callHooks(_self.settings.onInit);
 
-			_self.objectData = _self.getObjectData(this);
+			_self.objectData = _self._setObjectData(this);
 
-			_self.cacheScrollPosition();
-			_self.watchScrollInteraction();
+			_self._cacheScrollPosition();
+			_self._watchScrollInteraction();
 
-			_self.addElements();
+			_self._addElements();
 			_self.open();
 
 			_self.dimensions = _self.getDimensions();
 		},
 
 		/**
+		 * Getter method for objects
+		 *
+		 * @param	{string}	name
+		 * @return	{object}
+		 */
+		get: function (name) {
+			return _self.objects[name];
+		},
+
+		/**
+		 * Getter method for objectData
+		 *
+		 * @return	{object}
+		 */
+		getObjectData: function () {
+			return _self.objectData;
+		},
+
+		/**
 		 * Gets the object data
 		 *
-		 * @param	{object}	$object
+		 * @param	{object}	object
 		 * @return	{object}	objectData
 		 */
-		getObjectData: function ($object) {
-		 	var objectData = {
-				title: _self.settings.title || $object.attr(_self.prefixAttributeName('title')) || $object.attr('title'),
-				caption: _self.settings.caption || $object.attr(_self.prefixAttributeName('caption')) || $object.children('img').attr('alt'),
-				url: _self.verifyDataUrl(_self.determineLinkTarget()),
+		_setObjectData: function (object) {
+		 	var $object = $(object),
+				objectData = {
+				title: _self.settings.title || $object.attr(_self._prefixAttributeName('title')) || $object.attr('title'),
+				caption: _self.settings.caption || $object.attr(_self._prefixAttributeName('caption')) || $object.children('img').attr('alt'),
+				url: _self.verifyDataUrl(_self._determineLinkTarget()),
 				requestType: _self.settings.ajax.type,
 				requestData: _self.settings.ajax.data,
 				requestDataType: _self.settings.ajax.dataType,
-				rel: $object.attr(_self.determineAttributeSelector()),
-				type: _self.settings.type || _self.verifyDataType(_self.determineLinkTarget()),
+				rel: $object.attr(_self._determineAttributeSelector()),
+				type: _self.settings.type || _self.verifyDataType(_self._determineLinkTarget()),
 				isPartOfSequence: _self.isPartOfSequence($object.attr(_self.settings.attr), ':'),
 				isPartOfSequenceWithSlideshow: _self.isPartOfSequence($object.attr(_self.settings.attr), ':slideshow'),
-				currentIndex: $(_self.determineAttributeSelector()).index($object),
-				sequenceLength: $(_self.determineAttributeSelector()).length
+				currentIndex: $(_self._determineAttributeSelector()).index($object),
+				sequenceLength: $(_self._determineAttributeSelector()).length
 			};
 
 			// Add sequence info to objectData
@@ -218,7 +238,7 @@
 		 * @param	{string}	name
 		 * @return	{string}
 		 */
-		prefixAttributeName: function (name) {
+		_prefixAttributeName: function (name) {
 			return 'data-' + _self.settings.attrPrefix + name;
 		},
 
@@ -228,8 +248,8 @@
 		 *
 		 * @return	{string}
 		 */
-		determineLinkTarget: function () {
-			return _self.settings.href || $(_self.origin).attr(_self.prefixAttributeName('href')) || $(_self.origin).attr('href');
+		_determineLinkTarget: function () {
+			return _self.settings.href || $(_self.origin).attr(_self._prefixAttributeName('href')) || $(_self.origin).attr('href');
 		},
 
 		/**
@@ -238,20 +258,20 @@
 		 *
 		 * @return	{string}	selector
 		 */
-		determineAttributeSelector: function () {
+		_determineAttributeSelector: function () {
 			var	$origin = $(_self.origin),
 				selector = '';
 
 			if (typeof _self.cache.selector !== 'undefined') {
 				selector = _self.cache.selector;
-			} else if (_self.settings.useCategories === true && $origin.attr(_self.prefixAttributeName('categories'))) {
-				var	categories = $origin.attr(_self.prefixAttributeName('categories')).split(' ');
+			} else if (_self.settings.useCategories === true && $origin.attr(_self._prefixAttributeName('categories'))) {
+				var	categories = $origin.attr(_self._prefixAttributeName('categories')).split(' ');
 
 				$.each(categories, function (index, category) {
 					if (index > 0) {
 						selector += ',';
 					}
-					selector += '[' + _self.prefixAttributeName('categories') + '~="' + category + '"]';
+					selector += '[' + _self._prefixAttributeName('categories') + '~="' + category + '"]';
 				});
 			} else {
 				selector = '[' + _self.settings.attr + '="' + $origin.attr(_self.settings.attr) + '"]';
@@ -290,12 +310,12 @@
 		 *
 		 * @return	{void}
 		 */
-		loadContent: function () {
+		_loadContent: function () {
 			if (_self.cache.originalObject) {
-				_self.restoreObject();
+				_self._restoreObject();
 			}
 
-			_self.createObject();
+			_self._createObject();
 		},
 
 		/**
@@ -303,7 +323,7 @@
 		 *
 		 * @return	{void}
 		 */
-		createObject: function () {
+		_createObject: function () {
 			var $object;
 
 			// Create object
@@ -318,11 +338,11 @@
 					break;
 				case 'inline':
 					$object = $('<div class="' + _self.settings.classPrefix + 'inlineWrap"></div>');
-					$object.html(_self.cloneObject($(_self.objectData.url)));
+					$object.html(_self._cloneObject($(_self.objectData.url)));
 
 					// Add custom attributes from _self.settings
 					$.each(_self.settings.inline, function (name, value) {
-						$object.attr(_self.prefixAttributeName(name), value);
+						$object.attr(_self._prefixAttributeName(name), value);
 					});
 					break;
 				case 'ajax':
@@ -331,7 +351,7 @@
 					// Add custom attributes from _self.settings
 					$.each(_self.settings.ajax, function (name, value) {
 						if (name !== 'data') {
-							$object.attr(_self.prefixAttributeName(name), value);
+							$object.attr(_self._prefixAttributeName(name), value);
 						}
 					});
 					break;
@@ -364,8 +384,8 @@
 					});
 			}
 
-			_self.addObject($object);
-			_self.loadObject($object);
+			_self._addObject($object);
+			_self._loadObject($object);
 		},
 
 		/**
@@ -374,15 +394,15 @@
 		 * @param	{object}	$object
 		 * @return	{void}
 		 */
-		addObject: function ($object) {
+		_addObject: function ($object) {
 			// Add object to content holder
 			_self.objects.contentInner.html($object);
 
-			// Start loading
-			_self.loading('start');
+			// Start _loading
+			_self._loading('start');
 
 			// Call onStart hook functions
-			_self.callHooks(_self.settings.onStart);
+			_self._callHooks(_self.settings.onStart);
 
 			// Call hook function on initialization
 
@@ -418,12 +438,12 @@
 		 * @param	{object}	$object
 		 * @return	{void}
 		 */
-		loadObject: function ($object) {
+		_loadObject: function ($object) {
 			// Load the object
 			switch (_self.objectData.type) {
 				case 'inline':
 					if ($(_self.objectData.url)) {
-						_self.showContent($object);
+						_self._showContent($object);
 					} else {
 						_self.error();
 					}
@@ -442,7 +462,7 @@
 								} else {
 									$object.html(data);
 								}
-								_self.showContent($object);
+								_self._showContent($object);
 							},
 							error: function (jqXHR, textStatus, errorThrown) {
 								_self.error();
@@ -451,11 +471,11 @@
 					);
 					break;
 				case 'flash':
-					_self.showContent($object);
+					_self._showContent($object);
 					break;
 				case 'video':
 					if (typeof($object.get(0).canPlayType) === 'function' || _self.objects.case.find('video').length === 0) {
-						_self.showContent($object);
+						_self._showContent($object);
 					} else {
 						_self.error();
 					}
@@ -463,7 +483,7 @@
 				default:
 					if (_self.objectData.url) {
 						$object.load(function () {
-							_self.showContent($object);
+							_self._showContent($object);
 						});
 						$object.error(function () {
 							_self.error();
@@ -486,7 +506,7 @@
 			$object.html(_self.settings.errorMessage);
 			_self.objects.contentInner.html($object);
 
-			_self.showContent(_self.objects.contentInner);
+			_self._showContent(_self.objects.contentInner);
 		},
 
 		/**
@@ -500,8 +520,8 @@
 
 			// Set default dimensions
 			var dimensions = {
-				objectWidth: $object.attr('width') ? $object.attr('width') : $object.attr(_self.prefixAttributeName('width')),
-				objectHeight: $object.attr('height') ? $object.attr('height') : $object.attr(_self.prefixAttributeName('height'))
+				objectWidth: $object.attr('width') ? $object.attr('width') : $object.attr(_self._prefixAttributeName('width')),
+				objectHeight: $object.attr('height') ? $object.attr('height') : $object.attr(_self._prefixAttributeName('height'))
 			};
 
 			if (!_self.settings.disableShrink) {
@@ -555,7 +575,7 @@
 				}
 			}
 
-			_self.adjustDimensions($object, dimensions);
+			_self._adjustDimensions($object, dimensions);
 		},
 
 		/**
@@ -565,13 +585,13 @@
 		 * @param	{object}	dimensions
 		 * @return	{void}
 		 */
-		adjustDimensions: function ($object, dimensions) {
+		_adjustDimensions: function ($object, dimensions) {
 			// Adjust width and height
 			$object.css({
 				'width': dimensions.objectWidth,
 				'height': dimensions.objectHeight,
-				'max-width': $object.attr(_self.prefixAttributeName('max-width')) ? $object.attr(_self.prefixAttributeName('max-width')) : dimensions.maxWidth,
-				'max-height': $object.attr(_self.prefixAttributeName('max-height')) ? $object.attr(_self.prefixAttributeName('max-height')) : dimensions.maxHeight
+				'max-width': $object.attr(_self._prefixAttributeName('max-width')) ? $object.attr(_self._prefixAttributeName('max-width')) : dimensions.maxWidth,
+				'max-height': $object.attr(_self._prefixAttributeName('max-height')) ? $object.attr(_self._prefixAttributeName('max-height')) : dimensions.maxHeight
 			});
 
 			_self.objects.contentInner.css({
@@ -592,18 +612,18 @@
 		},
 
 		/**
-		 * Handles the loading
+		 * Handles the _loading
 		 *
 		 * @param	{string}	process
 		 * @return	{void}
 		 */
-		loading: function (process) {
+		_loading: function (process) {
 			if (process === 'start') {
-				_self.objects.case.addClass(_self.settings.classPrefix + 'loading');
-				_self.objects.loading.show();
+				_self.objects.case.addClass(_self.settings.classPrefix + '_loading');
+				_self.objects._loading.show();
 			} else if (process === 'end') {
-				_self.objects.case.removeClass(_self.settings.classPrefix + 'loading');
-				_self.objects.loading.hide();
+				_self.objects.case.removeClass(_self.settings.classPrefix + '_loading');
+				_self.objects._loading.hide();
 			}
 		},
 
@@ -684,7 +704,7 @@
 		 *
 		 * @return	{void}
 		 */
-		addElements: function () {
+		_addElements: function () {
 			if (typeof(_self.objects.case) !== 'undefined' && $('#' + _self.objects.case.attr('id')).length) {
 				return;
 			}
@@ -698,15 +718,15 @@
 		 * @param	{object}	$object
 		 * @return	{void}
 		 */
-		showContent: function ($object) {
+		_showContent: function ($object) {
 			// Add data attribute with the object type
-			_self.objects.case.attr(_self.prefixAttributeName('type'), _self.objectData.type);
+			_self.objects.case.attr(_self._prefixAttributeName('type'), _self.objectData.type);
 
 			_self.cache.object = $object;
 			_self.calculateDimensions($object);
 
 			// Call onFinish hook functions
-			_self.callHooks(_self.settings.onFinish);
+			_self._callHooks(_self.settings.onFinish);
 
 			switch (_self.settings.transitionIn) {
 				case 'scrollTop':
@@ -732,8 +752,8 @@
 					_self.transition.fade(_self.objects.case, 'in', 0);
 			}
 
-			// End loading
-			_self.loading('end');
+			// End _loading
+			_self._loading('end');
 			_self.busy = false;
 		},
 
@@ -742,7 +762,7 @@
 		 *
 		 * @return	{void}
 		 */
-		processContent: function () {
+		_processContent: function () {
 			_self.busy = true;
 
 			switch (_self.settings.transitionOut) {
@@ -754,23 +774,23 @@
 				case 'scrollHorizontal':
 					if (_self.objects.case.is(':hidden')) {
 						_self.transition.fade(_self.objects.case, 'out', 0, 0, function () {
-							_self.loadContent();
+							_self._loadContent();
 						});
 						_self.transition.fade(_self.objects.contentInner, 'out', 0);
 					} else {
 						_self.transition.scroll(_self.objects.case, 'out', _self.settings.speedOut, function () {
-							_self.loadContent();
+							_self._loadContent();
 						});
 					}
 					break;
 				case 'fade':
 					if (_self.objects.case.is(':hidden')) {
 						_self.transition.fade(_self.objects.case, 'out', 0, 0, function () {
-							_self.loadContent();
+							_self._loadContent();
 						});
 					} else {
 						_self.transition.fade(_self.objects.case, 'out', _self.settings.speedOut, 0, function () {
-							_self.loadContent();
+							_self._loadContent();
 						});
 					}
 					break;
@@ -778,17 +798,17 @@
 				case 'elastic':
 					if (_self.objects.case.is(':hidden')) {
 						_self.transition.fade(_self.objects.case, 'out', 0, 0, function () {
-							_self.loadContent();
+							_self._loadContent();
 						});
 					} else {
 						_self.transition.fade(_self.objects.contentInner, 'out', _self.settings.speedOut, 0, function () {
-							_self.loadContent();
+							_self._loadContent();
 						});
 					}
 					break;
 				default:
 					_self.transition.fade(_self.objects.case, 'out', 0, 0, function () {
-						_self.loadContent();
+						_self._loadContent();
 					});
 			}
 		},
@@ -798,8 +818,8 @@
 		 *
 		 * @return	{void}
 		 */
-		handleEvents: function () {
-			_self.unbindEvents();
+		_handleEvents: function () {
+			_self._unbindEvents();
 
 			_self.objects.nav.children().not(_self.objects.close).hide();
 
@@ -807,14 +827,14 @@
 			if (_self.isSlideshowEnabled()) {
 				// Only start the timeout if slideshow is not pausing
 				if (!_self.objects.nav.hasClass(_self.settings.classPrefix + 'paused')) {
-					_self.startTimeout();
+					_self._startTimeout();
 				} else {
-					_self.stopTimeout();
+					_self._stopTimeout();
 				}
 			}
 
 			if (_self.settings.liveResize) {
-				_self.watchResizeInteraction();
+				_self._watchResizeInteraction();
 			}
 
 			_self.objects.close.click(function (event) {
@@ -831,12 +851,12 @@
 			}
 
 			if (_self.settings.useKeys === true) {
-				_self.addKeyEvents();
+				_self._addKeyEvents();
 			}
 
 			if (_self.objectData.isPartOfSequence) {
-				_self.objects.nav.attr(_self.prefixAttributeName('ispartofsequence'), true);
-				_self.objects.nav.data('items', _self.setNavigation());
+				_self.objects.nav.attr(_self._prefixAttributeName('ispartofsequence'), true);
+				_self.objects.nav.data('items', _self._setNavigation());
 
 				_self.objects.prev.click(function (event) {
 					event.preventDefault();
@@ -847,7 +867,7 @@
 						_self.objects.nav.data('items').prev.click();
 
 						if (_self.isSlideshowEnabled()) {
-							_self.stopTimeout();
+							_self._stopTimeout();
 						}
 					}
 				});
@@ -861,7 +881,7 @@
 						_self.objects.nav.data('items').next.click();
 
 						if (_self.isSlideshowEnabled()) {
-							_self.stopTimeout();
+							_self._stopTimeout();
 						}
 					}
 				});
@@ -869,11 +889,11 @@
 				if (_self.isSlideshowEnabled()) {
 					_self.objects.play.click(function (event) {
 						event.preventDefault();
-						_self.startTimeout();
+						_self._startTimeout();
 					});
 					_self.objects.pause.click(function (event) {
 						event.preventDefault();
-						_self.stopTimeout();
+						_self._stopTimeout();
 					});
 				}
 
@@ -884,7 +904,7 @@
 							event.preventDefault();
 							_self.objects.next.click();
 							if (_self.isSlideshowEnabled()) {
-								_self.stopTimeout();
+								_self._stopTimeout();
 							}
 						});
 					}
@@ -893,7 +913,7 @@
 							event.preventDefault();
 							_self.objects.prev.click();
 							if (_self.isSlideshowEnabled()) {
-								_self.stopTimeout();
+								_self._stopTimeout();
 							}
 						});
 					}
@@ -906,7 +926,7 @@
 		 *
 		 * @return	{void}
 		 */
-		addKeyEvents: function () {
+		_addKeyEvents: function () {
 			$(document).bind('keyup.lightcase', function (event) {
 				// Do nothing if lightcase is in process
 				if (_self.busy) {
@@ -939,7 +959,7 @@
 		 *
 		 * @return	{void}
 		 */
-		startTimeout: function () {
+		_startTimeout: function () {
 			_self.objects.play.hide();
 			_self.objects.pause.show();
 
@@ -956,7 +976,7 @@
 		 *
 		 * @return	{void}
 		 */
-		stopTimeout: function () {
+		_stopTimeout: function () {
 			_self.objects.play.show();
 			_self.objects.pause.hide();
 
@@ -970,7 +990,7 @@
 		 *
 		 * @return	{object}	items
 		 */
-		setNavigation: function () {
+		_setNavigation: function () {
 			var $links = $((_self.cache.selector || _self.settings.attr)),
 				sequenceLength = _self.objectData.sequenceLength - 1,
 				items = {
@@ -1027,13 +1047,13 @@
 		 * @param	{object}	$object
 		 * @return	{object}	$clone
 		 */
-		cloneObject: function ($object) {
+		_cloneObject: function ($object) {
 			var $clone = $object.clone(),
 				objectId = $object.attr('id');
 
 			// If element is hidden, cache the object and remove
 			if ($object.is(':hidden')) {
-				_self.cacheObjectData($object);
+				_self._cacheObjectData($object);
 				$object.attr('id', _self.settings.idPrefix + 'temp-' + objectId).empty();
 			} else {
 				// Prevent duplicated id's
@@ -1279,7 +1299,7 @@
 		 * @param	{object}	hooks
 		 * @return	{void}
 		 */
-		callHooks: function (hooks) {
+		_callHooks: function (hooks) {
 			if (typeof(hooks) === 'object') {
 				$.each(hooks, function(index, hook) {
 					if (typeof(hook) === 'function') {
@@ -1295,7 +1315,7 @@
 		 * @param	{object}	$object
 		 * @return	{void}
 		 */
-		cacheObjectData: function ($object) {
+		_cacheObjectData: function ($object) {
 			$.data($object, 'cache', {
 				id: $object.attr('id'),
 				content: $object.html()
@@ -1309,7 +1329,7 @@
 		 *
 		 * @return	void
 		 */
-		restoreObject: function () {
+		_restoreObject: function () {
 			var $object = $('[id^="' + _self.settings.idPrefix + 'temp-"]');
 
 			$object.attr('id', $.data(_self.cache.originalObject, 'cache').id);
@@ -1326,7 +1346,7 @@
 			if (!_self.isOpen) return;
 
 			if (_self.isSlideshowEnabled()) {
-				_self.stopTimeout();
+				_self._stopTimeout();
 			}
 
 			_self.dimensions = _self.getDimensions();
@@ -1338,7 +1358,7 @@
 		 *
 		 * @return	{void}
 		 */
-		cacheScrollPosition: function () {
+		_cacheScrollPosition: function () {
 			var	$window = $(window),
 				$document = $(document),
 				offset = {
@@ -1361,7 +1381,7 @@
 		 *
 		 * @return	{void}
 		 */
-		watchResizeInteraction: function () {
+		_watchResizeInteraction: function () {
 			$(window).resize(_self.resize);
 		},
 
@@ -1370,7 +1390,7 @@
 		 *
 		 * @return	{void}
 		 */
-		unwatchResizeInteraction: function () {
+		_unwatchResizeInteraction: function () {
 			$(window).off('resize', _self.resize);
 		},
 
@@ -1379,8 +1399,8 @@
 		 *
 		 * @return	{void}
 		 */
-		watchScrollInteraction: function () {
-			$(window).scroll(_self.cacheScrollPosition);
+		_watchScrollInteraction: function () {
+			$(window).scroll(_self._cacheScrollPosition);
 		},
 
 		/**
@@ -1388,8 +1408,8 @@
 		 *
 		 * @return	{void}
 		 */
-		unwatchScrollInteraction: function () {
-			$(window).off('scroll', _self.cacheScrollPosition);
+		_unwatchScrollInteraction: function () {
+			$(window).off('scroll', _self._cacheScrollPosition);
 		},
 
 		/**
@@ -1398,7 +1418,7 @@
 		 *
 		 * @return	{void}
 		 */
-		restoreScrollPosition: function () {
+		_restoreScrollPosition: function () {
 			$(window)
 				.scrollTop(parseInt(_self.cache.scrollPosition.top))
 				.scrollLeft(parseInt(_self.cache.scrollPosition.left))
@@ -1410,7 +1430,7 @@
 		 *
 		 * @return	{void}
 		 */
-		switchToFullScreenMode: function () {
+		_switchToFullScreenMode: function () {
 			_self.settings.shrinkFactor = 1;
 			_self.settings.overlayOpacity = 1;
 
@@ -1432,7 +1452,7 @@
 				$('html').addClass(_self.settings.classPrefix + 'isMobileDevice');
 
 				if (_self.settings.fullScreenModeForMobile) {
-					_self.switchToFullScreenMode();
+					_self._switchToFullScreenMode();
 				}
 			}
 			if (!_self.settings.transitionIn) {
@@ -1460,15 +1480,15 @@
 					}
 					_self.transition.fade(_self.objects.overlay, 'in', _self.settings.speedIn, _self.settings.overlayOpacity, function () {
 						_self.transition.fade(_self.objects.close, 'in', _self.settings.speedIn);
-						_self.handleEvents();
-						_self.processContent();
+						_self._handleEvents();
+						_self._processContent();
 					});
 					break;
 				default:
 					_self.transition.fade(_self.objects.overlay, 'in', 0, _self.settings.overlayOpacity, function () {
 						_self.transition.fade(_self.objects.close, 'in', 0);
-						_self.handleEvents();
-						_self.processContent();
+						_self._handleEvents();
+						_self._processContent();
 					});
 			}
 
@@ -1485,26 +1505,26 @@
 			_self.isOpen = false;
 
 			if (_self.isSlideshowEnabled()) {
-				_self.stopTimeout();
+				_self._stopTimeout();
 				_self.objects.nav.removeClass(_self.settings.classPrefix + 'paused');
 			}
 
-			_self.objects.loading.hide();
+			_self.objects._loading.hide();
 
-			_self.unbindEvents();
+			_self._unbindEvents();
 
-			_self.unwatchResizeInteraction();
-			_self.unwatchScrollInteraction();
+			_self._unwatchResizeInteraction();
+			_self._unwatchScrollInteraction();
 
 			$('html').removeClass(_self.settings.classPrefix + 'open');
 			_self.objects.case.attr('aria-hidden', 'true');
 
 			_self.objects.nav.children().hide();
 
-			_self.restoreScrollPosition();
+			_self._restoreScrollPosition();
 
 			// Call onClose hook functions
-			_self.callHooks(_self.settings.onClose);
+			_self._callHooks(_self.settings.onClose);
 
 			switch (_self.settings.transitionOut) {
 				case 'fade':
@@ -1538,7 +1558,7 @@
 		 *
 		 * @return	{void}
 		 */
-		unbindEvents: function () {
+		_unbindEvents: function () {
 			// Unbind overlay event
 			_self.objects.overlay.unbind('click');
 
@@ -1584,32 +1604,59 @@
 		cleanup: function () {
 			_self.cleanupDimensions();
 
-			_self.objects.loading.hide();
+			_self.objects._loading.hide();
 			_self.objects.overlay.hide();
 			_self.objects.case.hide();
 			_self.objects.nav.children().hide();
 
-			_self.objects.case.removeAttr(_self.prefixAttributeName('type'));
-			_self.objects.nav.removeAttr(_self.prefixAttributeName('ispartofsequence'));
+			_self.objects.case.removeAttr(_self._prefixAttributeName('type'));
+			_self.objects.nav.removeAttr(_self._prefixAttributeName('ispartofsequence'));
 
 			_self.objects.contentInner.empty().hide();
 			_self.objects.info.children().empty();
 
 			if (_self.cache.originalObject) {
-				_self.restoreObject();
+				_self._restoreObject();
 			}
 
 			// Call onCleanup hook functions
-			_self.callHooks(_self.settings.onCleanup);
+			_self._callHooks(_self.settings.onCleanup);
 			
 			// Restore cache
 			_self.cache = {};
+		},
+
+		/**
+		 * Checks if method is public
+		 *
+		 * @return	{boolean}
+		 */
+		_isPublicMethod: function (method) {
+			return (typeof _self[method] === 'function' && method.charAt(0) !== '_');
+		},
+
+		/**
+		 * Exports all public methods to be accessible, callable
+		 * from global scope.
+		 *
+		 * @return	{boolean}
+		 */
+		_export: function () {
+			window.lightcase = {};
+
+			$.each(_self, function (property) {
+				if (_self._isPublicMethod(property)) {
+					lightcase[property] = _self[property];
+				}
+			});
 		}
 	};
 
+	_self._export();
+
 	$.fn.lightcase = function (method) {
-		// Method calling logic
-		if (_self[method]) {
+		// Method calling logic (only public methods are applied)
+		if (_self._isPublicMethod(method)) {
 			return _self[method].apply(this, Array.prototype.slice.call(arguments, 1));
 		} else if (typeof method === 'object' || !method) {
 			return _self.init.apply(this, arguments);
