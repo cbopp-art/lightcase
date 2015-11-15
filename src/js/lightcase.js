@@ -132,7 +132,7 @@
 				markup: function () {
 					$('body').append(
 						_self.objects.overlay = $('<div id="' + _self.settings.idPrefix + 'overlay"></div>'),
-						_self.objects._loading = $('<div id="' + _self.settings.idPrefix + '_loading" class="' + _self.settings.classPrefix + 'icon-spin"></div>'),
+						_self.objects.loading = $('<div id="' + _self.settings.idPrefix + '_loading" class="' + _self.settings.classPrefix + 'icon-spin"></div>'),
 						_self.objects.case = $('<div id="' + _self.settings.idPrefix + 'case" aria-hidden="true" role="dialog"></div>')
 					);
 					_self.objects.case.after(
@@ -398,7 +398,7 @@
 			// Add object to content holder
 			_self.objects.contentInner.html($object);
 
-			// Start _loading
+			// Start loading
 			_self._loading('start');
 
 			// Call onStart hook functions
@@ -619,11 +619,11 @@
 		 */
 		_loading: function (process) {
 			if (process === 'start') {
-				_self.objects.case.addClass(_self.settings.classPrefix + '_loading');
-				_self.objects._loading.show();
+				_self.objects.case.addClass(_self.settings.classPrefix + 'loading');
+				_self.objects.loading.show();
 			} else if (process === 'end') {
-				_self.objects.case.removeClass(_self.settings.classPrefix + '_loading');
-				_self.objects._loading.hide();
+				_self.objects.case.removeClass(_self.settings.classPrefix + 'loading');
+				_self.objects.loading.hide();
 			}
 		},
 
@@ -752,7 +752,7 @@
 					_self.transition.fade(_self.objects.case, 'in', 0);
 			}
 
-			// End _loading
+			// End loading.
 			_self._loading('end');
 			_self.busy = false;
 		},
@@ -1509,7 +1509,7 @@
 				_self.objects.nav.removeClass(_self.settings.classPrefix + 'paused');
 			}
 
-			_self.objects._loading.hide();
+			_self.objects.loading.hide();
 
 			_self._unbindEvents();
 
@@ -1604,7 +1604,7 @@
 		cleanup: function () {
 			_self.cleanupDimensions();
 
-			_self.objects._loading.hide();
+			_self.objects.loading.hide();
 			_self.objects.overlay.hide();
 			_self.objects.case.hide();
 			_self.objects.nav.children().hide();
