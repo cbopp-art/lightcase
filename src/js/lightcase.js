@@ -215,8 +215,8 @@
 				requestDataType: _self.settings.ajax.dataType,
 				rel: $object.attr(_self._determineAttributeSelector()),
 				type: _self.settings.type || _self.verifyDataType(_self._determineLinkTarget()),
-				isPartOfSequence: _self.isPartOfSequence($object.attr(_self.settings.attr), ':'),
-				isPartOfSequenceWithSlideshow: _self.isPartOfSequence($object.attr(_self.settings.attr), ':slideshow'),
+				isPartOfSequence: _self._isPartOfSequence($object.attr(_self.settings.attr), ':'),
+				isPartOfSequenceWithSlideshow: _self._isPartOfSequence($object.attr(_self.settings.attr), ':slideshow'),
 				currentIndex: $(_self._determineAttributeSelector()).index($object),
 				sequenceLength: $(_self._determineAttributeSelector()).length
 			};
@@ -289,7 +289,7 @@
 		 * @param	{string}	expression
 		 * @return	{boolean}
 		 */
-		isPartOfSequence: function (rel, expression) {
+		_isPartOfSequence: function (rel, expression) {
 			var getSimilarLinks = $('[' + _self.settings.attr + '="' + rel + '"]'),
 				regexp = new RegExp(expression);
 
