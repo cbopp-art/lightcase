@@ -1072,7 +1072,7 @@
 			if (_self.objectData.nextIndex <= sequenceLength) {
 				_self.objects.next.show();
 			} else {
-				items.nextItem = $links.eq(0);
+				items.next = $links.eq(0);
 			}
 
 			if (_self.settings.navigateEndless === true) {
@@ -1635,7 +1635,10 @@
 			_self.objects.case.unbind('swipeleft').unbind('swiperight');
 
 			// Unbind navigator events
-			_self.objects.nav.children('a').unbind('click');
+			_self.objects.prev.unbind('click');
+			_self.objects.next.unbind('click');
+			_self.objects.play.unbind('click');
+			_self.objects.pause.unbind('click');
 
 			// Unbind close event
 			_self.objects.close.unbind('click');
@@ -1673,7 +1676,10 @@
 			_self.objects.loading.hide();
 			_self.objects.overlay.hide();
 			_self.objects.case.hide();
-			_self.objects.nav.children().hide();
+			_self.objects.prev.hide();
+			_self.objects.next.hide();
+			_self.objects.play.hide();
+			_self.objects.pause.hide();
 
 			_self.objects.case.removeAttr(_self._prefixAttributeName('type'));
 			_self.objects.nav.removeAttr(_self._prefixAttributeName('ispartofsequence'));
