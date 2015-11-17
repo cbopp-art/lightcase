@@ -1,3 +1,6 @@
+2015/11/17 - v2.3.1
+Bugfix: Fixed navigation bug on last item in a sequence
+
 2015/11/15 - v2.3.0
 Added: bower manifest file
 Feature: Viewport and density support
