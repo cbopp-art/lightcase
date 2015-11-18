@@ -175,7 +175,7 @@
 			_self._watchScrollInteraction();
 
 			_self._addElements();
-			_self.open();
+			_self._open();
 
 			_self.dimensions = _self.getViewportDimensions();
 		},
@@ -1506,7 +1506,7 @@
 		 *
 		 * @return	{void}
 		 */
-		open: function () {
+		_open: function () {
 			_self.isOpen = true;
 
 			_self.support.transitions = _self.settings.cssTransitions ? _self.isTransitionSupported() : false;
