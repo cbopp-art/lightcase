@@ -40,6 +40,11 @@
     }
 
     .lightcase-contentInner {
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      -o-box-sizing: border-box;
+      box-sizing: border-box;
+
       @media screen and (max-width: #{map-get($lightcase-settings, 'breakpoint')-1}) {
         padding: 15px;
 

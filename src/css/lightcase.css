@@ -244,43 +244,50 @@
     background: none !important;
   }
 }
+/* line 42, ../scss/components/modules/_content.scss */
+#lightcase-case:not([data-lc-type=image]):not([data-lc-type=video]):not([data-lc-type=flash]):not([data-lc-type=error]) #lightcase-content .lightcase-contentInner {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -o-box-sizing: border-box;
+  box-sizing: border-box;
+}
 @media screen and (max-width: 640px) {
   /* line 42, ../scss/components/modules/_content.scss */
   #lightcase-case:not([data-lc-type=image]):not([data-lc-type=video]):not([data-lc-type=flash]):not([data-lc-type=error]) #lightcase-content .lightcase-contentInner {
     padding: 15px;
   }
-  /* line 46, ../scss/components/modules/_content.scss */
+  /* line 51, ../scss/components/modules/_content.scss */
   #lightcase-case:not([data-lc-type=image]):not([data-lc-type=video]):not([data-lc-type=flash]):not([data-lc-type=error]) #lightcase-content .lightcase-contentInner, #lightcase-case:not([data-lc-type=image]):not([data-lc-type=video]):not([data-lc-type=flash]):not([data-lc-type=error]) #lightcase-content .lightcase-contentInner > * {
     width: 100% !important;
     max-width: none !important;
   }
-  /* line 53, ../scss/components/modules/_content.scss */
+  /* line 58, ../scss/components/modules/_content.scss */
   #lightcase-case:not([data-lc-type=image]):not([data-lc-type=video]):not([data-lc-type=flash]):not([data-lc-type=error]) #lightcase-content .lightcase-contentInner > *:not(iframe) {
     height: auto !important;
     max-height: none !important;
   }
 }
 @media screen and (max-width: 640px) {
-  /* line 64, ../scss/components/modules/_content.scss */
+  /* line 69, ../scss/components/modules/_content.scss */
   .lightcase-isMobileDevice #lightcase-case[data-lc-type=iframe] #lightcase-content .lightcase-contentInner {
     overflow: auto;
     -webkit-overflow-scrolling: touch;
   }
 }
 @media screen and (max-width: 640px) and (min-width: 641px) {
-  /* line 68, ../scss/components/modules/_content.scss */
+  /* line 73, ../scss/components/modules/_content.scss */
   [data-lc-type=image] #lightcase-content .lightcase-contentInner, [data-lc-type=video] #lightcase-content .lightcase-contentInner {
     line-height: 0.75;
   }
 }
 
-/* line 80, ../scss/components/modules/_content.scss */
+/* line 85, ../scss/components/modules/_content.scss */
 .lightcase-isMobileDevice #lightcase-case[data-lc-type=iframe] #lightcase-content .lightcase-contentInner .lightcase-inlineWrap {
   overflow: auto;
   -webkit-overflow-scrolling: touch;
 }
 @media screen and (max-width: 640px) {
-  /* line 85, ../scss/components/modules/_content.scss */
+  /* line 90, ../scss/components/modules/_content.scss */
   #lightcase-case:not([data-lc-type=image]):not([data-lc-type=video]):not([data-lc-type=flash]):not([data-lc-type=error]) #lightcase-content .lightcase-contentInner .lightcase-inlineWrap {
     position: relative !important;
     top: auto !important;
@@ -294,7 +301,7 @@
   }
 }
 @media screen and (min-width: 641px) {
-  /* line 92, ../scss/components/modules/_content.scss */
+  /* line 97, ../scss/components/modules/_content.scss */
   #lightcase-case:not([data-lc-type=error]) #lightcase-content .lightcase-contentInner .lightcase-inlineWrap {
     padding: 30px;
     overflow: auto;
@@ -305,13 +312,13 @@
   }
 }
 @media screen and (max-width: 640px) {
-  /* line 109, ../scss/components/modules/_content.scss */
+  /* line 114, ../scss/components/modules/_content.scss */
   #lightcase-content h1, #lightcase-content h2, #lightcase-content h3, #lightcase-content h4, #lightcase-content h5, #lightcase-content h6, #lightcase-content p {
     color: #aaa;
   }
 }
 @media screen and (min-width: 641px) {
-  /* line 109, ../scss/components/modules/_content.scss */
+  /* line 114, ../scss/components/modules/_content.scss */
   #lightcase-content h1, #lightcase-content h2, #lightcase-content h3, #lightcase-content h4, #lightcase-content h5, #lightcase-content h6, #lightcase-content p {
     color: #333;
   }
