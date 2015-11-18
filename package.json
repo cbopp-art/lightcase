@@ -14,7 +14,10 @@
   },
   "author": "Cornel Boppart (https://github.com/cbopp-art)",
   "license": "GPL-2.0+",
-  "main": "lightcase.js",
+  "main": [
+      "src/js/lightcase.js",
+      "src/js/lightcase.scss"
+  ],
   "homepage": "http://cornel.bopp-art.com/lightcase/",
   "repository": {
     "type": "git",
