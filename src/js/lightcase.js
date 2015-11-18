@@ -53,7 +53,7 @@
 		start: function (options) {
 			_self.origin = lightcase.origin = this;
 
-			 _self.settings = lightcase.settings = $.extend(true, {
+			_self.settings = lightcase.settings = $.extend(true, {
 				idPrefix: 'lightcase-',
 				classPrefix: 'lightcase-',
 				attrPrefix: 'lc-',
