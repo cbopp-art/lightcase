@@ -53,7 +53,7 @@
 		start: function (options) {
 			_self.origin = lightcase.origin = this;
 
-			_self.settings = $.extend(true, {
+			 _self.settings = lightcase.settings = $.extend(true, {
 				idPrefix: 'lightcase-',
 				classPrefix: 'lightcase-',
 				attrPrefix: 'lc-',
@@ -177,7 +177,7 @@
 			_self._addElements();
 			_self.open();
 
-			_self.dimensions = _self.getDimensions();
+			_self.dimensions = _self.getViewportDimensions();
 		},
 
 		/**
@@ -200,7 +200,7 @@
 		},
 
 		/**
-		 * Gets the object data
+		 * Sets the object data
 		 *
 		 * @param	{object}	object
 		 * @return	{object}	objectData
@@ -215,7 +215,7 @@
 				requestData: _self.settings.ajax.data,
 				requestDataType: _self.settings.ajax.dataType,
 				rel: $object.attr(_self._determineAttributeSelector()),
-				type: _self.settings.type || _self.verifyDataType(_self._determineUrl()),
+				type: _self.settings.type || _self._verifyDataType(_self._determineUrl()),
 				isPartOfSequence: _self._isPartOfSequence($object.attr(_self.settings.attr), ':'),
 				isPartOfSequenceWithSlideshow: _self._isPartOfSequence($object.attr(_self.settings.attr), ':slideshow'),
 				currentIndex: $(_self._determineAttributeSelector()).index($object),
@@ -290,7 +290,7 @@
 		 * @return	{string}	url
 		 */
 		_determineUrl: function () {
-			var dataUrl = _self.verifyDataUrl(_self._determineLinkTarget()),
+			var dataUrl = _self._verifyDataUrl(_self._determineLinkTarget()),
 				width = 0,
 				density = 1,
 				url;
@@ -473,8 +473,6 @@
 			// Call onStart hook functions
 			_self._callHooks(_self.settings.onStart);
 
-			// Call hook function on initialization
-
 			// Add sequenceInfo to the content holder or hide if its empty
 			if (_self.settings.showSequenceInfo === true && _self.objectData.isPartOfSequence) {
 				_self.objects.sequenceInfo.html(_self.objectData.sequenceInfo);
@@ -584,8 +582,8 @@
 		 * @param	{object}	$object
 		 * @return	{void}
 		 */
-		calculateDimensions: function ($object) {
-			_self.cleanupDimensions();
+		_calculateDimensions: function ($object) {
+			_self._cleanupDimensions();
 
 			// Set default dimensions
 			var dimensions = {
@@ -702,7 +700,7 @@
 		 *
 		 * @return	{object}	dimensions
 		 */
-		getDimensions: function () {
+		getViewportDimensions: function () {
 			return {
 				windowWidth: $(window).innerWidth(),
 				windowHeight: $(window).innerHeight()
@@ -715,7 +713,7 @@
 		 * @param	{string}	dataUrl
 		 * @return	{object}	dataUrl	Clean url for processing content
 		 */
-		verifyDataUrl: function (dataUrl) {
+		_verifyDataUrl: function (dataUrl) {
 			if (!dataUrl || dataUrl === undefined || dataUrl === '') {
 				return false;
 			}
@@ -734,7 +732,7 @@
 		 * @param	{string}			url
 		 * @return	{string|boolean}	Array key if expression matched, else false
 		 */
-		verifyDataType: function (url) {
+		_verifyDataType: function (url) {
 			var typeMapping = _self.settings.typeMapping;
 
 			// Early abort if dataUrl couldn't be verified
@@ -789,7 +787,7 @@
 			_self.objects.case.attr(_self._prefixAttributeName('type'), _self.objectData.type);
 
 			_self.cache.object = $object;
-			_self.calculateDimensions($object);
+			_self._calculateDimensions($object);
 
 			// Call onFinish hook functions
 			_self._callHooks(_self.settings.onFinish);
@@ -1415,8 +1413,8 @@
 				_self._stopTimeout();
 			}
 
-			_self.dimensions = _self.getDimensions();
-			_self.calculateDimensions(_self.cache.object);
+			_self.dimensions = _self.getViewportDimensions();
+			_self._calculateDimensions(_self.cache.object);
 		},
 
 		/**
@@ -1649,7 +1647,7 @@
 		 *
 		 * @return	{void}
 		 */
-		cleanupDimensions: function () {
+		_cleanupDimensions: function () {
 			var opacity = _self.objects.contentInner.css('opacity');
 
 			_self.objects.case.css({
@@ -1671,7 +1669,7 @@
 		 * @return	{void}
 		 */
 		cleanup: function () {
-			_self.cleanupDimensions();
+			_self._cleanupDimensions();
 
 			_self.objects.loading.hide();
 			_self.objects.overlay.hide();
