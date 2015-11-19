@@ -178,7 +178,7 @@
 #lightcase-case {
   display: none;
   position: fixed;
-  z-index: 1002;
+  z-index: 2002;
   top: 50%;
   left: 50%;
   font-family: arial, sans-serif;
@@ -431,7 +431,7 @@
   text-align: center;
   text-shadow: none;
   position: fixed;
-  z-index: 1001;
+  z-index: 2001;
   top: 50%;
   left: 50%;
   margin-top: -0.5em;
@@ -520,7 +520,6 @@
 }
 /* line 40, ../scss/components/modules/_navigation.scss */
 #lightcase-nav a[class*='lightcase-icon-'].lightcase-icon-close {
-  z-index: 9997;
   top: 15px;
   right: 15px;
   bottom: auto;
@@ -553,7 +552,7 @@
     bottom: 50%;
     margin-bottom: -0.5em;
   }
-  /* line 67, ../scss/components/modules/_navigation.scss */
+  /* line 66, ../scss/components/modules/_navigation.scss */
   #lightcase-nav a[class*='lightcase-icon-']:hover, #lightcase-case:hover ~ #lightcase-nav a[class*='lightcase-icon-'] {
     opacity: 1;
   }
@@ -565,7 +564,7 @@
   width: 100%;
   height: 100%;
   position: fixed;
-  z-index: 1000;
+  z-index: 2000;
   top: 0;
   left: 0;
   background: #333;
