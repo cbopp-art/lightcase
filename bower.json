@@ -16,10 +16,7 @@
     "Cornel Boppart <cornel@bopp-art.com> (http://cornel.bopp-art.com)"
   ],
   "license": "GPL-2.0+",
-  "main": [
-    "src/js/lightcase.js",
-    "src/js/lightcase.scss"
-  ],
+  "main": "src/js/lightcase.js",
   "homepage": "http://cornel.bopp-art.com/lightcase/",
   "repository": {
     "type": "git",
