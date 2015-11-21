@@ -393,28 +393,29 @@
     position: fixed;
     top: 10px;
     left: 0;
+    max-width: 87.5%;
     padding: 5px 15px;
     background: #333;
   }
 }
-/* line 32, ../scss/components/modules/_info.scss */
+/* line 33, ../scss/components/modules/_info.scss */
 #lightcase-info #lightcase-caption {
   clear: both;
   font-size: 13px;
   color: #aaa;
 }
-/* line 38, ../scss/components/modules/_info.scss */
+/* line 39, ../scss/components/modules/_info.scss */
 #lightcase-info #lightcase-sequenceInfo {
   font-size: 11px;
   color: #aaa;
 }
 @media screen and (max-width: 640px) {
-  /* line 44, ../scss/components/modules/_info.scss */
+  /* line 45, ../scss/components/modules/_info.scss */
   .lightcase-fullScreenMode #lightcase-info {
     padding-left: 15px;
     padding-right: 15px;
   }
-  /* line 50, ../scss/components/modules/_info.scss */
+  /* line 51, ../scss/components/modules/_info.scss */
   #lightcase-case:not([data-lc-type=image]):not([data-lc-type=video]):not([data-lc-type=flash]):not([data-lc-type=error]) #lightcase-info {
     position: static;
   }
