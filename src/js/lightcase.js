@@ -292,7 +292,7 @@
 		_determineUrl: function () {
 			var dataUrl = _self._verifyDataUrl(_self._determineLinkTarget()),
 				width = 0,
-				density = 1,
+				density = 0,
 				url;
 
 			$.each(dataUrl, function (index, src) {
@@ -326,7 +326,7 @@
 			return url.split(',').map(function (str) {
 				var src = {
 					width: 0,
-					density: 1
+					density: 0
 				};
 
 				str.trim().split(/\s+/).forEach(function (url, i) {
