@@ -19,16 +19,6 @@
 
 		objects: {},
 
-		labels: {
-			'errorMessage': 'Source could not be found...',
-			'sequenceInfo.of': ' of ',
-			'close': 'Close',
-			'navigator.prev': 'Prev',
-			'navigator.next': 'Next',
-			'navigator.play': 'Play',
-			'navigator.pause': 'Pause'
-		},
-
 		/**
 		 * Initializes the plugin
 		 *
@@ -128,7 +118,16 @@
 					'inline': '#'
 				},
 				errorMessage: function () {
-					return '<p class="' + _self.settings.classPrefix + 'error">' + _self.labels['errorMessage'] + '</p>';
+					return '<p class="' + _self.settings.classPrefix + 'error">' + _self.settings.labels['errorMessage'] + '</p>';
+				},
+				labels: {
+					'errorMessage': 'Source could not be found...',
+					'sequenceInfo.of': ' of ',
+					'close': 'Close',
+					'navigator.prev': 'Prev',
+					'navigator.next': 'Next',
+ 					'navigator.play': 'Play',
+					'navigator.pause': 'Pause'
 				},
 				markup: function () {
 					$('body').append(
@@ -140,11 +139,11 @@
 						_self.objects.nav = $('<div id="' + _self.settings.idPrefix + 'nav"></div>')
 					);
 					_self.objects.nav.append(
-						_self.objects.close = $('<a href="#" class="' + _self.settings.classPrefix + 'icon-close"><span>' + _self.labels['close'] + '</span></a>'),
-						_self.objects.prev = $('<a href="#" class="' + _self.settings.classPrefix + 'icon-prev"><span>' + _self.labels['navigator.prev'] + '</span></a>').hide(),
-						_self.objects.next = $('<a href="#" class="' + _self.settings.classPrefix + 'icon-next"><span>' + _self.labels['navigator.next'] + '</span></a>').hide(),
-						_self.objects.play = $('<a href="#" class="' + _self.settings.classPrefix + 'icon-play"><span>' + _self.labels['navigator.play'] + '</span></a>').hide(),
-						_self.objects.pause = $('<a href="#" class="' + _self.settings.classPrefix + 'icon-pause"><span>' + _self.labels['navigator.pause'] + '</span></a>').hide()
+						_self.objects.close = $('<a href="#" class="' + _self.settings.classPrefix + 'icon-close"><span>' + _self.settings.labels['close'] + '</span></a>'),
+						_self.objects.prev = $('<a href="#" class="' + _self.settings.classPrefix + 'icon-prev"><span>' + _self.settings.labels['navigator.prev'] + '</span></a>').hide(),
+						_self.objects.next = $('<a href="#" class="' + _self.settings.classPrefix + 'icon-next"><span>' + _self.settings.labels['navigator.next'] + '</span></a>').hide(),
+						_self.objects.play = $('<a href="#" class="' + _self.settings.classPrefix + 'icon-play"><span>' + _self.settings.labels['navigator.play'] + '</span></a>').hide(),
+						_self.objects.pause = $('<a href="#" class="' + _self.settings.classPrefix + 'icon-pause"><span>' + _self.settings.labels['navigator.pause'] + '</span></a>').hide()
 					);
 					_self.objects.case.append(
 						_self.objects.content = $('<div id="' + _self.settings.idPrefix + 'content"></div>'),
@@ -223,7 +222,7 @@
 			};
 
 			// Add sequence info to objectData
-			objectData.sequenceInfo = (objectData.currentIndex + 1) + _self.labels['sequenceInfo.of'] + objectData.sequenceLength;
+			objectData.sequenceInfo = (objectData.currentIndex + 1) + _self.settings.labels['sequenceInfo.of'] + objectData.sequenceLength;
 
 			// Add next/prev index
 			objectData.prevIndex = objectData.currentIndex - 1;
