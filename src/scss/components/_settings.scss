@@ -10,7 +10,7 @@
  * );
  */
 $lightcase-default: (
-  'font-path': '../fonts/',
+  'font-path': '../fonts/', // Path relative to the compiled css file
 
   'breakpoint': 641px,
 
