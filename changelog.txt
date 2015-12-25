@@ -1,8 +1,14 @@
+2015/12/25 - v2.3.3
+Bugfix: Fixed forceWidth and forceHeight option
+Feature: Issue #46 - Font path configurable with scss settings
+Bugfix: Issue #45 - All labels as lightcase settings
+Bugfix: Issue #43 - Images not loaded when desktop browser view is zoomed out
+
 2015/11/21 - v2.3.2
-Bugfix: Issue #38: Fixed main path in package.json
+Bugfix: Issue #38 - Fixed main path in package.json
 WIP: open() no longer a public method
-Bugfix: Issue #37: Added border-box to contentInner
-Bugfix: Issue #32: Access origin link object and perform with data
+Bugfix: Issue #37 - Added border-box to contentInner
+Bugfix: Issue #32 - Access origin link object and perform with data
 
 2015/11/17 - v2.3.1
 Bugfix: Fixed navigation bug on last item in a sequence
