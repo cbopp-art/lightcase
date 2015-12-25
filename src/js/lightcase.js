@@ -450,6 +450,7 @@
 					$.each(_self.settings.iframe, function (name, value) {
 						$object.attr(name, value);
 					});
+					break;
 			}
 
 			_self._addObject($object);
@@ -557,6 +558,7 @@
 					} else {
 						_self.error();
 					}
+					break;
 			}
 		},
 
@@ -623,13 +625,11 @@
 							dimensions.objectWidth = parseInt(dimensions.maxWidth / dimensions.differenceHeightAsPercent * dimensions.differenceWidthAsPercent);
 							dimensions.objectHeight = dimensions.maxHeight;
 						}
-
 						break;
 					case 'error':
 						if (!isNaN(dimensions.objectWidth) && dimensions.objectWidth > dimensions.maxWidth) {
 							dimensions.objectWidth = dimensions.maxWidth;
 						}
-
 						break;
 					default:
 						if ((isNaN(dimensions.objectWidth) || dimensions.objectWidth > dimensions.maxWidth) && !_self.settings.forceWidth) {
@@ -638,7 +638,20 @@
 						if (((isNaN(dimensions.objectHeight) && dimensions.objectHeight !== 'auto') || dimensions.objectHeight > dimensions.maxHeight) && !_self.settings.forceHeight) {
 							dimensions.objectHeight = dimensions.maxHeight;
 						}
+						break;
 				}
+			}
+
+			if (_self.settings.forceWidth) {
+				dimensions.maxWidth = dimensions.objectWidth;
+			} else if ($object.attr(_self._prefixAttributeName('max-width'))) {
+				dimensions.maxWidth =  $object.attr(_self._prefixAttributeName('max-width'));
+			}
+
+			if (_self.settings.forceHeight) {
+				dimensions.maxHeight = dimensions.objectHeight;
+			} else if ($object.attr(_self._prefixAttributeName('max-height'))) {
+				dimensions.maxHeight =  $object.attr(_self._prefixAttributeName('max-height'));
 			}
 
 			_self._adjustDimensions($object, dimensions);
@@ -656,8 +669,8 @@
 			$object.css({
 				'width': dimensions.objectWidth,
 				'height': dimensions.objectHeight,
-				'max-width': $object.attr(_self._prefixAttributeName('max-width')) ? $object.attr(_self._prefixAttributeName('max-width')) : dimensions.maxWidth,
-				'max-height': $object.attr(_self._prefixAttributeName('max-height')) ? $object.attr(_self._prefixAttributeName('max-height')) : dimensions.maxHeight
+				'max-width': dimensions.maxWidth,
+				'max-height': dimensions.maxHeight
 			});
 
 			_self.objects.contentInner.css({
@@ -806,6 +819,7 @@
 						_self.transition.zoom(_self.objects.case, 'in', _self.settings.speedIn);
 						_self.transition.fade(_self.objects.contentInner, 'in', _self.settings.speedIn);
 					}
+					break;
 				case 'fade':
 				case 'fadeInline':
 					_self.transition.fade(_self.objects.case, 'in', _self.settings.speedIn);
@@ -813,6 +827,7 @@
 					break;
 				default:
 					_self.transition.fade(_self.objects.case, 'in', 0);
+					break;
 			}
 
 			// End loading.
@@ -873,6 +888,7 @@
 					_self.transition.fade(_self.objects.case, 'out', 0, 0, function () {
 						_self._loadContent();
 					});
+					break;
 			}
 		},
 
@@ -1553,6 +1569,7 @@
 						_self._handleEvents();
 						_self._processContent();
 					});
+					break;
 			}
 
 			$('html').addClass(_self.settings.classPrefix + 'open');
@@ -1613,6 +1630,7 @@
 					break;
 				default:
 					_self.cleanup();
+					break;
 			}
 		},
 
@@ -1690,7 +1708,7 @@
 
 			// Call onCleanup hook functions
 			_self._callHooks(_self.settings.onCleanup);
-			
+
 			// Restore cache
 			_self.cache = {};
 		},
