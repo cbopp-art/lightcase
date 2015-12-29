@@ -819,7 +819,6 @@
 						_self.transition.zoom(_self.objects.case, 'in', _self.settings.speedIn);
 						_self.transition.fade(_self.objects.contentInner, 'in', _self.settings.speedIn);
 					}
-					break;
 				case 'fade':
 				case 'fadeInline':
 					_self.transition.fade(_self.objects.case, 'in', _self.settings.speedIn);
