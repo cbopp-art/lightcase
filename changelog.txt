@@ -1,3 +1,6 @@
+2015/12/29 - v2.3.4
+Bugfix: Issue #47 - Fixed wrong break statement which crashed in transition
+
 2015/12/25 - v2.3.3
 Bugfix: Fixed forceWidth and forceHeight option
 Feature: Issue #46 - Font path configurable with scss settings
