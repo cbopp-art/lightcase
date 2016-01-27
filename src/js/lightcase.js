@@ -64,6 +64,7 @@
 				shrinkFactor: .75,
 				overlayOpacity: .9,
 				slideshow: false,
+				slideshowAutoStart: true,
 				timeout: 5000,
 				swipe: true,
 				useKeys: true,
@@ -903,8 +904,11 @@
 
 			// If slideshow is enabled, show play/pause and start timeout.
 			if (_self.isSlideshowEnabled()) {
-				// Only start the timeout if slideshow is not pausing
-				if (!_self.objects.nav.hasClass(_self.settings.classPrefix + 'paused')) {
+				// Only start the timeout if slideshow autostart is enabled and slideshow is not pausing
+				if (
+					(_self.settings.slideshowAutoStart === true || _self.isSlideshowStarted) &&
+					!_self.objects.nav.hasClass(_self.settings.classPrefix + 'paused')
+				) {
 					_self._startTimeout();
 				} else {
 					_self._stopTimeout();
@@ -1038,6 +1042,8 @@
 		 * @return	{void}
 		 */
 		_startTimeout: function () {
+			_self.isSlideshowStarted = true;
+
 			_self.objects.play.hide();
 			_self.objects.pause.show();
 
@@ -1585,6 +1591,7 @@
 
 			if (_self.isSlideshowEnabled()) {
 				_self._stopTimeout();
+				_self.isSlideshowStarted = false;
 				_self.objects.nav.removeClass(_self.settings.classPrefix + 'paused');
 			}
 
