@@ -269,7 +269,7 @@
 }
 @media screen and (max-width: 640px) {
   /* line 69, ../scss/components/modules/_content.scss */
-  .lightcase-isMobileDevice #lightcase-case[data-lc-type=iframe] #lightcase-content .lightcase-contentInner {
+  .lightcase-isMobileDevice #lightcase-case[data-lc-type=iframe] #lightcase-content .lightcase-contentInner iframe {
     overflow: auto;
     -webkit-overflow-scrolling: touch;
   }
@@ -281,13 +281,8 @@
   }
 }
 
-/* line 85, ../scss/components/modules/_content.scss */
-.lightcase-isMobileDevice #lightcase-case[data-lc-type=iframe] #lightcase-content .lightcase-contentInner .lightcase-inlineWrap {
-  overflow: auto;
-  -webkit-overflow-scrolling: touch;
-}
 @media screen and (max-width: 640px) {
-  /* line 90, ../scss/components/modules/_content.scss */
+  /* line 85, ../scss/components/modules/_content.scss */
   #lightcase-case:not([data-lc-type=image]):not([data-lc-type=video]):not([data-lc-type=flash]):not([data-lc-type=error]) #lightcase-content .lightcase-contentInner .lightcase-inlineWrap {
     position: relative !important;
     top: auto !important;
@@ -301,7 +296,7 @@
   }
 }
 @media screen and (min-width: 641px) {
-  /* line 97, ../scss/components/modules/_content.scss */
+  /* line 92, ../scss/components/modules/_content.scss */
   #lightcase-case:not([data-lc-type=error]) #lightcase-content .lightcase-contentInner .lightcase-inlineWrap {
     padding: 30px;
     overflow: auto;
@@ -312,13 +307,13 @@
   }
 }
 @media screen and (max-width: 640px) {
-  /* line 114, ../scss/components/modules/_content.scss */
+  /* line 109, ../scss/components/modules/_content.scss */
   #lightcase-content h1, #lightcase-content h2, #lightcase-content h3, #lightcase-content h4, #lightcase-content h5, #lightcase-content h6, #lightcase-content p {
     color: #aaa;
   }
 }
 @media screen and (min-width: 641px) {
-  /* line 114, ../scss/components/modules/_content.scss */
+  /* line 109, ../scss/components/modules/_content.scss */
   #lightcase-content h1, #lightcase-content h2, #lightcase-content h3, #lightcase-content h4, #lightcase-content h5, #lightcase-content h6, #lightcase-content p {
     color: #333;
   }
@@ -563,10 +558,11 @@
 #lightcase-overlay {
   display: none;
   width: 100%;
-  height: 100%;
+  min-height: 100%;
   position: fixed;
   z-index: 2000;
   top: 0;
+  bottom: 0;
   left: 0;
   background: #333;
 }

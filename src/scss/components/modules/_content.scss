@@ -66,7 +66,7 @@
   .lightcase-contentInner {
     @media screen and (max-width: #{map-get($lightcase-settings, 'breakpoint')-1}) {
       // For mobile (touch) devices
-      .lightcase-isMobileDevice #lightcase-case[data-lc-type=iframe] & {
+      .lightcase-isMobileDevice #lightcase-case[data-lc-type=iframe] & iframe {
         @include overflow();
       }
       // Type: image + video
@@ -81,11 +81,6 @@
     // Note: This is a very special wrap only added for few
     // types of content, type 'inline' and 'ajax'.
     .lightcase-inlineWrap {
-      // For mobile (touch) devices
-      .lightcase-isMobileDevice #lightcase-case[data-lc-type=iframe] & {
-         @include overflow();
-      }
-
       // Not type: image, video, flash or error
       #lightcase-case:not([data-lc-type=image]):not([data-lc-type=video]):not([data-lc-type=flash]):not([data-lc-type=error]) & {
         @media screen and (max-width: #{map-get($lightcase-settings, 'breakpoint')-1}) {
