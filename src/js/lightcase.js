@@ -549,7 +549,7 @@
 					break;
 				default:
 					if (_self.objectData.url) {
-						$object.on('load', function() {
+						$object.on('load', function () {
 							_self._showContent($object);
 						});
 						$object.error(function () {
