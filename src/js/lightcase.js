@@ -164,7 +164,10 @@
 				onFinish: {},
 				onClose: {},
 				onCleanup: {}
-			}, options);
+			}, 
+			options,
+			// Load options from data-lc-options attribute
+	 	    _self.origin.data('lc-options'));
 
 			// Call onInit hook functions
 			_self._callHooks(_self.settings.onInit);
