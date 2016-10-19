@@ -253,7 +253,7 @@
 		 * @return	{string}
 		 */
 		_determineLinkTarget: function () {
-			return _self.settings.href || $(_self.origin).attr(_self._prefixAttributeName('href')) || $(_self.origin).attr('href');
+			return _self.settings.href || $(_self.origin).attr(_self._prefixAttributeName('href')) || $(_self.origin).attr('href') || $(_self.origin).attr('src');
 		},
 
 		/**
