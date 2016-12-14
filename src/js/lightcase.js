@@ -304,7 +304,7 @@
 					_self._devicePixelRatio() >= src.density &&
 					src.density >= density &&
 					// Check viewport width
-					_self._matchMedia()('screen and (min-width:' + src.width + 'px)') &&
+					_self._matchMedia()('screen and (min-width:' + src.width + 'px)').matches &&
 					src.width >= width
 				) {
 					width = src.width;
