@@ -1,3 +1,11 @@
+2016/12/20 - v2.3.5
+Bugfix: Issue #98 - Fix bug with internal matchMedia function call
+Bugfix: Issue #97 - Closing Lightcase on mobile forces site to top of page
+Feature: Support for jQuery version 3.x.x
+Feature: Issue #84 - Add the option to override all the configurations from within the HTML
+Bugfix: Issue #50 - Iframe is not scrolling on all iDevices
+Feature: Issue #48 - Added new option slideshowAutostart
+
 2015/12/29 - v2.3.4
 Bugfix: Issue #47 - Fixed wrong break statement which crashed in transition
 
