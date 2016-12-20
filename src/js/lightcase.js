@@ -1455,6 +1455,14 @@
 
 			_self.cache.scrollPosition = _self.cache.scrollPosition || {};
 
+			if (!_self._assertContentInvisible()) {
+				_self.cache.cacheScrollPositionSkipped = true;
+			}
+			else if (_self.cache.cacheScrollPositionSkipped) {
+				delete _self.cache.cacheScrollPositionSkipped;
+				_self._restoreScrollPosition();
+			}
+
 			if ($document.width() > $window.width()) {
 				_self.cache.scrollPosition.left = offset.left;
 			}
@@ -1488,6 +1496,7 @@
 		 */
 		_watchScrollInteraction: function () {
 			$(window).scroll(_self._cacheScrollPosition);
+			$(window).resize(_self._cacheScrollPosition);
 		},
 
 		/**
@@ -1497,6 +1506,16 @@
 		 */
 		_unwatchScrollInteraction: function () {
 			$(window).off('scroll', _self._cacheScrollPosition);
+			$(window).off('resize', _self._cacheScrollPosition);
+		},
+
+		/**
+		 * Stop watching any scroll interaction related to _self.
+		 *
+		 * @return	{void}
+		 */
+		_assertContentInvisible: function () {
+			return $($('body').children().not('[id*=' + _self.settings.idPrefix + ']').get(0)).height() > 0;
 		},
 
 		/**
