@@ -1,3 +1,6 @@
+2016/12/20 - v2.3.6
+Hotfix: Fix scroll position after scrolling lightcase content on mobile
+
 2016/12/20 - v2.3.5
 Bugfix: Issue #98 - Fix bug with internal matchMedia function call
 Bugfix: Issue #97 - Closing Lightcase on mobile forces site to top of page
