@@ -1510,9 +1510,9 @@
 		},
 
 		/**
-		 * Stop watching any scroll interaction related to _self.
+		 * Ensures that site content is invisible or has not height.
 		 *
-		 * @return	{void}
+		 * @return	{boolean}
 		 */
 		_assertContentInvisible: function () {
 			return $($('body').children().not('[id*=' + _self.settings.idPrefix + ']').get(0)).height() > 0;
