@@ -1462,12 +1462,13 @@
 				delete _self.cache.cacheScrollPositionSkipped;
 				_self._restoreScrollPosition();
 			}
-
-			if ($document.width() > $window.width()) {
-				_self.cache.scrollPosition.left = offset.left;
-			}
-			if ($document.height() > $window.height()) {
-				_self.cache.scrollPosition.top = offset.top;
+			else {
+				if ($document.width() > $window.width()) {
+					_self.cache.scrollPosition.left = offset.left;
+				}
+				if ($document.height() > $window.height()) {
+					_self.cache.scrollPosition.top = offset.top;
+				}
 			}
 		},
 
