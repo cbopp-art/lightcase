@@ -69,6 +69,7 @@
 				swipe: true,
 				useKeys: true,
 				useCategories: true,
+				useAsCollection: true,
 				navigateEndless: true,
 				closeOnOverlayClick: true,
 				title: null,
@@ -219,7 +220,7 @@
 				requestDataType: _self.settings.ajax.dataType,
 				rel: $object.attr(_self._determineAttributeSelector()),
 				type: _self.settings.type || _self._verifyDataType(_self._determineUrl()),
-				isPartOfSequence: _self._isPartOfSequence($object.attr(_self.settings.attr), ':'),
+				isPartOfSequence: _self.settings.useAsCollection || _self._isPartOfSequence($object.attr(_self.settings.attr), ':'),
 				isPartOfSequenceWithSlideshow: _self._isPartOfSequence($object.attr(_self.settings.attr), ':slideshow'),
 				currentIndex: $(_self._determineAttributeSelector()).index($object),
 				sequenceLength: $(_self._determineAttributeSelector()).length
