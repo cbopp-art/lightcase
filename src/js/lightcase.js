@@ -528,13 +528,20 @@
 							dataType: _self.objectData.requestDataType,
 							data: _self.objectData.requestData,
 							success: function (data, textStatus, jqXHR) {
-								// Unserialize if data is transferred as json
-								if (_self.objectData.requestDataType === 'json') {
-									_self.objectData.data = data;
-								} else {
-									$object.html(data);
+								// Check for X-Ajax-Location
+								if (typeof jqXHR.getResponseHeader('X-Ajax-Location') !== 'undefined' && jqXHR.getResponseHeader('X-Ajax-Location') !== null) {
+									_self.objectData.url = jqXHR.getResponseHeader('X-Ajax-Location');
+									_self._loadObject($object);
 								}
-								_self._showContent($object);
+								else {
+									// Unserialize if data is transferred as json
+									if (_self.objectData.requestDataType === 'json') {
+										_self.objectData.data = data;
+									} else {
+										$object.html(data);
+									}
+									_self._showContent($object);
+								}
 							},
 							error: function (jqXHR, textStatus, errorThrown) {
 								_self.error();
