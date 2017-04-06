@@ -648,17 +648,30 @@
 			}
 
 			if (_self.settings.forceWidth) {
-				dimensions.maxWidth = dimensions.objectWidth;
-			} else if ($object.attr(_self._prefixAttributeName('max-width'))) {
-				dimensions.maxWidth =  $object.attr(_self._prefixAttributeName('max-width'));
+				try {
+					dimensions.objectWidth = _self.settings[_self.objectData.type].width;
+				} catch (e) {
+					dimensions.objectWidth = _self.settings.width || dimensions.objectWidth;
+				}
+
+				dimensions.maxWidth = null;
+			}
+			if ($object.attr(_self._prefixAttributeName('max-width'))) {
+				dimensions.maxWidth = $object.attr(_self._prefixAttributeName('max-width'));
 			}
 
 			if (_self.settings.forceHeight) {
-				dimensions.maxHeight = dimensions.objectHeight;
-			} else if ($object.attr(_self._prefixAttributeName('max-height'))) {
-				dimensions.maxHeight =  $object.attr(_self._prefixAttributeName('max-height'));
-			}
+				try {
+					dimensions.objectHeight = _self.settings[_self.objectData.type].height;
+				} catch (e) {
+					dimensions.objectHeight = _self.settings.height || dimensions.objectHeight;
+				}
 
+				dimensions.maxHeight = null;
+			}
+			if ($object.attr(_self._prefixAttributeName('max-height'))) {
+				dimensions.maxHeight = $object.attr(_self._prefixAttributeName('max-height'));
+			}
 			_self._adjustDimensions($object, dimensions);
 		},
 
