@@ -48,6 +48,8 @@
 				classPrefix: 'lightcase-',
 				attrPrefix: 'lc-',
 				transition: 'elastic',
+				transitionOpen: null,
+				transitionClose: null,
 				transitionIn: null,
 				transitionOut: null,
 				cssTransitions: true,
@@ -69,7 +71,7 @@
 				swipe: true,
 				useKeys: true,
 				useCategories: true,
-				useAsCollection: true,
+				useAsCollection: false,
 				navigateEndless: true,
 				closeOnOverlayClick: true,
 				title: null,
@@ -212,6 +214,7 @@
 		_setObjectData: function (object) {
 		 	var $object = $(object),
 				objectData = {
+				this: $(object),
 				title: _self.settings.title || $object.attr(_self._prefixAttributeName('title')) || $object.attr('title'),
 				caption: _self.settings.caption || $object.attr(_self._prefixAttributeName('caption')) || $object.children('img').attr('alt'),
 				url: _self._determineUrl(),
@@ -822,7 +825,7 @@
 			// Call onFinish hook functions
 			_self._callHooks(_self.settings.onFinish);
 
-			switch (_self.settings.transitionIn) {
+			switch (_self.transition.in()) {
 				case 'scrollTop':
 				case 'scrollRight':
 				case 'scrollBottom':
@@ -850,6 +853,12 @@
 			// End loading.
 			_self._loading('end');
 			_self.isBusy = false;
+			
+			// Set index of the first item opened
+			if (!_self.cache.firstOpened) {
+				_self.cache.firstOpened = _self.objectData.this;
+			}
+
 		},
 
 		/**
@@ -1133,6 +1142,15 @@
 			},
 
 			/**
+			 * Verifies if the current item is first item opened.
+			 *
+			 * @return	{boolean}
+			 */
+			isFirstOpened: function () {
+				return _self.objectData.this.is(_self.cache.firstOpened);
+			},
+
+			/**
 			 * Verifies if the current item is last item.
 			 *
 			 * @return	{boolean}
@@ -1207,6 +1225,18 @@
 		 *
 		 */
 		transition: {
+			/**
+			 * Returns the correct transition type according to the status of interaction.
+			 *
+			 * @return	{string}	Transition type
+			 */
+			in: function () {
+				if (_self.settings.transitionOpen && !_self.cache.firstOpened) {
+					return _self.settings.transitionOpen;
+				}
+				return _self.settings.transitionIn;
+			},
+
 			/**
 			 * Fades in/out the object
 			 *
@@ -1576,6 +1606,7 @@
 					_self._switchToFullScreenMode();
 				}
 			}
+
 			if (!_self.settings.transitionIn) {
 				_self.settings.transitionIn = _self.settings.transition;
 			}
@@ -1583,7 +1614,7 @@
 				_self.settings.transitionOut = _self.settings.transition;
 			}
 
-			switch (_self.settings.transitionIn) {
+			switch (_self.transition.in()) {
 				case 'fade':
 				case 'fadeInline':
 				case 'elastic':
@@ -1625,6 +1656,7 @@
 		 */
 		close: function () {
 			_self.isOpen = false;
+			_self.isClosing = true;
 
 			if (_self.isSlideshowEnabled()) {
 				_self._stopTimeout();
@@ -1649,7 +1681,7 @@
 			// Call onClose hook functions
 			_self._callHooks(_self.settings.onClose);
 
-			switch (_self.settings.transitionOut) {
+			switch (_self.settings.transitionClose || _self.settings.transitionOut) {
 				case 'fade':
 				case 'fadeInline':
 				case 'scrollTop':
@@ -1754,6 +1786,8 @@
 
 			// Restore cache
 			_self.cache = {};
+
+			delete _self.isClosing;
 		},
 
 		/**
