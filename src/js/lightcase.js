@@ -1656,7 +1656,6 @@
 		 */
 		close: function () {
 			_self.isOpen = false;
-			_self.isClosing = true;
 
 			if (_self.isSlideshowEnabled()) {
 				_self._stopTimeout();
@@ -1786,8 +1785,6 @@
 
 			// Restore cache
 			_self.cache = {};
-
-			delete _self.isClosing;
 		},
 
 		/**
