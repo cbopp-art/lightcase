@@ -855,10 +855,10 @@
 				case 'scrollVertical':
 				case 'scrollHorizontal':
 					if (_self.objects.case.is(':hidden')) {
+						_self.transition.fade(_self.objects.contentInner, 'out', 0);
 						_self.transition.fade(_self.objects.case, 'out', 0, 0, function () {
 							_self._loadContent();
 						});
-						_self.transition.fade(_self.objects.contentInner, 'out', 0);
 					} else {
 						_self.transition.scroll(_self.objects.case, 'out', _self.settings.speedOut, function () {
 							_self._loadContent();
