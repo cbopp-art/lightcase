@@ -55,6 +55,8 @@
 				cssTransitions: true,
 				speedIn: 250,
 				speedOut: 250,
+				width: null,
+				height: null,
 				maxWidth: 800,
 				maxHeight: 500,
 				forceWidth: false,
@@ -116,7 +118,7 @@
 				typeMapping: {
 					'image': 'jpg,jpeg,gif,png,bmp',
 					'flash': 'swf',
-					'video': 'mp4,mov,ogv,ogg,webm',
+					'video': 'mp4,mov,ogv,ogg,webm,woff',
 					'iframe': 'html,php',
 					'ajax': 'json,txt',
 					'inline': '#'
@@ -297,23 +299,38 @@
 		 * @return	{string}	url
 		 */
 		_determineUrl: function () {
-			var dataUrl = _self._verifyDataUrl(_self._determineLinkTarget()),
+			var	dataUrl = _self._verifyDataUrl(_self._determineLinkTarget()),
 				width = 0,
 				density = 0,
+				supportLevel = '',
 				url;
 
 			$.each(dataUrl, function (index, src) {
-				if (
-					// Check density
-					_self._devicePixelRatio() >= src.density &&
-					src.density >= density &&
-					// Check viewport width
-					_self._matchMedia()('screen and (min-width:' + src.width + 'px)').matches &&
-					src.width >= width
-				) {
-					width = src.width;
-					density = src.density;
-					url = src.url;
+				switch (_self._verifyDataType(src.url)) {
+					case 'video':
+						var	video = document.createElement('video'),
+							videoType = _self._verifyDataType(src.url) + '/' + _self._getFileUrlSuffix(src.url);
+
+						// Check if browser can play this type of video format
+						if (supportLevel !== 'probably' && supportLevel !== video.canPlayType(videoType) && video.canPlayType(videoType) !== '') {
+							supportLevel = video.canPlayType(videoType);
+							url = src.url;
+						}
+						break;
+					default:
+						if (
+							// Check density
+							_self._devicePixelRatio() >= src.density &&
+							src.density >= density &&
+							// Check viewport width
+							_self._matchMedia()('screen and (min-width:' + src.width + 'px)').matches &&
+							src.width >= width
+						) {
+							width = src.width;
+							density = src.density;
+							url = src.url;
+						}
+						break;
 				}
 			});
 
@@ -448,7 +465,7 @@
 						$object.attr(name, value);
 					});
 					break;
-				default :
+				default:
 					$object = $('<iframe></iframe>');
 					$object.attr({
 						'src': _self.objectData.url
@@ -759,6 +776,17 @@
 			return _self._normalizeUrl(dataUrl.toString());
 		},
 
+			// 
+		/**
+		 * Tries to get the (file) suffix of an url
+		 *
+		 * @param	{string}	url
+		 * @return	{string}
+		 */
+		_getFileUrlSuffix: function (url) {
+			return url.toLowerCase().split('?')[0].split('.')[1];
+		},
+
 		/**
 		 * Verifies the data type of the content to load
 		 *
@@ -782,7 +810,6 @@
 					for (var i = 0; i < suffixArr.length; i++) {
 						var suffix = suffixArr[i].toLowerCase(),
 							regexp = new RegExp('\.(' + suffix + ')$', 'i'),
-							// Verify only the last 5 characters of the string
 							str = url.toLowerCase().split('?')[0].substr(-5);
 
 						if (regexp.test(str) === true || (key === 'inline' && (url.indexOf(suffix) > -1))) {
