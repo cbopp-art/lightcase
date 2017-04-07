@@ -48,11 +48,15 @@
 				classPrefix: 'lightcase-',
 				attrPrefix: 'lc-',
 				transition: 'elastic',
+				transitionOpen: null,
+				transitionClose: null,
 				transitionIn: null,
 				transitionOut: null,
 				cssTransitions: true,
 				speedIn: 250,
 				speedOut: 250,
+				width: null,
+				height: null,
 				maxWidth: 800,
 				maxHeight: 500,
 				forceWidth: false,
@@ -69,7 +73,7 @@
 				swipe: true,
 				useKeys: true,
 				useCategories: true,
-				useAsCollection: true,
+				useAsCollection: false,
 				navigateEndless: true,
 				closeOnOverlayClick: true,
 				title: null,
@@ -212,6 +216,7 @@
 		_setObjectData: function (object) {
 		 	var $object = $(object),
 				objectData = {
+				this: $(object),
 				title: _self.settings.title || $object.attr(_self._prefixAttributeName('title')) || $object.attr('title'),
 				caption: _self.settings.caption || $object.attr(_self._prefixAttributeName('caption')) || $object.children('img').attr('alt'),
 				url: _self._determineUrl(),
@@ -294,23 +299,38 @@
 		 * @return	{string}	url
 		 */
 		_determineUrl: function () {
-			var dataUrl = _self._verifyDataUrl(_self._determineLinkTarget()),
+			var	dataUrl = _self._verifyDataUrl(_self._determineLinkTarget()),
 				width = 0,
 				density = 0,
+				supportLevel = '',
 				url;
 
 			$.each(dataUrl, function (index, src) {
-				if (
-					// Check density
-					_self._devicePixelRatio() >= src.density &&
-					src.density >= density &&
-					// Check viewport width
-					_self._matchMedia()('screen and (min-width:' + src.width + 'px)').matches &&
-					src.width >= width
-				) {
-					width = src.width;
-					density = src.density;
-					url = src.url;
+				switch (_self._verifyDataType(src.url)) {
+					case 'video':
+						var	video = document.createElement('video'),
+							videoType = _self._verifyDataType(src.url) + '/' + _self._getFileUrlSuffix(src.url);
+
+						// Check if browser can play this type of video format
+						if (supportLevel !== 'probably' && supportLevel !== video.canPlayType(videoType) && video.canPlayType(videoType) !== '') {
+							supportLevel = video.canPlayType(videoType);
+							url = src.url;
+						}
+						break;
+					default:
+						if (
+							// Check density
+							_self._devicePixelRatio() >= src.density &&
+							src.density >= density &&
+							// Check viewport width
+							_self._matchMedia()('screen and (min-width:' + src.width + 'px)').matches &&
+							src.width >= width
+						) {
+							width = src.width;
+							density = src.density;
+							url = src.url;
+						}
+						break;
 				}
 			});
 
@@ -445,7 +465,7 @@
 						$object.attr(name, value);
 					});
 					break;
-				default :
+				default:
 					$object = $('<iframe></iframe>');
 					$object.attr({
 						'src': _self.objectData.url
@@ -648,17 +668,30 @@
 			}
 
 			if (_self.settings.forceWidth) {
-				dimensions.maxWidth = dimensions.objectWidth;
-			} else if ($object.attr(_self._prefixAttributeName('max-width'))) {
-				dimensions.maxWidth =  $object.attr(_self._prefixAttributeName('max-width'));
+				try {
+					dimensions.objectWidth = _self.settings[_self.objectData.type].width;
+				} catch (e) {
+					dimensions.objectWidth = _self.settings.width || dimensions.objectWidth;
+				}
+
+				dimensions.maxWidth = null;
+			}
+			if ($object.attr(_self._prefixAttributeName('max-width'))) {
+				dimensions.maxWidth = $object.attr(_self._prefixAttributeName('max-width'));
 			}
 
 			if (_self.settings.forceHeight) {
-				dimensions.maxHeight = dimensions.objectHeight;
-			} else if ($object.attr(_self._prefixAttributeName('max-height'))) {
-				dimensions.maxHeight =  $object.attr(_self._prefixAttributeName('max-height'));
-			}
+				try {
+					dimensions.objectHeight = _self.settings[_self.objectData.type].height;
+				} catch (e) {
+					dimensions.objectHeight = _self.settings.height || dimensions.objectHeight;
+				}
 
+				dimensions.maxHeight = null;
+			}
+			if ($object.attr(_self._prefixAttributeName('max-height'))) {
+				dimensions.maxHeight = $object.attr(_self._prefixAttributeName('max-height'));
+			}
 			_self._adjustDimensions($object, dimensions);
 		},
 
@@ -743,6 +776,17 @@
 			return _self._normalizeUrl(dataUrl.toString());
 		},
 
+			// 
+		/**
+		 * Tries to get the (file) suffix of an url
+		 *
+		 * @param	{string}	url
+		 * @return	{string}
+		 */
+		_getFileUrlSuffix: function (url) {
+			return url.toLowerCase().split('?')[0].split('.')[1];
+		},
+
 		/**
 		 * Verifies the data type of the content to load
 		 *
@@ -766,7 +810,6 @@
 					for (var i = 0; i < suffixArr.length; i++) {
 						var suffix = suffixArr[i].toLowerCase(),
 							regexp = new RegExp('\.(' + suffix + ')$', 'i'),
-							// Verify only the last 5 characters of the string
 							str = url.toLowerCase().split('?')[0].substr(-5);
 
 						if (regexp.test(str) === true || (key === 'inline' && (url.indexOf(suffix) > -1))) {
@@ -809,7 +852,7 @@
 			// Call onFinish hook functions
 			_self._callHooks(_self.settings.onFinish);
 
-			switch (_self.settings.transitionIn) {
+			switch (_self.transition.in()) {
 				case 'scrollTop':
 				case 'scrollRight':
 				case 'scrollBottom':
@@ -837,6 +880,12 @@
 			// End loading.
 			_self._loading('end');
 			_self.isBusy = false;
+			
+			// Set index of the first item opened
+			if (!_self.cache.firstOpened) {
+				_self.cache.firstOpened = _self.objectData.this;
+			}
+
 		},
 
 		/**
@@ -855,10 +904,10 @@
 				case 'scrollVertical':
 				case 'scrollHorizontal':
 					if (_self.objects.case.is(':hidden')) {
+						_self.transition.fade(_self.objects.contentInner, 'out', 0);
 						_self.transition.fade(_self.objects.case, 'out', 0, 0, function () {
 							_self._loadContent();
 						});
-						_self.transition.fade(_self.objects.contentInner, 'out', 0);
 					} else {
 						_self.transition.scroll(_self.objects.case, 'out', _self.settings.speedOut, function () {
 							_self._loadContent();
@@ -1120,6 +1169,15 @@
 			},
 
 			/**
+			 * Verifies if the current item is first item opened.
+			 *
+			 * @return	{boolean}
+			 */
+			isFirstOpened: function () {
+				return _self.objectData.this.is(_self.cache.firstOpened);
+			},
+
+			/**
 			 * Verifies if the current item is last item.
 			 *
 			 * @return	{boolean}
@@ -1194,6 +1252,18 @@
 		 *
 		 */
 		transition: {
+			/**
+			 * Returns the correct transition type according to the status of interaction.
+			 *
+			 * @return	{string}	Transition type
+			 */
+			in: function () {
+				if (_self.settings.transitionOpen && !_self.cache.firstOpened) {
+					return _self.settings.transitionOpen;
+				}
+				return _self.settings.transitionIn;
+			},
+
 			/**
 			 * Fades in/out the object
 			 *
@@ -1563,6 +1633,7 @@
 					_self._switchToFullScreenMode();
 				}
 			}
+
 			if (!_self.settings.transitionIn) {
 				_self.settings.transitionIn = _self.settings.transition;
 			}
@@ -1570,7 +1641,7 @@
 				_self.settings.transitionOut = _self.settings.transition;
 			}
 
-			switch (_self.settings.transitionIn) {
+			switch (_self.transition.in()) {
 				case 'fade':
 				case 'fadeInline':
 				case 'elastic':
@@ -1636,7 +1707,7 @@
 			// Call onClose hook functions
 			_self._callHooks(_self.settings.onClose);
 
-			switch (_self.settings.transitionOut) {
+			switch (_self.settings.transitionClose || _self.settings.transitionOut) {
 				case 'fade':
 				case 'fadeInline':
 				case 'scrollTop':
