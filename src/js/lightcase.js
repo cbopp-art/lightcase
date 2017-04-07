@@ -118,7 +118,7 @@
 				typeMapping: {
 					'image': 'jpg,jpeg,gif,png,bmp',
 					'flash': 'swf',
-					'video': 'mp4,mov,ogv,ogg,webm,woff',
+					'video': 'mp4,mov,ogv,ogg,webm',
 					'iframe': 'html,php',
 					'ajax': 'json,txt',
 					'inline': '#'
