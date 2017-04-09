@@ -1,4 +1,7 @@
-2017/04/08 - v2.4.0
+2017/04/09 - v2.4.0
+Feature: Improve external video resize handling using a new setting 'fixedRatio'
+Feature: Add compiled css file without breakpoint
+Bugfix: Fix couple of browser issues with several content types
 Feature: Issue #69 - Autodetect the right video format supported by the browser
 Feature: Issue #96 - Allow more possibilities to define transitions
 Bugfix: Issue #122 - Improve dimension handling using forceWidth and forceHeight
