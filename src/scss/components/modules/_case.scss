@@ -13,7 +13,7 @@
   text-shadow: #{map-get($lightcase-settings, 'text-shadow')};
 
   // Not type: image, video, flash or error
-  &:not([data-lc-type=image]):not([data-lc-type=video]):not([data-lc-type=flash]):not([data-lc-type=error]) {
+  &:not([data-lc-type=image]):not([data-lc-type=video]):not([data-lc-type=flash]):not([data-lc-type=iframe]):not([data-lc-type=error]) {
     @media screen and (max-width: #{map-get($lightcase-settings, 'breakpoint')-1}) {
       @include clear(true);
     }

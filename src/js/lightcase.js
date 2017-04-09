@@ -65,6 +65,7 @@
 				fullScreenModeForMobile: true,
 				mobileMatchExpression: /(iphone|ipod|ipad|android|blackberry|symbian)/,
 				disableShrink: false,
+				fixedRatio: true,
 				shrinkFactor: .75,
 				overlayOpacity: .9,
 				slideshow: false,
@@ -613,6 +614,7 @@
 
 			// Set default dimensions
 			var dimensions = {
+				ratio: 1,
 				objectWidth: $object.attr('width') ? $object.attr('width') : $object.attr(_self._prefixAttributeName('width')),
 				objectHeight: $object.attr('height') ? $object.attr('height') : $object.attr(_self._prefixAttributeName('height'))
 			};
@@ -622,7 +624,7 @@
 				dimensions.maxWidth = parseInt(_self.dimensions.windowWidth * _self.settings.shrinkFactor);
 				dimensions.maxHeight = parseInt(_self.dimensions.windowHeight * _self.settings.shrinkFactor);
 
-				// If the auto calculated maxWidth/maxHeight greather than the userdefined one, use that.
+				// If the auto calculated maxWidth/maxHeight greather than the user-defined one, use that.
 				if (dimensions.maxWidth > _self.settings.maxWidth) {
 					dimensions.maxWidth = _self.settings.maxWidth;
 				}
@@ -638,19 +640,22 @@
 					case 'image':
 					case 'flash':
 					case 'video':
-						if (dimensions.differenceWidthAsPercent > 100 && dimensions.differenceWidthAsPercent > dimensions.differenceHeightAsPercent) {
-							dimensions.objectWidth = dimensions.maxWidth;
-							dimensions.objectHeight = parseInt(dimensions.objectHeight / dimensions.differenceWidthAsPercent * 100);
+					case 'iframe':
+						if (_self.objectData.type !== 'iframe' || _self.settings.fixedRatio === true) {
+							if (dimensions.differenceWidthAsPercent > 100 && dimensions.differenceWidthAsPercent > dimensions.differenceHeightAsPercent) {
+								dimensions.objectWidth = dimensions.maxWidth;
+								dimensions.objectHeight = parseInt(dimensions.objectHeight / dimensions.differenceWidthAsPercent * 100);
+							}
+							if (dimensions.differenceHeightAsPercent > 100 && dimensions.differenceHeightAsPercent > dimensions.differenceWidthAsPercent) {
+								dimensions.objectWidth = parseInt(dimensions.objectWidth / dimensions.differenceHeightAsPercent * 100);
+								dimensions.objectHeight = dimensions.maxHeight;
+							}
+							if (dimensions.differenceHeightAsPercent > 100 && dimensions.differenceWidthAsPercent < dimensions.differenceHeightAsPercent) {
+								dimensions.objectWidth = parseInt(dimensions.maxWidth / dimensions.differenceHeightAsPercent * dimensions.differenceWidthAsPercent);
+								dimensions.objectHeight = dimensions.maxHeight;
+							}
+							break;
 						}
-						if (dimensions.differenceHeightAsPercent > 100 && dimensions.differenceHeightAsPercent > dimensions.differenceWidthAsPercent) {
-							dimensions.objectWidth = parseInt(dimensions.objectWidth / dimensions.differenceHeightAsPercent * 100);
-							dimensions.objectHeight = dimensions.maxHeight;
-						}
-						if (dimensions.differenceHeightAsPercent > 100 && dimensions.differenceWidthAsPercent < dimensions.differenceHeightAsPercent) {
-							dimensions.objectWidth = parseInt(dimensions.maxWidth / dimensions.differenceHeightAsPercent * dimensions.differenceWidthAsPercent);
-							dimensions.objectHeight = dimensions.maxHeight;
-						}
-						break;
 					case 'error':
 						if (!isNaN(dimensions.objectWidth) && dimensions.objectWidth > dimensions.maxWidth) {
 							dimensions.objectWidth = dimensions.maxWidth;
@@ -885,7 +890,6 @@
 			if (!_self.cache.firstOpened) {
 				_self.cache.firstOpened = _self.objectData.this;
 			}
-
 		},
 
 		/**

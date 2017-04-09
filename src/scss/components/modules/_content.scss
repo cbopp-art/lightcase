@@ -29,7 +29,7 @@
   }
 
   // Not type: image, video, flash or error
-  #lightcase-case:not([data-lc-type=image]):not([data-lc-type=video]):not([data-lc-type=flash]):not([data-lc-type=error]) & {
+  #lightcase-case:not([data-lc-type=image]):not([data-lc-type=video]):not([data-lc-type=flash]):not([data-lc-type=iframe]):not([data-lc-type=error]) & {
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
     -o-box-shadow: none;
@@ -82,7 +82,7 @@
     // types of content, type 'inline' and 'ajax'.
     .lightcase-inlineWrap {
       // Not type: image, video, flash or error
-      #lightcase-case:not([data-lc-type=image]):not([data-lc-type=video]):not([data-lc-type=flash]):not([data-lc-type=error]) & {
+      #lightcase-case:not([data-lc-type=image]):not([data-lc-type=video]):not([data-lc-type=flash]):not([data-lc-type=iframe]):not([data-lc-type=error]) & {
         @media screen and (max-width: #{map-get($lightcase-settings, 'breakpoint')-1}) {
          @include clear(true);
         }
