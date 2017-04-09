@@ -48,7 +48,7 @@
     }
 
     // Not type: image, video, flash or error
-    #lightcase-case:not([data-lc-type=image]):not([data-lc-type=video]):not([data-lc-type=flash]):not([data-lc-type=error]) & {
+    html:not([data-lc-type=image]):not([data-lc-type=video]):not([data-lc-type=flash]):not([data-lc-type=error]) & {
         position: static;
     }
   }
