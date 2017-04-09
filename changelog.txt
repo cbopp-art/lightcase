@@ -1,3 +1,10 @@
+2017/04/08 - v2.4.0
+Feature: Issue #69 - Autodetect the right video format supported by the browser
+Feature: Issue #96 - Allow more possibilities to define transitions
+Bugfix: Issue #122 - Improve dimension handling using forceWidth and forceHeight
+Bugfix: Fix fade in issue with inner content
+Feature: Issue #114 - Possibility to initialize lightcase collections with different tag attribute values
+
 2016/12/20 - v2.3.6
 Hotfix: Fix scroll position after scrolling lightcase content on mobile
 

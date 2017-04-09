@@ -1,11 +1,10 @@
 #lightcase-content {
 
   // Not type: error
-  #lightcase-case:not([data-lc-type=error]) & {
+  html:not([data-lc-type=error]) & {
     @media screen and (min-width: #{map-get($lightcase-settings, 'breakpoint')}) {
       position: relative;
       z-index: 1;
-      overflow: hidden;
 
       text-shadow: none;
 
@@ -21,15 +20,17 @@
   }
 
   // Type: image + video
-  #lightcase-case[data-lc-type=image] &,
-  #lightcase-case[data-lc-type=video] & {
+  html[data-lc-type=image] &,
+  html[data-lc-type=video] & {
     @media screen and (min-width: #{map-get($lightcase-settings, 'breakpoint')}) {
       background-color: #{map-get($lightcase-settings, 'case-background-media')};
     }
   }
 
-  // Not type: image, video, flash or error
-  #lightcase-case:not([data-lc-type=image]):not([data-lc-type=video]):not([data-lc-type=flash]):not([data-lc-type=error]) & {
+  // Only for type: inline, ajax, error
+  html[data-lc-type=inline] &,
+  html[data-lc-type=ajax] &,
+  html[data-lc-type=error] & {
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
     -o-box-shadow: none;
@@ -66,30 +67,37 @@
   .lightcase-contentInner {
     @media screen and (max-width: #{map-get($lightcase-settings, 'breakpoint')-1}) {
       // For mobile (touch) devices
-      .lightcase-isMobileDevice #lightcase-case[data-lc-type=iframe] & iframe {
+      html.lightcase-isMobileDevice[data-lc-type=iframe] & iframe {
         @include overflow();
       }
       // Type: image + video
-      [data-lc-type=image] &,
-      [data-lc-type=video] & {
+      html[data-lc-type=image] &,
+      html[data-lc-type=video] & {
         @media screen and (min-width: #{map-get($lightcase-settings, 'breakpoint')}) {
           line-height: 0.75;
         }
       }
     }
 
+    html[data-lc-type=image] & {
+      position: relative;
+      overflow: hidden !important;
+    }
+
     // Note: This is a very special wrap only added for few
     // types of content, type 'inline' and 'ajax'.
     .lightcase-inlineWrap {
-      // Not type: image, video, flash or error
-      #lightcase-case:not([data-lc-type=image]):not([data-lc-type=video]):not([data-lc-type=flash]):not([data-lc-type=error]) & {
+      // Only for type: inline, ajax error
+      html[data-lc-type=inline] &,
+      html[data-lc-type=ajax] &,
+      html[data-lc-type=error] & {
         @media screen and (max-width: #{map-get($lightcase-settings, 'breakpoint')-1}) {
          @include clear(true);
         }
       }
 
       // Not type: error
-      #lightcase-case:not([data-lc-type=error]) & {
+      html:not([data-lc-type=error]) & {
         @media screen and (min-width: #{map-get($lightcase-settings, 'breakpoint')}) {
           padding: 30px;
 

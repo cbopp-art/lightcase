@@ -5,7 +5,7 @@
  * @author		Cornel Boppart <cornel@bopp-art.com>
  * @copyright	Author
  *
- * @version		2.3.6 (20/12/2016)
+ * @version		2.4.0 (08/04/2017)
  */
 
 ;(function ($) {
@@ -65,6 +65,7 @@
 				fullScreenModeForMobile: true,
 				mobileMatchExpression: /(iphone|ipod|ipad|android|blackberry|symbian)/,
 				disableShrink: false,
+				fixedRatio: true,
 				shrinkFactor: .75,
 				overlayOpacity: .9,
 				slideshow: false,
@@ -136,16 +137,16 @@
 					'navigator.pause': 'Pause'
 				},
 				markup: function () {
-					$('body').append(
+					_self.objects.body.append(
 						_self.objects.overlay = $('<div id="' + _self.settings.idPrefix + 'overlay"></div>'),
 						_self.objects.loading = $('<div id="' + _self.settings.idPrefix + 'loading" class="' + _self.settings.classPrefix + 'icon-spin"></div>'),
 						_self.objects.case = $('<div id="' + _self.settings.idPrefix + 'case" aria-hidden="true" role="dialog"></div>')
 					);
 					_self.objects.case.after(
+						_self.objects.close = $('<a href="#" class="' + _self.settings.classPrefix + 'icon-close"><span>' + _self.settings.labels['close'] + '</span></a>'),
 						_self.objects.nav = $('<div id="' + _self.settings.idPrefix + 'nav"></div>')
 					);
 					_self.objects.nav.append(
-						_self.objects.close = $('<a href="#" class="' + _self.settings.classPrefix + 'icon-close"><span>' + _self.settings.labels['close'] + '</span></a>'),
 						_self.objects.prev = $('<a href="#" class="' + _self.settings.classPrefix + 'icon-prev"><span>' + _self.settings.labels['navigator.prev'] + '</span></a>').hide(),
 						_self.objects.next = $('<a href="#" class="' + _self.settings.classPrefix + 'icon-next"><span>' + _self.settings.labels['navigator.next'] + '</span></a>').hide(),
 						_self.objects.play = $('<a href="#" class="' + _self.settings.classPrefix + 'icon-play"><span>' + _self.settings.labels['navigator.play'] + '</span></a>').hide(),
@@ -167,6 +168,7 @@
 				onInit: {},
 				onStart: {},
 				onFinish: {},
+				onResize: {},
 				onClose: {},
 				onCleanup: {}
 			}, 
@@ -174,13 +176,13 @@
 			// Load options from data-lc-options attribute
 			_self.origin.data ? _self.origin.data('lc-options') : {});
 
+			_self.objects.document = $('html');
+			_self.objects.body = $('body');
+
 			// Call onInit hook functions
 			_self._callHooks(_self.settings.onInit);
 
 			_self.objectData = _self._setObjectData(this);
-
-			_self._cacheScrollPosition();
-			_self._watchScrollInteraction();
 
 			_self._addElements();
 			_self._open();
@@ -613,6 +615,7 @@
 
 			// Set default dimensions
 			var dimensions = {
+				ratio: 1,
 				objectWidth: $object.attr('width') ? $object.attr('width') : $object.attr(_self._prefixAttributeName('width')),
 				objectHeight: $object.attr('height') ? $object.attr('height') : $object.attr(_self._prefixAttributeName('height'))
 			};
@@ -622,7 +625,7 @@
 				dimensions.maxWidth = parseInt(_self.dimensions.windowWidth * _self.settings.shrinkFactor);
 				dimensions.maxHeight = parseInt(_self.dimensions.windowHeight * _self.settings.shrinkFactor);
 
-				// If the auto calculated maxWidth/maxHeight greather than the userdefined one, use that.
+				// If the auto calculated maxWidth/maxHeight greather than the user-defined one, use that.
 				if (dimensions.maxWidth > _self.settings.maxWidth) {
 					dimensions.maxWidth = _self.settings.maxWidth;
 				}
@@ -638,19 +641,24 @@
 					case 'image':
 					case 'flash':
 					case 'video':
-						if (dimensions.differenceWidthAsPercent > 100 && dimensions.differenceWidthAsPercent > dimensions.differenceHeightAsPercent) {
-							dimensions.objectWidth = dimensions.maxWidth;
-							dimensions.objectHeight = parseInt(dimensions.objectHeight / dimensions.differenceWidthAsPercent * 100);
+					case 'iframe':
+					case 'ajax':
+					case 'inline':
+						if (_self.objectData.type === 'image' || _self.settings.fixedRatio === true) {
+							if (dimensions.differenceWidthAsPercent > 100 && dimensions.differenceWidthAsPercent > dimensions.differenceHeightAsPercent) {
+								dimensions.objectWidth = dimensions.maxWidth;
+								dimensions.objectHeight = parseInt(dimensions.objectHeight / dimensions.differenceWidthAsPercent * 100);
+							}
+							if (dimensions.differenceHeightAsPercent > 100 && dimensions.differenceHeightAsPercent > dimensions.differenceWidthAsPercent) {
+								dimensions.objectWidth = parseInt(dimensions.objectWidth / dimensions.differenceHeightAsPercent * 100);
+								dimensions.objectHeight = dimensions.maxHeight;
+							}
+							if (dimensions.differenceHeightAsPercent > 100 && dimensions.differenceWidthAsPercent < dimensions.differenceHeightAsPercent) {
+								dimensions.objectWidth = parseInt(dimensions.maxWidth / dimensions.differenceHeightAsPercent * dimensions.differenceWidthAsPercent);
+								dimensions.objectHeight = dimensions.maxHeight;
+							}
+							break;
 						}
-						if (dimensions.differenceHeightAsPercent > 100 && dimensions.differenceHeightAsPercent > dimensions.differenceWidthAsPercent) {
-							dimensions.objectWidth = parseInt(dimensions.objectWidth / dimensions.differenceHeightAsPercent * 100);
-							dimensions.objectHeight = dimensions.maxHeight;
-						}
-						if (dimensions.differenceHeightAsPercent > 100 && dimensions.differenceWidthAsPercent < dimensions.differenceHeightAsPercent) {
-							dimensions.objectWidth = parseInt(dimensions.maxWidth / dimensions.differenceHeightAsPercent * dimensions.differenceWidthAsPercent);
-							dimensions.objectHeight = dimensions.maxHeight;
-						}
-						break;
 					case 'error':
 						if (!isNaN(dimensions.objectWidth) && dimensions.objectWidth > dimensions.maxWidth) {
 							dimensions.objectWidth = dimensions.maxWidth;
@@ -844,7 +852,7 @@
 		 */
 		_showContent: function ($object) {
 			// Add data attribute with the object type
-			_self.objects.case.attr(_self._prefixAttributeName('type'), _self.objectData.type);
+			_self.objects.document.attr(_self._prefixAttributeName('type'), _self.objectData.type);
 
 			_self.cache.object = $object;
 			_self._calculateDimensions($object);
@@ -886,6 +894,11 @@
 				_self.cache.firstOpened = _self.objectData.this;
 			}
 
+			// Fade in the info with delay
+			_self.objects.info.hide();
+			setTimeout(function () {
+			  _self.transition.fade(_self.objects.info, 'in', _self.settings.speedIn);
+			}, _self.settings.speedIn);
 		},
 
 		/**
@@ -895,6 +908,9 @@
 		 */
 		_processContent: function () {
 			_self.isBusy = true;
+
+			// Fade out the info at first
+			_self.transition.fade(_self.objects.info, 'out', 0);
 
 			switch (_self.settings.transitionOut) {
 				case 'scrollTop':
@@ -1227,7 +1243,7 @@
 		 * @return	{string|boolean}	The transition prefix if supported, else false.
 		 */
 		isTransitionSupported: function () {
-			var body = $('body').get(0),
+			var body = _self.objects.body.get(0),
 				isTransitionSupported = false,
 				transitionMapping = {
 					'transition': '',
@@ -1509,38 +1525,9 @@
 
 			_self.dimensions = _self.getViewportDimensions();
 			_self._calculateDimensions(_self.cache.object);
-		},
 
-		/**
-		 * Caches the actual scroll coordinates.
-		 *
-		 * @return	{void}
-		 */
-		_cacheScrollPosition: function () {
-			var	$window = $(window),
-				$document = $(document),
-				offset = {
-					'top': $window.scrollTop(),
-					'left':  $window.scrollLeft()
-				};
-
-			_self.cache.scrollPosition = _self.cache.scrollPosition || {};
-
-			if (!_self._assertContentInvisible()) {
-				_self.cache.cacheScrollPositionSkipped = true;
-			}
-			else if (_self.cache.cacheScrollPositionSkipped) {
-				delete _self.cache.cacheScrollPositionSkipped;
-				_self._restoreScrollPosition();
-			}
-			else {
-				if ($document.width() > $window.width()) {
-					_self.cache.scrollPosition.left = offset.left;
-				}
-				if ($document.height() > $window.height()) {
-					_self.cache.scrollPosition.top = offset.top;
-				}
-			}
+			// Call onResize hook functions
+			_self._callHooks(_self.settings.onResize);
 		},
 
 		/**
@@ -1559,48 +1546,6 @@
 		 */
 		_unwatchResizeInteraction: function () {
 			$(window).off('resize', _self.resize);
-		},
-
-		/**
-		 * Watches for any scroll interaction and caches the new position.
-		 *
-		 * @return	{void}
-		 */
-		_watchScrollInteraction: function () {
-			$(window).scroll(_self._cacheScrollPosition);
-			$(window).resize(_self._cacheScrollPosition);
-		},
-
-		/**
-		 * Stop watching any scroll interaction related to _self.
-		 *
-		 * @return	{void}
-		 */
-		_unwatchScrollInteraction: function () {
-			$(window).off('scroll', _self._cacheScrollPosition);
-			$(window).off('resize', _self._cacheScrollPosition);
-		},
-
-		/**
-		 * Ensures that site content is invisible or has not height.
-		 *
-		 * @return	{boolean}
-		 */
-		_assertContentInvisible: function () {
-			return $($('body').children().not('[id*=' + _self.settings.idPrefix + ']').get(0)).height() > 0;
-		},
-
-		/**
-		 * Restores to the original scoll position before
-		 * lightcase got initialized.
-		 *
-		 * @return	{void}
-		 */
-		_restoreScrollPosition: function () {
-			$(window)
-				.scrollTop(parseInt(_self.cache.scrollPosition.top))
-				.scrollLeft(parseInt(_self.cache.scrollPosition.left))
-				.resize();
 		},
 
 		/**
@@ -1672,7 +1617,7 @@
 					break;
 			}
 
-			$('html').addClass(_self.settings.classPrefix + 'open');
+			_self.objects.document.addClass(_self.settings.classPrefix + 'open');
 			_self.objects.case.attr('aria-hidden', 'false');
 		},
 
@@ -1695,17 +1640,18 @@
 			_self._unbindEvents();
 
 			_self._unwatchResizeInteraction();
-			_self._unwatchScrollInteraction();
 
 			$('html').removeClass(_self.settings.classPrefix + 'open');
 			_self.objects.case.attr('aria-hidden', 'true');
 
 			_self.objects.nav.children().hide();
-
-			_self._restoreScrollPosition();
+			_self.objects.close.hide();
 
 			// Call onClose hook functions
 			_self._callHooks(_self.settings.onClose);
+
+			// Fade out the info at first
+			_self.transition.fade(_self.objects.info, 'out', 0);
 
 			switch (_self.settings.transitionClose || _self.settings.transitionOut) {
 				case 'fade':
@@ -1797,7 +1743,7 @@
 			_self.objects.play.hide();
 			_self.objects.pause.hide();
 
-			_self.objects.case.removeAttr(_self._prefixAttributeName('type'));
+			_self.objects.document.removeAttr(_self._prefixAttributeName('type'));
 			_self.objects.nav.removeAttr(_self._prefixAttributeName('ispartofsequence'));
 
 			_self.objects.contentInner.empty().hide();
