@@ -529,7 +529,7 @@
 							data: _self.objectData.requestData,
 							success: function (data, textStatus, jqXHR) {
 								// Check for X-Ajax-Location
-								if (typeof jqXHR.getResponseHeader('X-Ajax-Location') !== 'undefined' && jqXHR.getResponseHeader('X-Ajax-Location') !== null) {
+								if (jqXHR.getResponseHeader('X-Ajax-Location')) {
 									_self.objectData.url = jqXHR.getResponseHeader('X-Ajax-Location');
 									_self._loadObject($object);
 								}
