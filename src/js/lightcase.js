@@ -793,7 +793,7 @@
 		 */
 		_getFileUrlSuffix: function (url) {
 			var re = /(?:\.([^.]+))?$/;
-            return re.exec(url.toLowerCase())[1]; 
+			return re.exec(url.toLowerCase())[1]; 
 		},
 
 		/**
