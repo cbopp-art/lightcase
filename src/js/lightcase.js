@@ -798,10 +798,14 @@
 		 * @param	{string}	url
 		 * @return	{string}
 		 */
-		_getFileUrlSuffix: function (url) {
-			var re = /(?:\.([^.]+))?$/;
-			return re.exec(url.toLowerCase())[1]; 
-		},
+        _getFileUrlSuffix: function (url) {
+            var re = /(?:\.([^.]+))?$/;
+            var suffix = re.exec(url.toLowerCase())[1];
+            if(!suffix || _self.settings.typeMapping.video.indexOf(suffix) == -1) {
+                suffix = "mp4";
+            }
+            return suffix;
+        },
 
 		/**
 		 * Verifies the data type of the content to load
