@@ -1,3 +1,7 @@
+2017/09/23 - v2.4.1
+Bugfix: Fix resize issue with maxWidth
+Bugfix: Issue #128: Improved _getFileUrlSuffix function to get the suffix of files from external urls
+Bugfix: Issue #116: add X-Ajax-Location check
 2017/04/09 - v2.4.0
 Feature: Improve external video resize handling using a new setting 'fixedRatio'
 Feature: Add compiled css file without breakpoint
