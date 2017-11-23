@@ -733,7 +733,8 @@
 			});
 
 			_self.objects.case.css({
-				'width': _self.objects.contentInner.outerWidth()
+				'width': _self.objects.contentInner.outerWidth(),
+				'max-width': '100%'
 			});
 
 			// Adjust margin
