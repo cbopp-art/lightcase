@@ -167,6 +167,7 @@
 				},
 				onInit: {},
 				onStart: {},
+				onCalculateDimensions: {},
 				onFinish: {},
 				onResize: {},
 				onClose: {},
@@ -620,6 +621,8 @@
 		_calculateDimensions: function ($object) {
 			_self._cleanupDimensions();
 
+			if (!$object) return;
+
 			// Set default dimensions
 			var dimensions = {
 				ratio: 1,
@@ -864,11 +867,23 @@
 			_self.objects.document.attr(_self._prefixAttributeName('type'), _self.objectData.type);
 
 			_self.cache.object = $object;
+
+			// Call onCalculateDimensions hook functions
+			_self._callHooks(_self.settings.onCalculateDimensions);
+
 			_self._calculateDimensions($object);
 
 			// Call onFinish hook functions
 			_self._callHooks(_self.settings.onFinish);
 
+			_self._startInTransition();
+		},
+
+		/**
+		 * Starts the 'inTransition'
+		 * @return	{void}
+		 */
+		_startInTransition: function () {
 			switch (_self.transition.in()) {
 				case 'scrollTop':
 				case 'scrollRight':
@@ -883,7 +898,7 @@
 					if (_self.objects.case.css('opacity') < 1) {
 						_self.transition.zoom(_self.objects.case, 'in', _self.settings.speedIn);
 						_self.transition.fade(_self.objects.contentInner, 'in', _self.settings.speedIn);
-					}
+				}
 				case 'fade':
 				case 'fadeInline':
 					_self.transition.fade(_self.objects.case, 'in', _self.settings.speedIn);
@@ -893,20 +908,20 @@
 					_self.transition.fade(_self.objects.case, 'in', 0);
 					break;
 			}
-
+ 
 			// End loading.
 			_self._loading('end');
 			_self.isBusy = false;
-			
+
 			// Set index of the first item opened
 			if (!_self.cache.firstOpened) {
 				_self.cache.firstOpened = _self.objectData.this;
 			}
-
+ 
 			// Fade in the info with delay
 			_self.objects.info.hide();
 			setTimeout(function () {
-			  _self.transition.fade(_self.objects.info, 'in', _self.settings.speedIn);
+				 _self.transition.fade(_self.objects.info, 'in', _self.settings.speedIn);
 			}, _self.settings.speedIn);
 		},
 
@@ -1311,6 +1326,7 @@
 				startTransition['opacity'] = startOpacity;
 				endTransition['opacity'] = endOpacity;
 
+				$object.css(_self.support.transition + 'transition', 'none');
 				$object.css(startTransition).show();
 
 				// Css transition
@@ -1400,6 +1416,7 @@
 				endTransition['opacity'] = endOpacity;
 				endTransition[direction] = endOffset;
 
+				$object.css(_self.support.transition + 'transition', 'none');
 				$object.css(startTransition).show();
 
 				// Css transition
@@ -1449,6 +1466,7 @@
 
 				endTransition['opacity'] = endOpacity;
 
+				$object.css(_self.support.transition + 'transition', 'none');
 				$object.css(startTransition).show();
 
 				// Css transition
@@ -1523,9 +1541,10 @@
 		 * Executes functions for a window resize.
 		 * It stops an eventual timeout and recalculates dimenstions.
 		 *
+		 * @param	{boolean}	startInTransition
 		 * @return	{void}
 		 */
-		resize: function () {
+		resize: function (event, startInTransition) {
 			if (!_self.isOpen) return;
 
 			if (_self.isSlideshowEnabled()) {
@@ -1537,6 +1556,10 @@
 
 			// Call onResize hook functions
 			_self._callHooks(_self.settings.onResize);
+
+			if (startInTransition) {
+				_self._startInTransition(_self.cache.object);
+			}
 		},
 
 		/**
