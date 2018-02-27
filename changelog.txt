@@ -1,3 +1,7 @@
+2018/02/27 - v2.4.3
+Feature: New parameter for function resize to pass dimensions
+Feature: Support touch events for jQuery version 3.x
+
 2017/11/24 - v2.4.2
 Feature: New argument for resize function to start the inTransition afterwards
 Bugfix: Fix error inside _calculateDimensions when $object is not defined
