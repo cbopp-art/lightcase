@@ -1,3 +1,6 @@
+2018/02/27 - v2.4.4
+Cleanup: Updated version number
+
 2018/02/27 - v2.4.3
 Feature: New parameter for function resize to pass dimensions
 Feature: Support touch events for jQuery version 3.x
