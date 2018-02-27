@@ -172,7 +172,7 @@
 				onResize: {},
 				onClose: {},
 				onCleanup: {}
-			}, 
+			},
 			options,
 			// Load options from data-lc-options attribute
 			_self.origin.data ? _self.origin.data('lc-options') : {});
@@ -795,7 +795,7 @@
 			return _self._normalizeUrl(dataUrl.toString());
 		},
 
-			// 
+			//
 		/**
 		 * Tries to get the (file) suffix of an url
 		 *
@@ -804,7 +804,7 @@
 		 */
 		_getFileUrlSuffix: function (url) {
 			var re = /(?:\.([^.]+))?$/;
-			return re.exec(url.toLowerCase())[1]; 
+			return re.exec(url.toLowerCase())[1];
 		},
 
 		/**
@@ -908,7 +908,7 @@
 					_self.transition.fade(_self.objects.case, 'in', 0);
 					break;
 			}
- 
+
 			// End loading.
 			_self._loading('end');
 			_self.isBusy = false;
@@ -917,7 +917,7 @@
 			if (!_self.cache.firstOpened) {
 				_self.cache.firstOpened = _self.objectData.this;
 			}
- 
+
 			// Fade in the info with delay
 			_self.objects.info.hide();
 			setTimeout(function () {
@@ -1541,14 +1541,42 @@
 		 * Executes functions for a window resize.
 		 * It stops an eventual timeout and recalculates dimenstions.
 		 *
+		 * @param	{object}	dimensions
 		 * @param	{boolean}	startInTransition
 		 * @return	{void}
 		 */
-		resize: function (event, startInTransition) {
+		resize: function (event, dimensions, startInTransition) {
 			if (!_self.isOpen) return;
 
 			if (_self.isSlideshowEnabled()) {
 				_self._stopTimeout();
+			}
+
+			if (typeof dimensions === 'object' && dimensions !== null) {
+				if (dimensions.width) {
+					_self.cache.object.attr(
+						_self._prefixAttributeName('width'),
+						dimensions.width
+					);
+				}
+				if (dimensions.maxWidth) {
+					_self.cache.object.attr(
+						_self._prefixAttributeName('max-width'),
+						dimensions.maxWidth
+					);
+				}
+				if (dimensions.height) {
+					_self.cache.object.attr(
+						_self._prefixAttributeName('height'),
+						dimensions.height
+					);
+				}
+				if (dimensions.maxHeight) {
+					_self.cache.object.attr(
+						_self._prefixAttributeName('max-height'),
+						dimensions.maxHeight
+					);
+				}
 			}
 
 			_self.dimensions = _self.getViewportDimensions();
