@@ -1539,7 +1539,7 @@
 
 		/**
 		 * Executes functions for a window resize.
-		 * It stops an eventual timeout and recalculates dimenstions.
+		 * It stops an eventual timeout and recalculates dimensions.
 		 *
 		 * @param	{object}	dimensions
 		 * @param	{boolean}	startInTransition
