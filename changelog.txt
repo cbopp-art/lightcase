@@ -1,3 +1,6 @@
+2018/03/11 - v2.5.0
+Feature: Implementation of new hooks and new setting to stop lightcase process before showing loaded content
+
 2018/02/27 - v2.4.4
 Cleanup: Updated version number
 
