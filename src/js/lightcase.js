@@ -353,32 +353,41 @@
 		_normalizeUrl: function (url) {
 			var srcExp = /^\d+$/;
 
-			return url.split(',').map(function (str) {
-				var src = {
-					width: 0,
-					density: 0
-				};
+            var urlParser = function (str) {
+                var src = {
+                    width: 0,
+                    density: 0
+                };
 
-				str.trim().split(/\s+/).forEach(function (url, i) {
-					if (i === 0) {
-						return src.url = url;
-					}
+                str.trim().split(/\s+/).forEach(function (url, i) {
+                    if (i === 0) {
+                        return src.url = url;
+                    }
 
-					var value = url.substring(0, url.length - 1),
-						lastChar = url[url.length - 1],
-						intVal = parseInt(value, 10),
-						floatVal = parseFloat(value);
-					if (lastChar === 'w' && srcExp.test(value)) {
-						src.width = intVal;
-					} else if (lastChar === 'h' && srcExp.test(value)) {
-						src.height = intVal;
-					} else if (lastChar === 'x' && !isNaN(floatVal)) {
-						src.density = floatVal;
-					}
-				});
+                    var value = url.substring(0, url.length - 1),
+                        lastChar = url[url.length - 1],
+                        intVal = parseInt(value, 10),
+                        floatVal = parseFloat(value);
+                    if (lastChar === 'w' && srcExp.test(value)) {
+                        src.width = intVal;
+                    } else if (lastChar === 'h' && srcExp.test(value)) {
+                        src.height = intVal;
+                    } else if (lastChar === 'x' && !isNaN(floatVal)) {
+                        src.density = floatVal;
+                    }
+                });
 
-				return src;
-			});
+                return src;
+            };
+
+            //data URL detected (no split)
+            if (url.indexOf("data:") === 0)
+            {
+                return [urlParser(url)];
+            }
+
+            //regular URL, normal behavior
+            return url.split(',').map(urlParser);
 		},
 
 		/**
@@ -823,6 +832,14 @@
 			if (!url) {
 				return false;
 			}
+			
+            //checking if user defined type is valid
+            if (_self.settings.type) {
+                for (var key in typeMapping) {
+                    if (key === _self.settings.type)
+                        return _self.settings.type;
+                }
+            }
 
 			// Verify the dataType of url according to typeMapping which
 			// has been defined in settings.
