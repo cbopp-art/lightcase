@@ -835,8 +835,9 @@
 			//checking if user defined type is valid
 			if (_self.settings.type) {
 				for (var key in typeMapping) {
-					if (key === _self.settings.type)
-					return _self.settings.type;
+					if (key === _self.settings.type) {
+						return _self.settings.type;
+					}
 				}
 			}
 
