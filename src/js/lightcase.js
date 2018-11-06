@@ -230,7 +230,7 @@
 				requestData: _self.settings.ajax.data,
 				requestDataType: _self.settings.ajax.dataType,
 				rel: $object.attr(_self._determineAttributeSelector()),
-				type: _self.settings.type || _self._verifyDataType(_self._determineUrl()),
+				type: _self._verifyDataType(_self._determineUrl()),
 				isPartOfSequence: _self.settings.useAsCollection || _self._isPartOfSequence($object.attr(_self.settings.attr), ':'),
 				isPartOfSequenceWithSlideshow: _self._isPartOfSequence($object.attr(_self.settings.attr), ':slideshow'),
 				currentIndex: $(_self._determineAttributeSelector()).index($object),
@@ -353,41 +353,40 @@
 		_normalizeUrl: function (url) {
 			var srcExp = /^\d+$/;
 
-            var urlParser = function (str) {
-                var src = {
-                    width: 0,
-                    density: 0
-                };
+            		var urlParser = function (str) {
+                		var src = {
+                    			width: 0,
+                    			density: 0
+                		};
 
-                str.trim().split(/\s+/).forEach(function (url, i) {
-                    if (i === 0) {
-                        return src.url = url;
-                    }
+                		str.trim().split(/\s+/).forEach(function (url, i) {
+                   			if (i === 0) {
+                        			return src.url = url;
+                    			}
 
-                    var value = url.substring(0, url.length - 1),
-                        lastChar = url[url.length - 1],
-                        intVal = parseInt(value, 10),
-                        floatVal = parseFloat(value);
-                    if (lastChar === 'w' && srcExp.test(value)) {
-                        src.width = intVal;
-                    } else if (lastChar === 'h' && srcExp.test(value)) {
-                        src.height = intVal;
-                    } else if (lastChar === 'x' && !isNaN(floatVal)) {
-                        src.density = floatVal;
-                    }
-                });
+                    			var value = url.substring(0, url.length - 1),
+                        		lastChar = url[url.length - 1],
+                        		intVal = parseInt(value, 10),
+                        		floatVal = parseFloat(value);
+					if (lastChar === 'w' && srcExp.test(value)) {
+						src.width = intVal;
+					} else if (lastChar === 'h' && srcExp.test(value)) {
+						src.height = intVal;
+					} else if (lastChar === 'x' && !isNaN(floatVal)) {
+						src.density = floatVal;
+					}
+				});
 
-                return src;
-            };
+                		return src;
+            		};
 
-            //data URL detected (no split)
-            if (url.indexOf("data:") === 0)
-            {
-                return [urlParser(url)];
-            }
+			// Data URL detected (no split)
+			if (url.indexOf('data:') === 0) {
+				return [urlParser(url)];
+			}
 
-            //regular URL, normal behavior
-            return url.split(',').map(urlParser);
+			// Regular URL, normal behavior
+			return url.split(',').map(urlParser);
 		},
 
 		/**
