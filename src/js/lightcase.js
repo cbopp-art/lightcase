@@ -1093,18 +1093,28 @@
 
 				// Enable swiping if activated
 				if (_self.settings.swipe === true) {
-					if ($.isPlainObject($.event.special.swipeleft)) {
+					// Enable swipe on init
+					var viewportScale = 1;
+					if ($.isPlainObject($.event.special.swipeleft) && viewportScale <= 1) {
 						_self.objects.case.on('swipeleft', function (event) {
 							event.preventDefault();
+							// Check for pinch-to-zoom Gesture
+							viewportScale = screen.width / window.innerWidth;
+							if(viewportScale > 1) return;
+
 							_self.objects.next.click();
 							if (_self.isSlideshowEnabled()) {
 								_self._stopTimeout();
 							}
 						});
 					}
-					if ($.isPlainObject($.event.special.swiperight)) {
+					if ($.isPlainObject($.event.special.swiperight) && viewportScale <= 1) {
 						_self.objects.case.on('swiperight', function (event) {
 							event.preventDefault();
+							// Check for pinch-to-zoom Gesture
+							viewportScale = screen.width / window.innerWidth;
+							if(viewportScale > 1) return;
+							
 							_self.objects.prev.click();
 							if (_self.isSlideshowEnabled()) {
 								_self._stopTimeout();
